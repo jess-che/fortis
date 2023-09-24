@@ -65,6 +65,51 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 The Flask server will be running on [http://127.0.0.1:5328](http://127.0.0.1:5328) – feel free to change the port in `package.json` (you'll also need to update it in `next.config.js`).
 
+## File Structure
+
+Here is an overview of the project's file structure:
+
+```
+my-web-app/
+│
+├── api/
+│   └── index.py
+│
+├── app/
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+│
+├── public/
+│   ├── icons/
+│   ├── images/
+│   ├── next.svg
+│   └── vercel.svg
+│
+├── src/
+│   ├── components/
+│   ├── pages/
+│   └── styles/
+│
+├── .gitignore
+├── README.md
+├── next.config.js
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.js
+├── requirements.txt
+├── tailwind.config.js
+└── tsconfig.json
+```
+
+- **api/**: Contains server-side code, possibly API endpoints or backend routes.
+- **app/**: Contains files related to the Next.js application, including favicon, global CSS, layout, and main page.
+- **public/**: Holds public assets such as icons, images, and SVG logos.
+- **src/**: Contains the source code for the Next.js application, including components, pages, and styles.
+
+*Changes may be made to create a `config/` folder to organize the configuration files.*
+
 ## Helpful Doccumentation
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
