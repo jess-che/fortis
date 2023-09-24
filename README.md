@@ -1,6 +1,6 @@
 ## Introduction
 
-Fortis. 
+Fortís. 
 
 ## How It Works
 
@@ -19,7 +19,7 @@ Furthermore, postgreSQL is also hosted by Vercel and linked to this project.
 
 The initial framework is based on [Vercel's Next.js Flask Starter](https://vercel.com/templates/next.js/nextjs-flask-starter).
 
-To get started, first, install the dependencies:
+To get started: first, install the dependencies:
 ```bash
 
 pnpm install
@@ -67,7 +67,7 @@ The Flask server will be running on [http://127.0.0.1:5328](http://127.0.0.1:532
 
 ## File Structure
 
-Here is an overview of the project's file structure:
+Here is an overview of the project's overall file structure:
 
 ```
 my-web-app/
