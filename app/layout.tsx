@@ -1,12 +1,13 @@
 import './globals.css'
-import { Inter } from 'next/font/google'
+import { Nunito } from 'next/font/google'
 
-const inter = Inter({ subsets: ['latin'] })
+const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito", display: "swap" });
 
 export const metadata = {
   title: 'Fortis',
   description: 'CS316 Project: Jessica Chen (jc939), Anirudh Jain (aj383), Swarajh Mehta (sm961), Austin Huang (ash110), Benjamin Chauhan (bsc32)',
 }
+
 
 export default function RootLayout({
   children,
@@ -15,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={nunito.className}>{children}</body>
     </html>
   )
 }
