@@ -12,7 +12,7 @@ On localhost, the rewrite will be made to the `127.0.0.1:5328` port, which is wh
 
 In production, the Flask server is hosted as [Python serverless functions](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python) on Vercel.
 
-*Benjamin, can you check this part on how postgre is connected to this when you have time*
+Flask connects to the postgreSQL server and makes the queries to interact with the data as necessary in the backend. 
 Furthermore, postgreSQL is also hosted by Vercel and linked to this project.
 
 To set up postgre, first connect postgre to storage in your Vercel dashboard.
