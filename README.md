@@ -15,16 +15,6 @@ In production, the Flask server is hosted as [Python serverless functions](https
 *Benjamin, can you check this part on how postgre is connected to this when you have time*
 Furthermore, postgreSQL is also hosted by Vercel and linked to this project.
 
-## Getting Started
-
-The initial framework is based on [Vercel's Next.js Flask Starter](https://vercel.com/templates/next.js/nextjs-flask-starter).
-
-To get started: first, install the dependencies:
-```bash
-
-pnpm install
-```
-
 To set up postgre, first connect postgre to storage in your Vercel dashboard.
 Install the Vercel Postgres package:
 ```bash
@@ -54,6 +44,16 @@ Install the Vercel Postgres SDK:
 
 npm install @vercel/postgres
 ``` 
+
+## Getting Started
+
+The initial framework is based on [Vercel's Next.js Flask Starter](https://vercel.com/templates/next.js/nextjs-flask-starter).
+
+To get started: first, install the dependencies:
+```bash
+
+pnpm install
+```
 
 To run the development server:
 ```bash
