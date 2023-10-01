@@ -38,7 +38,7 @@ export default function Home() {
         </Link>
 
         <div className="flex flex-row h-15 items-center justify-evenly">
-          <Link href="#">
+          <Link href="/api/python">
             <p className="px-3 text-xl font-bold hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">History</p>
           </Link>
           <Link href="#">
