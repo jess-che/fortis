@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin');
+
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -19,5 +21,32 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addUtilities }) => {
+      const newUtilities = {
+        '.gradient-text-gb': {
+          background: 'linear-gradient(45deg, #55BBA4, #2FABDD)',
+          backgroundClip: 'text',
+          color: 'transparent',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+        },
+        '.gradient-text-pg': {
+          background: 'linear-gradient(45deg, #C32E67, #55BBA4)',
+          backgroundClip: 'text',
+          color: 'transparent',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+        },
+        '.gradient-text-bp': {
+          background: 'linear-gradient(45deg, #2FABDD, #C32E67)',
+          backgroundClip: 'text',
+          color: 'transparent',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+        },
+      };
+      addUtilities(newUtilities, ['responsive', 'hover']);
+    }),
+  ],
 }
