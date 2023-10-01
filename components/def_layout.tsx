@@ -11,7 +11,7 @@ export default function RootLayout({
         <div className="flex flex-col bg-[#121212]">
         {/* navbar -- make into component */}
         <div className="w-screen p-2 flex flex-row items-center h-15">
-            <Link href="#">
+            <Link href="/">
             <svg xmlns="http://www.w3.org/2000/svg" 
                 xmlnsXlink="http://www.w3.org/1999/xlink" 
                 className="w-40 h-15 hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300"
@@ -43,13 +43,13 @@ export default function RootLayout({
             <Link href="/history">
                 <p className="px-3 text-xl font-bold hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">History</p>
             </Link>
-            <Link href="/api/python">
+            <Link href="/log">
                 <p className="px-3 text-xl font-bold hover:gradient-text-gb hover:shadow-pink transition-shadow duration-300">Log</p>
             </Link>
-            <Link href="#">
+            <Link href="/social">
                 <p className="px-3 text-xl font-bold hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300">Social</p>
             </Link>
-            <Link href="#">
+            <Link href="/discover">
                 <p className="px-3 text-xl font-bold hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">Discover</p>
             </Link>
             </div>
