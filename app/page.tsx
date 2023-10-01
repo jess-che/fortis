@@ -2,8 +2,6 @@ import Image          from 'next/image';
 import Link           from 'next/link';
 import React, { FC }  from 'react';
 
-
-
 export default function Home() {
   return (
     <div className="flex flex-col bg-[#121212]">
@@ -38,10 +36,10 @@ export default function Home() {
         </Link>
 
         <div className="flex flex-row h-15 items-center justify-evenly">
-          <Link href="/api/python">
+          <Link href="/history">
             <p className="px-3 text-xl font-bold hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">History</p>
           </Link>
-          <Link href="#">
+          <Link href="/api/python">
             <p className="px-3 text-xl font-bold hover:gradient-text-gb hover:shadow-pink transition-shadow duration-300">Log</p>
           </Link>
           <Link href="#">
