@@ -7,7 +7,7 @@ import DefLayout      from '@/components/def_layout'
 const DiscoverPage: React.FC = () => {
   return (
     <DefLayout>
-      discover
+      discover smth smth
     </DefLayout>
   )
 }
