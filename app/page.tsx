@@ -39,13 +39,13 @@ export default function Home() {
 
         <div className="flex flex-row h-15 items-center justify-evenly">
           <Link href="#">
-            <p className="px-3 text-xl font-bold hover:shadow-blue transition-shadow duration-300">History</p>
+            <p className="px-3 text-xl font-bold hover:shadow-green transition-shadow duration-300">History</p>
           </Link>
           <Link href="#">
-            <p className="px-3 text-xl font-bold hover:shadow-blue transition-shadow duration-300">Log</p>
+            <p className="px-3 text-xl font-bold hover:shadow-pink transition-shadow duration-300">Log</p>
           </Link>
           <Link href="#">
-            <p className="px-3 text-xl font-bold hover:shadow-blue transition-shadow duration-300">Social</p>
+            <p className="px-3 text-xl font-bold hover:shadow-green transition-shadow duration-300">Social</p>
           </Link>
           <Link href="#">
             <p className="px-3 text-xl font-bold hover:shadow-blue transition-shadow duration-300">Discover</p>

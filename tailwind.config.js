@@ -13,7 +13,9 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       boxShadow: {
-        'blue': '0 4px 6px 0 rgba(0, 116, 217, 0.5)', // Adjust color as needed
+        'green': '0 4px 6px 0 rgba(85, 187, 164, 0.5)', 
+        'blue': '0 4px 6px 0 rgba(47, 171, 221, 0.5)',
+        'pink': '0 4px 6px 0 rgba(195, 46, 103, 0.5)',  
       },
     },
   },
