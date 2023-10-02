@@ -8,7 +8,7 @@ export default function Home() {
     <div className="flex flex-col bg-[#121212]">
       {/* navbar -- this will be default not logined -- just do nothing with all the hrefs except login*/}
       <div className="w-screen p-2 flex flex-row items-center h-15">
-        <Link href="/">
+        <Link href="/home">
           <svg xmlns="http://www.w3.org/2000/svg" 
             xmlnsXlink="http://www.w3.org/1999/xlink" 
             className="w-40 h-15 hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300"
@@ -37,16 +37,16 @@ export default function Home() {
         </Link>
 
         <div className="flex flex-row h-15 items-center justify-evenly">
-          <Link href="/history">
+          <Link href="/">
             <p className="px-3 text-xl font-bold hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">History</p>
           </Link>
-          <Link href="/log">
+          <Link href="/">
             <p className="px-3 text-xl font-bold hover:gradient-text-gb hover:shadow-pink transition-shadow duration-300">Log</p>
           </Link>
-          <Link href="/social">
+          <Link href="/">
             <p className="px-3 text-xl font-bold hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300">Social</p>
           </Link>
-          <Link href="/discover">
+          <Link href="/">
             <p className="px-3 text-xl font-bold hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">Discover</p>
           </Link>
         </div>
