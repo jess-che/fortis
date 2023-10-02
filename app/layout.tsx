@@ -1,5 +1,6 @@
-import './globals.css'
-import { Nunito } from 'next/font/google'
+import './globals.css';
+import { Nunito } from 'next/font/google';
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito", display: "swap" });
 
@@ -16,7 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={nunito.className}>{children}</body>
+      <UserProvider>
+        <body className={nunito.className}>{children}</body>
+      </UserProvider>
     </html>
   )
 }
