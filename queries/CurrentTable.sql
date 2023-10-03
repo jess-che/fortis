@@ -7,6 +7,7 @@ create table exercise
     type         varchar,
     muscle_group varchar,
     popularity   integer,
+    equipment varchar,
     favorite     boolean
 );
 
