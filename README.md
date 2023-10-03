@@ -15,7 +15,14 @@ In production, the Flask server is hosted as [Python serverless functions](https
 Flask connects to the postgreSQL server and makes the queries to interact with the data as necessary in the backend. 
 Furthermore, postgreSQL is also hosted by Vercel and linked to this project.
 
-To set up postgre, first connect postgre to storage in your Vercel dashboard.
+To set up postgreSQL, first connect postgre to storage in your Vercel dashboard.
+
+## Getting Started
+
+The initial framework is based on [Vercel's Next.js Flask Starter](https://vercel.com/templates/next.js/nextjs-flask-starter).
+
+First, clone the project onto your local machine.
+
 Install the Vercel Postgres package:
 ```bash
 
@@ -45,17 +52,18 @@ Install the Vercel Postgres SDK:
 npm install @vercel/postgres
 ``` 
 
-## Getting Started
-
-The initial framework is based on [Vercel's Next.js Flask Starter](https://vercel.com/templates/next.js/nextjs-flask-starter).
-
-To get started: first, install the dependencies:
+Next, install the dependencies:
 ```bash
 
 pnpm install
 ```
+Set up auth0:
+```bash
 
-To run the development server:
+TODO: someone fill out this line pls thx
+```
+
+Finally, to run the development server:
 ```bash
 
 pnpm dev
@@ -64,6 +72,20 @@ pnpm dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 The Flask server will be running on [http://127.0.0.1:5328](http://127.0.0.1:5328) – feel free to change the port in `package.json` (you'll also need to update it in `next.config.js`).
+
+## Connecting to PostgreSQL database
+We use DataGrip to connect to the database, but any database tool that supports PostgreSQL 15 should work. 
+First, we get the appropriate information from the Vercel homepage;\
+POSTGRES_USER="default"\
+POSTGRES_HOST="ep-polished-cherry-55480419-pooler.us-east-1.postgres.vercel-storage.com"\
+POSTGRES_PASSWORD="now shown here"\
+POSTGRES_DATABASE="verceldb"
+
+Next, input the data into a New Data Source of the type PostgreSQL in DataGrip:
+<img width="798" alt="image" src="https://github.com/jess-che/fortis/assets/63178260/874c23da-0d7b-4038-9e7c-d27cf5254451">\
+Click OK, and your database should load on the left hand side of the screen. Tables will be shown under verceldb > public > tables:
+<img width="351" alt="image" src="https://github.com/jess-che/fortis/assets/63178260/3d15e61d-ef31-4d4f-9003-961b84d3565c">\
+Double clicking on a table lets you see its contents. To make queries, go to File -> New -> Query Console, and then use the console that appears to write and run any SQL queries you desire. 
 
 ## File Structure
 
