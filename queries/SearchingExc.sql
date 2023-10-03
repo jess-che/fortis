@@ -4,19 +4,19 @@ JOIN gym G ON E.equipment = G.equipment
 WHERE G.gid = (
     SELECT G.gid FROM gym G
     JOIN user_data UD ON G.uid = UD.uid
-    WHERE UD.name = '[Gym Name Placeholder]'
+    WHERE UD.name = '[Placeholder]'
     LIMIT 1 --gid to gym name might not be injective :skull:, this just stops error
 )
 ORDER BY E.popularity DESC;
 
 -- Search by Name
 SELECT * FROM exercise
-WHERE name LIKE '%[Exercise Name Placeholder]%'
+WHERE name LIKE '%[Placeholder]%'
 ORDER BY popularity DESC;
 
 -- Filter by Muscle Group
 SELECT * FROM exercise
-WHERE muscle_group = '[Muscle Group Placeholder]'
+WHERE muscle_group = '[Placeholder]'
 ORDER BY popularity DESC;
 
 -- Sort by Public Popularity (Default)
