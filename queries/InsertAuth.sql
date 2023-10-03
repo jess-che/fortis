@@ -1,5 +1,4 @@
 -- Insert a new user via Auth0
-
 INSERT INTO "Users" (email)
 VALUES ('[Email Placeholder]');
 
