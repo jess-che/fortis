@@ -5,7 +5,7 @@ const pool = new Pool({
 });
 
 const insertUser = `
-    INSERT INTO "Users" (email)
+    INSERT INTO "users" (email)
     VALUES ($1)
 `;
 
