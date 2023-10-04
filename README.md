@@ -63,6 +63,12 @@ Set up auth0:
 pnpm add @auth0/nextjs-auth0
 ```
 
+Set up pg:
+```bash
+
+pnpm add pg
+```
+
 Finally, to run the development server:
 ```bash
 
