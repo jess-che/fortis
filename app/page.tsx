@@ -10,36 +10,35 @@ import { useUser }    from '@auth0/nextjs-auth0/client';
 const Home: React.FC = () => {
   const { user, error, isLoading } = useUser();
 
-    const saveUserToDatabase = async (user: any) => {
-        const response = await fetch('/api/insertAuthUser', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            email: user.email,
-            name: user.name
-        }),
-        });
+  const saveUserToDatabase = async (user: any) => {
+    const response = await fetch('/api/insertAuthUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: user.email
+      }),
+    });
     
-        if (!response.ok) {
+    if (!response.ok) {
         throw new Error('Failed to save user');
-        }
-    };
+      }
+  };
     
-    const handleUserSave = async () => {
-        if (!user) {
-            console.error('No user is logged in.');
-            return;
-        }
+  const handleUserSave = async () => {
+    if (!user) {
+      console.error('No user is logged in.');
+      return;
+    }
 
-        try {
-            await saveUserToDatabase(user);
-            console.log('User saved successfully');
-        } catch (error) {
-            console.error('Error saving user:', error);
-        }
-    };
+    try {
+      await saveUserToDatabase(user);
+      console.log('User saved successfully');
+    } catch (error) {
+      console.error('Error saving user:', error);
+    }
+  };
 
   if (!user) {
     return (

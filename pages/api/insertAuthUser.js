@@ -11,7 +11,7 @@ const insertUser = `
 
 export default async (req, res) => {
     if (req.method === 'POST') {
-        const { email, name } = req.body;
+        const { email } = req.body;
 
         try {
             // Insert user
