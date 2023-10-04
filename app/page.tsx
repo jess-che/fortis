@@ -4,10 +4,28 @@ import Link           from 'next/link';
 import React, { FC }  from 'react';
 import DefLayout      from '@/components/def_layout';
 import LoginLayout    from '@/components/login_layout';
-import { useUser } from '@auth0/nextjs-auth0/client';
+import { useUser }    from '@auth0/nextjs-auth0/client';
+import { Auth0User }  from '@/components/types';
 
 const Home: React.FC = () => {
   const { user, error, isLoading } = useUser();
+
+  const saveUserToDatabase = async (user: Auth0User) => {
+    const response = await fetch('/api/insertAuthUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: user.email,
+        name: user.name
+      }),
+    });
+  
+    if (!response.ok) {
+      throw new Error('Failed to save user');
+    }
+  };
 
   if (!user) {
     return (
