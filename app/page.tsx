@@ -44,6 +44,20 @@ const Home: React.FC = () => {
     return (
         <LoginLayout>
           You are not logged in. Please login.
+
+          <Image
+            src="/animated/pulseLogo.gif"
+            alt="Pulsing Logo"
+            width={50}
+            height={50}
+          />
+
+          <Image
+            src="/animated/pulseLogo.svg"
+            alt="Pulsing Logo"
+            width={150}
+            height={150}
+          />
         </LoginLayout>
     );
   }
