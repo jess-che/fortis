@@ -6,8 +6,40 @@ import DefLayout      from '@/components/def_layout';
 import LoginLayout    from '@/components/login_layout';
 import { useUser }    from '@auth0/nextjs-auth0/client';
 
+
 const Home: React.FC = () => {
   const { user, error, isLoading } = useUser();
+
+    const saveUserToDatabase = async (user: any) => {
+        const response = await fetch('/api/insertAuthUser', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email: user.email,
+            name: user.name
+        }),
+        });
+    
+        if (!response.ok) {
+        throw new Error('Failed to save user');
+        }
+    };
+    
+    const handleUserSave = async () => {
+        if (!user) {
+            console.error('No user is logged in.');
+            return;
+        }
+
+        try {
+            await saveUserToDatabase(user);
+            console.log('User saved successfully');
+        } catch (error) {
+            console.error('Error saving user:', error);
+        }
+    };
 
   if (!user) {
     return (
@@ -21,6 +53,9 @@ const Home: React.FC = () => {
     <DefLayout>
       Welcome, {user.name}. This is home page.
       Your email is {user.email}. 
+      <button onClick={handleUserSave}>
+        Click to save user
+      </button>
     </DefLayout>
   );
 }

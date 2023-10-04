@@ -9,39 +9,7 @@ export default function RootLayout({
   }: {
     children: React.ReactNode
   }) {
-    const { user, error, isLoading } = useUser();
-
-    const saveUserToDatabase = async (user: any) => {
-        const response = await fetch('/api/insertAuthUser', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            email: user.email,
-            name: user.name
-        }),
-        });
     
-        if (!response.ok) {
-        throw new Error('Failed to save user');
-        }
-    };
-    
-    const handleUserSave = async () => {
-        if (!user) {
-            console.error('No user is logged in.');
-            return;
-        }
-
-        try {
-            await saveUserToDatabase(user);
-            console.log('User saved successfully');
-        } catch (error) {
-            console.error('Error saving user:', error);
-        }
-    };
-
     return (
         <UserProvider>
         <div className="flex flex-col bg-[#121212]">
@@ -91,7 +59,7 @@ export default function RootLayout({
             </div>
 
             <div className="w-screen p-2 flex justify-end items-center"> 
-            <button onClick={handleUserSave}>
+            
             <Link href="api/auth/login">
                 <div className="flex px-3 items-center hover:shadow-blue transition-shadow duration-300"> 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-10 h-10 pr-1">
@@ -100,7 +68,6 @@ export default function RootLayout({
                 <p className="l-0 pl-1 text-xl font-bold hover:gradient-text-pg ">Login</p>
                 </div>
             </Link>
-            </button>
             </div>
 
         </div>
