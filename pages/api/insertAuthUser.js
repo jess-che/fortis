@@ -1,12 +1,12 @@
 import { Pool } from 'pg';
 
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL
+    connectionString: process.env.POSTGRES_URL
 });
 
 const insertUser = `
-    INSERT INTO "users" (email)
-    VALUES ($1)
+    INSERT INTO "users" (uuid, email)
+    VALUES (DEFAULT, $1)
 `;
 
 export default async (req, res) => {
