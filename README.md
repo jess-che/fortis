@@ -60,7 +60,7 @@ pnpm install
 Set up auth0:
 ```bash
 
-TODO: someone fill out this line pls thx
+pnpm add @auth0/nextjs-auth0
 ```
 
 Finally, to run the development server:
