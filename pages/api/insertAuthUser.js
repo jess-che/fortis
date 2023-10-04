@@ -19,7 +19,7 @@ export default async (req, res) => {
             
             res.status(200).send('Data saved successfully');
         } catch (err) {
-            console.log(pool.query);
+            console.log('hello');
             console.error(err);
             res.status(500).json({ error: err.message });
         }
