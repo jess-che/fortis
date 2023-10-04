@@ -1,7 +1,8 @@
 import "./SearchResultsList.css";
+import React, { FC }  from 'react';
 // import { SearchResult } from "./SearchResult";
 
-export const SearchResultsList = () => {
+const SearchResultsList: React.FC = () => {
   return (
     <div className="results-list">
       <div style={{color: 'black'}}>A</div>
@@ -31,3 +32,5 @@ export const SearchResultsList = () => {
     </div>
   );
 };
+
+export default SearchResultsList;

@@ -5,8 +5,8 @@ import DefLayout from "@/components/def_layout";
 import { isTemplateSpan } from "typescript";
 import { useState } from "react";
 
-import { SearchBar } from "./SearchBarComponents/SearchBar";
-import { SearchResultsList } from "./SearchBarComponents/SearchResultsList";
+import SearchBar from "./SearchBarComponents/SearchBar";
+import SearchResultsList from "./SearchBarComponents/SearchResultsList";
 
 
 const DiscoverPage: React.FC = () => {

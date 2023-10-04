@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, FC } from "react";
 
 // import { FaSearch } from "react-icons/fa";
 import "./SearchBar.css";
@@ -14,7 +14,7 @@ type User = {
 //     setResults: React.Dispatch<React.SetStateAction<User[]>>;
 //   };
   
-export const SearchBar = () => {
+const SearchBar: React.FC = () => {
   const [input, setInput] = useState("");
 
   const fetchData = (value: string) => {
@@ -49,6 +49,8 @@ export const SearchBar = () => {
     </div>
   );
 };
+
+export default SearchBar;
 
 
 // type SearchBarProps = {
