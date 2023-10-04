@@ -7,7 +7,7 @@ create table exercise
     type         varchar,
     muscle_group varchar,
     popularity   integer,
-    equipment varchar,
+    equipment varchar,  -- add this to the database on the app...
     favorite     boolean
 );
 

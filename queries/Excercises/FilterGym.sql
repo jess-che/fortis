@@ -8,22 +8,3 @@ WHERE G.gid = (
     LIMIT 1 --gid to gym name might not be injective :skull:, this just stops error
 )
 ORDER BY E.popularity DESC;
-
--- Search by Name
-SELECT * FROM exercise
-WHERE name LIKE '%[Placeholder]%'
-ORDER BY popularity DESC;
-
--- Filter by Muscle Group
-SELECT * FROM exercise
-WHERE muscle_group = '[Placeholder]'
-ORDER BY popularity DESC;
-
--- Sort by Public Popularity (Default)
-SELECT * FROM exercise
-ORDER BY popularity DESC;
-
--- Filter by Favorites
-SELECT * FROM exercise
-WHERE favorite = TRUE
-ORDER BY popularity DESC;
