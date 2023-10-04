@@ -1,43 +1,56 @@
-import React from "react";
-import {FaSearch} from "react-icons/fa";
+import React, { useState } from "react";
 
-export const SearchBar = () => {
-    return (<div className="input-wrapper">
-        <FaSearch id="search-icon" />
-        <input placeholder="Type to search..." style={{color: 'black'}} />
-        </div>);
-}
+import { FaSearch } from "react-icons/fa";
+import "./SearchBar.css";
 
+// Define a type for the user objects
+type User = {
+  id: number;
+  name: string;
+  // Add other properties as needed
+};
 
-
-
-
-
-
-
-
-// import React, { useState } from 'react';
-
-// const SearchBar = () => {
-//   const [searchQuery, setSearchQuery] = useState('');
-
-//   const handleInputChange = (e) => {
-//     setSearchQuery(e.target.value);
+// type SearchBarProps = {
+//     setResults: React.Dispatch<React.SetStateAction<User[]>>;
 //   };
+  
+export const SearchBar = () => {
+  const [input, setInput] = useState("");
 
-//   return (
-//     <div>
-//       <input
-//         type="text"
-//         placeholder="Search..."
-//         value={searchQuery}
-//         onChange={handleInputChange}
-//       />
-//       <button onClick={() => alert(`Searching for: ${searchQuery}`)}>
-//         Search
-//       </button>
-//     </div>
-//   );
-// };
+  const fetchData = (value: string) => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((response) => response.json())
+      .then((json) => {
+        const results = json.filter((user: User) => {
+          return (
+            value &&
+            user &&
+            user.name &&
+            user.name.toLowerCase().includes(value)
+          );
+        });
+        // setResults(results);
+      });
+  };
 
-// export default SearchBar;
+  const handleChange = (value: string) => {
+    setInput(value);
+    fetchData(value);
+  };
+
+  return (
+    <div className="input-wrapper">
+      <FaSearch id="search-icon" />
+      <input
+        placeholder="Type to search..."
+        value={input}
+        onChange={(e) => handleChange(e.target.value)}
+      />
+    </div>
+  );
+};
+
+
+// type SearchBarProps = {
+//     setResults: React.Dispatch<React.SetStateAction<User[]>>; // Assuming results is an array of User objects
+//   };

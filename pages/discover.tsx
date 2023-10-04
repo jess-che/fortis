@@ -4,7 +4,9 @@ import React, { FC } from "react";
 import DefLayout from "@/components/def_layout";
 import { isTemplateSpan } from "typescript";
 import { useState } from "react";
+
 import { SearchBar } from "./SearchBarComponents/SearchBar";
+import { SearchResultsList } from "./SearchBarComponents/SearchResultsList";
 
 
 const DiscoverPage: React.FC = () => {
@@ -32,32 +34,30 @@ const DiscoverPage: React.FC = () => {
   };
 
   const searchBarStyle = {
-    backgroundColor: '#aaa',
+    // backgroundColor: '#aaa',
     margin: 'auto',
     width: '40%',
     display: 'flex',
     flexDirection: 'column' as 'column',
-    alignITems: 'center',
+    alignItems: 'center',
     minWidth: '200px',
   };
 
-  const onClick = () => {
-    console.log('Not an accessible button');
-  }
+  const [results, setResults] = useState([]);
 
   return (
     <DefLayout>
       <div className="discover-page">
         <div className="search-bar-container" style={searchBarStyle}>
           <SearchBar />
-          <div>Search results</div>
+          <SearchResultsList />
         </div>
 
         <div className="workout-list">
           
           {workouts.map((workout) => (
-            <div key={workout.name} className="workout-item" style={workoutRectangleStyle} onClick={onClick}>
-              <div className="workout-rectangle" onClick={onClick}>
+            <div key={workout.name} className="workout-item" style={workoutRectangleStyle} >
+              <div className="workout-rectangle" >
                 <p className="workout-name" style={workoutNameStyle}>{workout.name}</p>
                 <p className="workout-description">{workout.description}</p>
               </div>
