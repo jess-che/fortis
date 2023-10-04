@@ -32,6 +32,7 @@ export default async (req, res) => {
 
             // Insert user data
             // await pool.query(insertUserData, [email, name, gymName]);
+            
 
             res.status(200).send('Data saved successfully');
         } catch (err) {
