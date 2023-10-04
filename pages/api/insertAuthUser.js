@@ -15,6 +15,7 @@ export default async (req, res) => {
 
         try {
             // Insert user
+            console.log('hi');
             await pool.query(insertUser, [email]);
             
             res.status(200).send('Data saved successfully');
