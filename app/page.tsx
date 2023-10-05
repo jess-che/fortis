@@ -62,9 +62,11 @@ const Home: React.FC = () => {
   }
   
   if (user.loginCounts === 1) {
-    <Link href="/signup">
-      go here
-    </Link>
+    return(
+      <Link href="/signup">
+        go here
+      </Link>
+    );
   }
 
   return (
