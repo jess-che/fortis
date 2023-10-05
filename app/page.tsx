@@ -5,10 +5,12 @@ import React, { FC }  from 'react';
 import DefLayout      from '@/components/def_layout';
 import LoginLayout    from '@/components/login_layout';
 import { useUser }    from '@auth0/nextjs-auth0/client';
+import { useState, useEffect } from 'react';
 
 
 const Home: React.FC = () => {
   const { user, error, isLoading } = useUser();
+  let firstLogin = false;
 
   const saveUserToDatabase = async (user: any) => {
     const response = await fetch('/api/insertAuthUser', {
@@ -61,13 +63,26 @@ const Home: React.FC = () => {
     );
   }
 
+  if (user && user['https://cs316-fortis.vercel.app/firstLogin']) {
+    firstLogin = user['https://cs316-fortis.vercel.app/firstLogin'] as boolean;
+  }
+
   return (
     <DefLayout>
-      Welcome, {user.name}. This is home page.
-      Your email is {user.email}. 
-      <button onClick={handleUserSave}>
-        Click to save user
-      </button>
+      {firstLogin ? (
+        <p>True!</p>
+      )
+      :
+      (
+      <div>
+        Welcome, {user.name}. This is home page.
+        Your email is {user.email}. 
+        <button onClick={handleUserSave}>
+          Click to save user
+        </button>
+      </div>
+      )
+      }
     </DefLayout>
   );
 }
