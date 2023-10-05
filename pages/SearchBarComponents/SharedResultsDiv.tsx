@@ -6,7 +6,12 @@ interface SharedResultsDivProps {
 }
 
 const SharedResultsDiv: React.FC<SharedResultsDivProps> = ({ children }) => {
-  return <div className="search-results">{children}</div>;
+  return (
+    <>
+    <div className="search-results">{children}</div>
+    </>
+  );
 };
 
 export default SharedResultsDiv;
+

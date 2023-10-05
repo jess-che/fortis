@@ -135,6 +135,7 @@ const DiscoverPage: React.FC = () => {
               : workoutRectangleStyle;
 
             return (
+              <>
               <div key={workout.name} className="workout-item" style={itemStyle} onClick={() => handleWorkoutClick(workout.name)}>
                 <div className="workout-rectangle">
                   <p className="workout-name" style={workoutNameStyle}>
@@ -143,9 +144,13 @@ const DiscoverPage: React.FC = () => {
                   <p className="workout-description">{workout.description}</p>
                 </div>
               </div>
+
+              {/* <SharedResultsDiv>
+                {results && results.length > 0 && <SearchResultsList results={results} />}
+              </SharedResultsDiv> */}
+              </>
             );
           })}
-
           <SharedResultsDiv>
             {results && results.length > 0 && <SearchResultsList results={results} />}
           </SharedResultsDiv>
