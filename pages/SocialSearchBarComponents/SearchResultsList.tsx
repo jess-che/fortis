@@ -15,7 +15,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
           ))}
         </ul>
       ) : (
-        <p>No results found.</p>
+        <></>
       )}
     </div>
   );
