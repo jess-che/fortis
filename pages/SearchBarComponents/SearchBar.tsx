@@ -1,3 +1,4 @@
+import "./SearchBar.css";
 import React, { useState, FC } from "react";
 
 type User = {
