@@ -51,6 +51,12 @@ const Home: React.FC = () => {
             width={150}
             height={150}
           />
+          <Image
+            src="/animated/homeLogin.svg"
+            alt="Pulsing Logo"
+            width={800}
+            height={300}
+          />
         </LoginLayout>
     );
   }
