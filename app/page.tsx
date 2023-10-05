@@ -71,18 +71,8 @@ const Home: React.FC = () => {
 
   if (firstLogin && count === 0) {
     useEffect(() => {
-      // Retrieve the count from local storage first
-      const savedCount = localStorage.getItem('pageOpens');
-  
-      if (savedCount) {
-          setCount(Number(savedCount));
-      }
-  
-      // Increment the count and save it back to local storage
-      const newCount = Number(savedCount) + 1 || 1;
-      setCount(newCount);
-      localStorage.setItem('pageOpens', newCount.toString());
-    }, []); 
+      setCount(prevCount => prevCount + 1);
+    }, []);
 
     return (
       <DefLayout>
