@@ -8,7 +8,7 @@ const SearchBar = () => {
   const [results, setResults] = useState([]);
 
   const populatelist = async (query: any) => {
-    const response = await fetch('/api/searchExcName', {
+    const response = await fetch('/api/searchUserName', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -25,6 +25,7 @@ const SearchBar = () => {
     const data = await response.json();
     const dataName = data.data.rows.map((row: { name: any; }) => row.name);
     setResults(dataName);
+    console.log(dataName)
   };
 
   const handleChange = (value: React.SetStateAction<string>) => {
