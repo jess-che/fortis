@@ -24,6 +24,8 @@ const SearchBar = () => {
 
     const data = await response.json();
     const dataName = data.data.rows.map((row: { name: any; }) => row.name);
+    console.log(data);
+    console.log(dataName);
     setResults(dataName);
   };
 
