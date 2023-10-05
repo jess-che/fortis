@@ -11,8 +11,18 @@ import { useState, useEffect } from 'react';
 const Home: React.FC = () => {
   const { user, error, isLoading } = useUser();
   let firstLogin = false;
-  const [count, setCount] = useState(0);
+  const setCountInLocalStorage = (count: any) => {
+    localStorage.setItem('count', count);
+  }
+  
+  const getCountFromLocalStorage = () => {
+    return localStorage.getItem('count') || 0;
+  }
 
+  let storedValue = localStorage.getItem('count');
+  let count = storedValue ? parseInt(storedValue, 10) : 0;
+
+  
 
   const saveUserToDatabase = async (user: any) => {
     const response = await fetch('/api/insertAuthUser', {
@@ -31,7 +41,9 @@ const Home: React.FC = () => {
   };
     
   const handleUserSave = async () => {
-    setCount(prevCount => prevCount + 1);
+    setCountInLocalStorage(count+1);
+    count += 1;
+
     if (!user) {
       console.error('No user is logged in.');
       return;
