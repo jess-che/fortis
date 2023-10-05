@@ -35,6 +35,9 @@ dependencies:
   next:
     specifier: 13.4.3
     version: 13.4.3(react-dom@18.2.0)(react@18.2.0)
+  nextjs:
+    specifier: ^0.0.3
+    version: 0.0.3
   pg:
     specifier: ^8.11.3
     version: 8.11.3
@@ -2072,6 +2075,11 @@ packages:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+    dev: false
+
+  /nextjs@0.0.3:
+    resolution: {integrity: sha512-mYbDUo4/sRAZ8TqK63PCpYnFiLg7BICG/ot9+guOrUKd4/Fo71ZmEQ41IZbH6nqbQvG7SXTBuofJXAIWfNho0w==}
+    engines: {node: '>=0.8.21'}
     dev: false
 
   /node-gyp-build@4.6.1:
