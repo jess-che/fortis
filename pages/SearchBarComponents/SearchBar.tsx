@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchResultsList from "./SearchResultsList";
 import "./SearchBar.css";
 
@@ -31,6 +31,10 @@ const SearchBar = () => {
     setInput(value);
     populatelist(value);
   };
+
+  useEffect(() => {
+    handleChange(''); 
+  }, []); 
 
   return (
     <div className="search-container">

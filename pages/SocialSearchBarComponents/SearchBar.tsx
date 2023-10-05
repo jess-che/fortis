@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchResultsList from "./SearchResultsList";
 import "./SearchBar.css";
 
@@ -27,6 +27,11 @@ const SearchBar = () => {
     setResults(dataName);
     console.log(dataName)
   };
+
+  // so names load on start
+  useEffect(() => {
+    handleChange(''); 
+  }, []); 
 
   const handleChange = (value: React.SetStateAction<string>) => {
     setInput(value);
