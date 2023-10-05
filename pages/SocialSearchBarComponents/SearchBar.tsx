@@ -5,7 +5,7 @@ import "./SearchBar.css";
 
 const SearchBar = () => {
     const [input, setInput] = useState("");
-    const [results, setResults] = useState([]);
+    const [results, setResults] = useState<string[]>([]);
 
     const populatelist = async (query: any) => {
         const response = await fetch('/api/searchUserName', {
@@ -25,7 +25,7 @@ const SearchBar = () => {
         const data = await response.json();
         const dataName = data.data.rows.map((row: { name: any; }) => row.name);
         setResults(dataName);
-        console.log(dataName)
+        console.log(dataName);
     };
 
     const populatelist2 = async (query: any) => {
@@ -44,9 +44,10 @@ const SearchBar = () => {
         }
 
         const data = await response.json();
-        const dataName = data.data.rows.map((row: { name: any; }) => row.name);
-        setResults(prevResults => [...prevResults, ...dataName]);
-        console.log(dataName)
+        const dataName = data.data.rows.map((row: { email: any; }) => row.email);
+        setResults((prevResults: string[]) => [...prevResults, ...dataName]);
+        // setResults(dataName);
+        console.log(dataName);
     };
 
 
@@ -58,6 +59,7 @@ const SearchBar = () => {
     const handleChange = (value: React.SetStateAction<string>) => {
         setInput(value);
         populatelist(value);
+        populatelist2(value);
     };
 
     return (

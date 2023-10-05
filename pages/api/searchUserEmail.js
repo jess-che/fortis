@@ -5,9 +5,9 @@ const pool = new Pool({
     connectionString: "postgres://default:Azy2srgWb9aU@ep-polished-cherry-55480419-pooler.us-east-1.postgres.vercel-storage.com/verceldb?sslmode=require"
 });
 
-const searchUserName = `
-    SELECT * FROM user
-    WHERE email LIKE $1
+const searchUserEmail = `
+    SELECT * FROM users
+    WHERE Email LIKE $1
     `;
 
 export default async (req, res) => {
@@ -17,12 +17,12 @@ export default async (req, res) => {
         try {
             // Insert user
             const values = [`%${searchQuery}%`];
-            console.log('hi');
-            const results = await pool.query(searchUserName, values);
+            console.log('hi2');
+            const results = await pool.query(searchUserEmail, values);
             
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('hello');
+            console.log('hello2');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
