@@ -11,17 +11,6 @@ import { useState, useEffect } from 'react';
 const Home: React.FC = () => {
   const { user, error, isLoading } = useUser();
   let firstLogin = false;
-  const setCountInLocalStorage = (count: any) => {
-    localStorage.setItem('count', count);
-  }
-  
-  const getCountFromLocalStorage = () => {
-    return localStorage.getItem('count') || 0;
-  }
-
-  let storedValue = localStorage.getItem('count');
-  let count = storedValue ? parseInt(storedValue, 10) : 0;
-
   
 
   const saveUserToDatabase = async (user: any) => {
@@ -41,9 +30,6 @@ const Home: React.FC = () => {
   };
     
   const handleUserSave = async () => {
-    setCountInLocalStorage(count+1);
-    count += 1;
-
     if (!user) {
       console.error('No user is logged in.');
       return;
@@ -82,7 +68,7 @@ const Home: React.FC = () => {
     firstLogin = user['https://cs316-fortis.vercel.app/firstLogin'] as boolean;
   }
 
-  if (firstLogin && count === 0) {
+  if (firstLogin) {
     return (
       <DefLayout>
         <button onClick={handleUserSave}>
