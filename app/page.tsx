@@ -60,14 +60,6 @@ const Home: React.FC = () => {
         </LoginLayout>
     );
   }
-  
-  if (user.loginCounts === 1) {
-    return(
-      <Link href="/signup">
-        go here
-      </Link>
-    );
-  }
 
   return (
     <DefLayout>
