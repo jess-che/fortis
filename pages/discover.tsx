@@ -44,6 +44,17 @@ const DiscoverPage: React.FC = () => {
   };
 
   const [results, setResults] = useState([]);
+  // const handleWorkoutClick = (workoutName: string) => {console.log(`You clicked ${workoutName}`);};
+  const [selectedWorkout, setSelectedWorkout] = useState<string | null>(null);
+  const handleWorkoutClick = (workoutName: string) => {
+    setSelectedWorkout(prevWorkout => {
+      if (prevWorkout === workoutName) {
+        return null; // if the workout is clicked again, unselect it
+      } else {
+        return workoutName; // otherwise, select the clicked workout
+      }
+    });
+  };
 
   return (
     <DefLayout>
@@ -55,14 +66,24 @@ const DiscoverPage: React.FC = () => {
 
         <div className="workout-list">
           
-          {workouts.map((workout) => (
-            <div key={workout.name} className="workout-item" style={workoutRectangleStyle} >
+        {workouts.map((workout) => {
+          const isSelected = workout.name === selectedWorkout;
+          const itemStyle = isSelected ? { ...workoutRectangleStyle, background: 'green' } : workoutRectangleStyle;
+
+          return (
+            <div 
+              key={workout.name}
+              className="workout-item"
+              style={itemStyle}
+              onClick={() => handleWorkoutClick(workout.name)}
+            >
               <div className="workout-rectangle" >
                 <p className="workout-name" style={workoutNameStyle}>{workout.name}</p>
                 <p className="workout-description">{workout.description}</p>
               </div>
             </div>
-          ))}
+          );
+        })}
         </div>
       </div>
     </DefLayout>
