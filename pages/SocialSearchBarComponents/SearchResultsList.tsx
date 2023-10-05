@@ -8,11 +8,15 @@ interface SearchResultsListProps {
 const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
   return (
     <div className="search-results">
-      <ul>
-        {results.map((name, index) => (
-          <li key={index}>{name}</li>
-        ))}
-      </ul>
+      {results && results.length > 0 ? (
+        <ul>
+          {results.map((name, index) => (
+            <li key={index}>{name}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>No results found.</p>
+      )}
     </div>
   );
 };
