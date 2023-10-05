@@ -11,6 +11,8 @@ import { useState, useEffect } from 'react';
 const Home: React.FC = () => {
   const { user, error, isLoading } = useUser();
   let firstLogin = false;
+  const [count, setCount] = useState(0);
+
 
   const saveUserToDatabase = async (user: any) => {
     const response = await fetch('/api/insertAuthUser', {
@@ -67,22 +69,38 @@ const Home: React.FC = () => {
     firstLogin = user['https://cs316-fortis.vercel.app/firstLogin'] as boolean;
   }
 
-  return (
-    <DefLayout>
-      {firstLogin ? (
-        <p>True!</p>
-      )
-      :
-      (
-      <div>
-        Welcome, {user.name}. This is home page.
-        Your email is {user.email}. 
+  if (firstLogin && count === 0) {
+    useEffect(() => {
+      // Retrieve the count from local storage first
+      const savedCount = localStorage.getItem('pageOpens');
+  
+      if (savedCount) {
+          setCount(Number(savedCount));
+      }
+  
+      // Increment the count and save it back to local storage
+      const newCount = Number(savedCount) + 1 || 1;
+      setCount(newCount);
+      localStorage.setItem('pageOpens', newCount.toString());
+    }, []); 
+
+    return (
+      <DefLayout>
         <button onClick={handleUserSave}>
           Click to save user
         </button>
+      </DefLayout>
+    );
+  }
+
+  return (
+    <DefLayout>
+      
+      <div>
+        Welcome, {user.name}. This is home page.
+        Your email is {user.email}. 
       </div>
-      )
-      }
+    
     </DefLayout>
   );
 }
