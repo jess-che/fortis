@@ -13,12 +13,6 @@ const Home: React.FC = () => {
   let firstLogin = false;
   const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    if (firstLogin) {
-      setCount(prevCount => prevCount + 1);
-    }
-  }, [firstLogin]);
-
 
   const saveUserToDatabase = async (user: any) => {
     const response = await fetch('/api/insertAuthUser', {
@@ -37,6 +31,7 @@ const Home: React.FC = () => {
   };
     
   const handleUserSave = async () => {
+    setCount(prevCount => prevCount + 1);
     if (!user) {
       console.error('No user is logged in.');
       return;
@@ -75,8 +70,7 @@ const Home: React.FC = () => {
     firstLogin = user['https://cs316-fortis.vercel.app/firstLogin'] as boolean;
   }
 
-  if (firstLogin && count === 1) {
-    firstLogin = false;
+  if (firstLogin && count === 0) {
     return (
       <DefLayout>
         <button onClick={handleUserSave}>
