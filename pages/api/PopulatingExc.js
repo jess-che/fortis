@@ -12,7 +12,7 @@
 //     console.log("your mother");
     
 //     if (!response.ok) {
-//         throw new Error('Failed to save user');
+//         throw new Error('Failed to save Exc');
 //       }
 //   };
 
