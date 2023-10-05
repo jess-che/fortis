@@ -19,7 +19,7 @@ const DiscoverPage: React.FC = () => {
     { name: "Legs", description: "A leg workout targets your quadriceps, hamstrings, and calves" },
     { name: "Core", description: "An abs workout targets your abdominal muscles, lower back, and obliques" },
     { name: "Cardio", description: "A cardio workout trains your aerobic metabolism and cardiovascular health" },
-    { name: "HIIT", description: "High Intensity Interval Training incorporate rounds of higher and lower intensity movements" },
+    { name: "HIIT", description: "HIIT incorporate rounds of higher and lower intensity movements" },
   ];
 
   type StringToArrayMappingType = {
@@ -36,16 +36,15 @@ const DiscoverPage: React.FC = () => {
   }
 
   // Inline styles for workout-name and workout-rectangle
-  const workoutNameStyle = {
-    fontSize: '20px',
-    fontWeight: 'bold',
-  };
+  // const workoutNameStyle = {
+  //   fontSize: '4rem',
+  //   fontWeight: 'bold',
+  // };
 
   const workoutRectangleStyle = {
     background: 'gray',
     border: '1px solid #ccc',
-    padding: '10px',
-    margin: '10px',
+    padding: '.5rem',
     borderRadius: '10px',
   };
 
@@ -127,7 +126,7 @@ const DiscoverPage: React.FC = () => {
           <SearchBar />
         </div>
 
-        <div className="workout-list">
+        <div className="workout-list grid grid-cols-6 gap-2">
           {workouts.map((workout) => {
             const isSelected = workout.name === selectedWorkout;
             const itemStyle = isSelected
@@ -135,22 +134,23 @@ const DiscoverPage: React.FC = () => {
               : workoutRectangleStyle;
 
             return (
-              <>
-              <div key={workout.name} className="workout-item" style={itemStyle} onClick={() => handleWorkoutClick(workout.name)}>
-                <div className="workout-rectangle">
-                  <p className="workout-name" style={workoutNameStyle}>
-                    {workout.name}
-                  </p>
-                  <p className="workout-description">{workout.description}</p>
+              <div>
+                <div key={workout.name} className="workout-item" style={itemStyle} onClick={() => handleWorkoutClick(workout.name)}>
+                  <div className="workout-rectangle">
+                    <p className="text-xl font-bold">
+                      {workout.name}
+                    </p>
+                    <p className="text-xs">{workout.description}</p>
+                  </div>
                 </div>
-              </div>
 
-              {/* <SharedResultsDiv>
-                {results && results.length > 0 && <SearchResultsList results={results} />}
-              </SharedResultsDiv> */}
-              </>
+                {/* <SharedResultsDiv>
+                  {results && results.length > 0 && <SearchResultsList results={results} />}
+                </SharedResultsDiv> */}
+              </div>
             );
           })}
+
           <SharedResultsDiv>
             {results && results.length > 0 && <SearchResultsList results={results} />}
           </SharedResultsDiv>
