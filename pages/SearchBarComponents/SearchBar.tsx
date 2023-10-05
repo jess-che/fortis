@@ -9,7 +9,7 @@ type User = {
 const SearchBar: React.FC = () => {
   const [input, setInput] = useState("");
 
-  const saveSearchQueryToDatabase = async (query: string) => {
+  const populatelist = async (query: string) => {
     const response = await fetch('/api/searchExcName', {
       method: 'POST',
       headers: {
@@ -29,7 +29,7 @@ const SearchBar: React.FC = () => {
 
   const handleChange = (value: string) => {
     setInput(value);
-    saveSearchQueryToDatabase(value);
+    populatelist(value);
   };
 
   return (

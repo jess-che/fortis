@@ -43,6 +43,24 @@ const DiscoverPage: React.FC = () => {
     minWidth: '200px',
   };
 
+  const populatelistMuscle = async (query: string) => {
+    const response = await fetch('/api/FilterExcMuscle', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        searchQuery: query
+      }),
+    });
+    
+    if (!response.ok) {
+        throw new Error('Failed to save query');
+      }
+    const data = await response.json();
+    console.log(data);
+  };
+
   const [results, setResults] = useState([]);
   // const handleWorkoutClick = (workoutName: string) => {console.log(`You clicked ${workoutName}`);};
   const [selectedWorkout, setSelectedWorkout] = useState<string | null>(null);
@@ -51,6 +69,8 @@ const DiscoverPage: React.FC = () => {
       if (prevWorkout === workoutName) {
         return null; // if the workout is clicked again, unselect it
       } else {
+        console.log(workoutName);
+        populatelistMuscle(workoutName);
         return workoutName; // otherwise, select the clicked workout
       }
     });

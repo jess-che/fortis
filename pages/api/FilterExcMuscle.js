@@ -7,7 +7,7 @@ const pool = new Pool({
 
 const FilterExcMuscle = `
     SELECT * FROM exercise
-    WHERE name LIKE $1
+    WHERE muscle_group = $1
     ORDER BY popularity DESC;
     `;
 
@@ -17,9 +17,9 @@ export default async (req, res) => {
 
         try {
             // Insert user
-            const values = [`%${searchQuery}%`];
-            console.log('hi');
-            const results = await pool.query(FilterExcMuscle, values);
+           //const values = [${searchQuery}$`];
+            console.log('hi', searchQuery);
+            const results = await pool.query(FilterExcMuscle, [searchQuery]);
             
             res.json({ success: true, data: results });
         } catch (err) {
