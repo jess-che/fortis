@@ -24,7 +24,8 @@ const SearchBar = () => {
 
         const data = await response.json();
         const dataName = data.data.rows.map((row: { name: any; }) => row.name);
-        setResults(dataName);
+        // setResults(dataName);
+        setResults((prevResults: string[]) => [...prevResults, ...dataName]);
         console.log(dataName);
     };
 
@@ -58,6 +59,8 @@ const SearchBar = () => {
 
     const handleChange = (value: React.SetStateAction<string>) => {
         setInput(value);
+        setResults([]);
+
         populatelist(value);
         populatelist2(value);
     };
