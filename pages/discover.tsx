@@ -22,6 +22,19 @@ const DiscoverPage: React.FC = () => {
     { name: "HIIT", description: "High Intensity Interval Training incorporate rounds of higher and lower intensity movements" },
   ];
 
+  type StringToArrayMappingType = {
+    [key: string]: string[];
+  };
+
+  const workout_muscle_map: StringToArrayMappingType = {
+    "Push": ["Chest", "Shoulder", "Triceps"],
+    "Pull": ["Back", "Biceps"],
+    "Legs": ["Quadriceps", "Hamstrings", "Calves"],
+    "Core": ["Abs", "Back", "Obliques"],
+    "Cardio": [],
+    "HIIT": []
+  }
+
   // Inline styles for workout-name and workout-rectangle
   const workoutNameStyle = {
     fontSize: '20px',
@@ -45,28 +58,53 @@ const DiscoverPage: React.FC = () => {
     minWidth: '200px',
   };
 
-  const populatelistMuscle = async (query: string) => {
-    const response = await fetch('/api/FilterExcMuscle', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        searchQuery: query
-      }),
-    });
+  // const populatelistMuscle = async (query: string) => {
+  //   const response = await fetch('/api/FilterExcMuscle', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       searchQuery: query
+  //     }),
+  //   });
     
-    if (!response.ok) {
-        throw new Error('Failed to save query');
+  //   if (!response.ok) {
+  //       throw new Error('Failed to save query');
+  //   }
+
+  //   const data = await response.json();
+  //   const dataName = data.data.rows.map((row: { name: any; }) => row.name);
+  //   console.log(dataName);
+  //   setResults(dataName);
+  // };
+  const populatelistMuscle = async (queries: string[]) => {
+    let allResults: string[] = [];
+
+    for (const query of queries) {
+      const response = await fetch('/api/FilterExcMuscle', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          searchQuery: query
+        }),
+      });
+      
+      if (!response.ok) {
+          throw new Error('Failed to save query');
+      }
+
+      const data = await response.json();
+      const dataNames = data.data.rows.map((row: { name: any; }) => row.name);
+      allResults = [...allResults, ...dataNames];
     }
-    
-    const data = await response.json();
-    const dataName = data.data.rows.map((row: { name: any; }) => row.name);
-    console.log(dataName);
-    setResults(dataName);
+    console.log(allResults);
+    setResults(allResults);
   };
 
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<string[]>([]);
   // const handleWorkoutClick = (workoutName: string) => {console.log(`You clicked ${workoutName}`);};
   
   const [selectedWorkout, setSelectedWorkout] = useState<string | null>(null);
@@ -76,7 +114,7 @@ const DiscoverPage: React.FC = () => {
         return null; // if the workout is clicked again, unselect it
       } else {
         console.log(workoutName);
-        populatelistMuscle(workoutName);
+        populatelistMuscle(workout_muscle_map[workoutName]);
         return workoutName; // otherwise, select the clicked workout
       }
     });
