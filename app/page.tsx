@@ -69,13 +69,7 @@ const Home: React.FC = () => {
   }
 
   if (firstLogin) {
-    return (
-      <DefLayout>
-        <button onClick={handleUserSave}>
-          Click to save user
-        </button>
-      </DefLayout>
-    );
+    handleUserSave();
   }
 
   return (
