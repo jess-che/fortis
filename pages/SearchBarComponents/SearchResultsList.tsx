@@ -1,36 +1,40 @@
 import "./SearchResultsList.css";
-import React, { FC }  from 'react';
-// import { SearchResult } from "./SearchResult";
+import React from "react";
 
-const SearchResultsList: React.FC = () => {
+interface SearchResultsListProps {
+  results: string[]; // Define the type of the dataName prop as an array of strings
+}
+
+const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
   return (
-    <div className="results-list">
-      <div style={{color: 'black'}}>A</div>
-      <div style={{color: 'black'}}>B</div>
-      <div style={{color: 'black'}}>C</div>
-      <div style={{color: 'black'}}>A</div>
-      <div style={{color: 'black'}}>B</div>
-      <div style={{color: 'black'}}>C</div>
-      <div style={{color: 'black'}}>A</div>
-      <div style={{color: 'black'}}>B</div>
-      <div style={{color: 'black'}}>C</div>
-      <div style={{color: 'black'}}>A</div>
-      <div style={{color: 'black'}}>B</div>
-      <div style={{color: 'black'}}>C</div>
-      <div style={{color: 'black'}}>A</div>
-      <div style={{color: 'black'}}>B</div>
-      <div style={{color: 'black'}}>C</div>
-      <div style={{color: 'black'}}>A</div>
-      <div style={{color: 'black'}}>B</div>
-      <div style={{color: 'black'}}>C</div>
-      <div style={{color: 'black'}}>A</div>
-      <div style={{color: 'black'}}>B</div>
-      <div style={{color: 'black'}}>C</div>
-      <div style={{color: 'black'}}>A</div>
-      <div style={{color: 'black'}}>B</div>
-      <div style={{color: 'black'}}>C</div>
+    <div className="search-results">
+      <ul>
+        {results.map((name, index) => (
+          <li key={index}>{name}</li>
+        ))}
+      </ul>
     </div>
   );
 };
 
 export default SearchResultsList;
+
+
+//export default SearchResultsList;
+
+
+
+
+// import "./SearchResultsList.css";
+// import React, { FC }  from 'react';
+// // import { SearchResult } from "./SearchResult";
+
+// const SearchResultsList: React.FC = () => {
+//   return (
+//     console.log("s");
+//     <div className="results-list">
+//     </div>
+//   );
+// };
+
+// export default SearchResultsList;

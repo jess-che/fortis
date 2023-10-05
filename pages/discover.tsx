@@ -81,7 +81,6 @@ const DiscoverPage: React.FC = () => {
       <div className="discover-page">
         <div className="search-bar-container" style={searchBarStyle}>
           <SearchBar />
-          <SearchResultsList />
         </div>
 
         <div className="workout-list">
@@ -93,9 +92,8 @@ const DiscoverPage: React.FC = () => {
           return (
             <div 
               key={workout.name}
-              className="workout-item"
-              style={itemStyle}
-              onClick={() => handleWorkoutClick(workout.name)}
+              className="workout-item" 
+              style={itemStyle} onClick={() => handleWorkoutClick(workout.name)}
             >
               <div className="workout-rectangle" >
                 <p className="workout-name" style={workoutNameStyle}>{workout.name}</p>
@@ -108,7 +106,29 @@ const DiscoverPage: React.FC = () => {
       </div>
     </DefLayout>
   );
-
 };
+
+  // return (
+  //   <DefLayout>
+  //     <div className="discover-page">
+  //       <div className="search-bar-container" style={searchBarStyle}>
+  //         {/* <SearchBar results={setResults} />
+  //         {results && results.length > 0 && <SearchResultsList results={results} />} */}
+  //       </div>
+
+  //       <div className="workout-list">
+          
+  //         {workouts.map((workout) => (
+  //           <div key={workout.name} className="workout-item" style={workoutRectangleStyle} >
+  //             <div className="workout-rectangle" >
+  //               <p className="workout-name" style={workoutNameStyle}>{workout.name}</p>
+  //               <p className="workout-description">{workout.description}</p>
+  //             </div>
+  //           </div>
+  //         ))}
+  //       </div>
+  //     </div>
+  //   </DefLayout>
+  // );
 
 export default DiscoverPage;
