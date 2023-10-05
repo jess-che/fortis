@@ -58,7 +58,8 @@ const DiscoverPage: React.FC = () => {
         throw new Error('Failed to save query');
       }
     const data = await response.json();
-    console.log(data);
+    const dataName = data.data.rows.map((row: { name: any; }) => row.name);
+    console.log(dataName);
   };
 
   const [results, setResults] = useState([]);
