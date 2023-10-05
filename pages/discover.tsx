@@ -7,9 +7,12 @@ import { useState } from "react";
 
 import SearchBar from "./SearchBarComponents/SearchBar";
 import SearchResultsList from "./SearchBarComponents/SearchResultsList";
+import SharedResultsDiv from "./SearchBarComponents/SharedResultsDiv";
+
 
 
 const DiscoverPage: React.FC = () => {
+
   const workouts = [
     { name: "Push", description: "A push workout targets your chest, shoulder, and triceps" },
     { name: "Pull", description: "A pull workout targets your back and biceps" },
@@ -34,7 +37,6 @@ const DiscoverPage: React.FC = () => {
   };
 
   const searchBarStyle = {
-    // backgroundColor: '#aaa',
     margin: 'auto',
     width: '40%',
     display: 'flex',
@@ -60,10 +62,12 @@ const DiscoverPage: React.FC = () => {
     const data = await response.json();
     const dataName = data.data.rows.map((row: { name: any; }) => row.name);
     console.log(dataName);
+    setResults(dataName);
   };
 
   const [results, setResults] = useState([]);
   // const handleWorkoutClick = (workoutName: string) => {console.log(`You clicked ${workoutName}`);};
+  
   const [selectedWorkout, setSelectedWorkout] = useState<string | null>(null);
   const handleWorkoutClick = (workoutName: string) => {
     setSelectedWorkout(prevWorkout => {
@@ -85,29 +89,74 @@ const DiscoverPage: React.FC = () => {
         </div>
 
         <div className="workout-list">
-          
-        {workouts.map((workout) => {
-          const isSelected = workout.name === selectedWorkout;
-          const itemStyle = isSelected ? { ...workoutRectangleStyle, background: 'green' } : workoutRectangleStyle;
+          {workouts.map((workout) => {
+            const isSelected = workout.name === selectedWorkout;
+            const itemStyle = isSelected
+              ? { ...workoutRectangleStyle, background: "green" }
+              : workoutRectangleStyle;
 
-          return (
-            <div 
-              key={workout.name}
-              className="workout-item" 
-              style={itemStyle} onClick={() => handleWorkoutClick(workout.name)}
-            >
-              <div className="workout-rectangle" >
-                <p className="workout-name" style={workoutNameStyle}>{workout.name}</p>
-                <p className="workout-description">{workout.description}</p>
+            return (
+              <div key={workout.name} className="workout-item" style={itemStyle} onClick={() => handleWorkoutClick(workout.name)}>
+                <div className="workout-rectangle">
+                  <p className="workout-name" style={workoutNameStyle}>
+                    {workout.name}
+                  </p>
+                  <p className="workout-description">{workout.description}</p>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+
+          <SharedResultsDiv>
+            {results && results.length > 0 && <SearchResultsList results={results} />}
+          </SharedResultsDiv>
         </div>
       </div>
     </DefLayout>
   );
 };
+
+// export default DiscoverPage;
+
+
+//   return (
+//     <DefLayout>
+//       <div className="discover-page">
+//         <div className="search-bar-container" style={searchBarStyle}>
+//           <SearchBar />
+//         </div>
+
+//         <div className="workout-list">
+          
+//         {workouts.map((workout) => {
+//           const isSelected = workout.name === selectedWorkout;
+//           const itemStyle = isSelected ? { ...workoutRectangleStyle, background: 'green' } : workoutRectangleStyle;
+
+//           return (
+//             <div>
+//               <div 
+//                 key={workout.name}
+//                 className="workout-item" 
+//                 style={itemStyle} onClick={() => handleWorkoutClick(workout.name)}
+//               >
+//                 <div className="workout-rectangle" >
+//                   <p className="workout-name" style={workoutNameStyle}>{workout.name}</p>
+//                   <p className="workout-description">{workout.description}</p>
+//                 </div>
+//               </div>
+//               <div className="search-results">
+//                 {results && results.length > 0 && <SearchResultsList results={results} />}
+//               </div>
+//             </div>
+            
+//           );
+//         })}
+//         </div>
+//       </div>
+//     </DefLayout>
+//   );
+// };
+
 
   // return (
   //   <DefLayout>
@@ -133,3 +182,5 @@ const DiscoverPage: React.FC = () => {
   // );
 
 export default DiscoverPage;
+
+
