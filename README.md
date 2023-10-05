@@ -1,6 +1,6 @@
 ## Introduction
 
-Fortís. 
+Fortís
 
 ## How It Works
 
