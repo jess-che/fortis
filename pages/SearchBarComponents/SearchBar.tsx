@@ -20,7 +20,7 @@ const SearchBar: React.FC = () => {
             user.name.toLowerCase().includes(value.toLowerCase())
           );
         });
-        // setResults(results);
+        console.log(results);
       });
   };
 
