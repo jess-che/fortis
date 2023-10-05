@@ -69,11 +69,13 @@ const Home: React.FC = () => {
     firstLogin = user['https://cs316-fortis.vercel.app/firstLogin'] as boolean;
   }
 
-  if (firstLogin && count === 0) {
-    useEffect(() => {
+  useEffect(() => {
+    if (firstLogin) {
       setCount(prevCount => prevCount + 1);
-    }, []);
+    }
+  }, []);
 
+  if (firstLogin && count === 1) {
     return (
       <DefLayout>
         <button onClick={handleUserSave}>
