@@ -16,6 +16,12 @@ interface Exercise {
 
 const LogPage: FC = () => {
   const [exercises, setExercises] = useState<Exercise[]>([]);
+
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
+  const toggleSidePanel = () => {
+    setIsSidePanelOpen(!isSidePanelOpen);
+  };
+
   const [currentExercise, setCurrentExercise] = useState<Exercise>({
     exerciseName: '',
     numberOfReps: 0,
@@ -106,9 +112,21 @@ const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
             </tr>
           </tbody>
         </table>
-
+  
         <button className={styles.button} onClick={handleAddExercise}>Add Exercise</button>
       </div>
+  
+      <aside className={styles.sidePanel}>
+        <Select
+          className={styles.dropdown}
+          options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
+          name='exerciseName'
+          onChange={handleSelectChange}
+          isSearchable
+          placeholder="Search..."
+        />
+        {/* Rest of the side panel content... */}
+      </aside>
     </DefLayout>
   )
 }
