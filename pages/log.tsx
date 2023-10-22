@@ -1,6 +1,9 @@
+import Image          from 'next/image';
+import Link           from 'next/link';
 import React, { FC, useState, ChangeEvent } from 'react';
 import DefLayout from '@/components/def_layout';
 import styles from './LogPage.module.css';
+
 
 interface Exercise {
   exerciseName: string;
@@ -8,7 +11,6 @@ interface Exercise {
   numberOfSets: number;
   weight: number;
 }
-
 const LogPage: FC = () => {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [currentExercise, setCurrentExercise] = useState<Exercise>({
@@ -57,7 +59,7 @@ const LogPage: FC = () => {
             ))}
             <tr>
               <td>
-                <select className={styles.input} name="exerciseName" value={currentExercise.exerciseName} onChange={handleInputChange}>
+                <select className={styles.dropdown} name="exerciseName" value={currentExercise.exerciseName} onChange={handleInputChange}>
                   <option value="" disabled>Select an exercise</option>
                   <option value="pushup">Push Up</option>
                   <option value="squat">Squat</option>
