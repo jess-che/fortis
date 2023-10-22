@@ -16,10 +16,10 @@ interface SearchResultsListProps {
   results: Exercise[];
 }
 
-const NameSearchResultsList: React.FC<{ results: string[] }> = ({ results }) => {
+const NameSearchResultsList: React.FC<{ results?: string[] }> = ({ results }) => {
     return (
       <div>
-        {results.map((result, index) => (
+        {results && results.map((result, index) => (
           <p key={index}>{result}</p> // Display only the name
         ))}
       </div>
