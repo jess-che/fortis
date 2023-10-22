@@ -26,7 +26,8 @@ const SearchBar = () => {
     const dataName = data.data.rows.map((row: { name: any; }) => row.name);
     console.log(data);
     console.log(dataName);
-    setResults(dataName);
+    setResults(data.data.rows);
+    //setResults(dataName) -- For only Excercise name (changed to account for description etc.)
   };
 
   const handleChange = (value: React.SetStateAction<string>) => {

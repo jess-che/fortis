@@ -16,27 +16,17 @@ interface SearchResultsListProps {
   results: Exercise[];
 }
 
-const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
-  return (
-    <SharedResultsDiv>
-      {results && results.length > 0 ? (
-        <ul className="results-list">
-          {results.map((exercise, index) => (
-            <li key={index}>
-              <h2>{exercise.name}</h2>
-              <p><strong>Muscle Groups:</strong> {exercise.muscle_groups || "Dummy Muscle Groups"}</p>
-              <p><strong>Description:</strong> {exercise.description || "Dummy Description"}</p>
-            </li>
-          ))}
-        </ul>
-      ) : (
-       <></>
-      )}
-    </SharedResultsDiv>
-  );
-};
-
-export default SearchResultsList;
+const NameSearchResultsList: React.FC<{ results: string[] }> = ({ results }) => {
+    return (
+      <div>
+        {results.map((result, index) => (
+          <p key={index}>{result}</p> // Display only the name
+        ))}
+      </div>
+    );
+  };
+  
+export default NameSearchResultsList;
 
 
 

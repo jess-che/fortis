@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import SearchBar from "./SearchBarComponents/SearchBar";
 import SearchResultsList from "./SearchBarComponents/SearchResultsList";
+import NameSearchResultsList from "./SearchBarComponents/NameSearchResultsList";
 import SharedResultsDiv from "./SearchBarComponents/SharedResultsDiv";
 
 
@@ -152,7 +153,7 @@ const DiscoverPage: React.FC = () => {
           })}
 
           <SharedResultsDiv>
-            {results && results.length > 0 && <SearchResultsList results={results} />}
+            {results && results.length > 0 && <NameSearchResultsList results ={results} />}
           </SharedResultsDiv>
         </div>
       </div>
