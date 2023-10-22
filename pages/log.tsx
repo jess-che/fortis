@@ -3,6 +3,8 @@ import Link           from 'next/link';
 import React, { FC, useState, useEffect, ChangeEvent } from 'react';
 import DefLayout from '@/components/def_layout';
 import styles from './LogPage.module.css';
+import Select from 'react-select';
+
 
 
 interface Exercise {
@@ -36,9 +38,17 @@ const LogPage: FC = () => {
     fetchExercises();
   }, []);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setCurrentExercise({...currentExercise, [e.target.name]: e.target.value});
+  // Create a new handler for the Select component
+const handleSelectChange = (selectedOption: { value: string, label: string } | null, actionMeta: any) => {
+  if (actionMeta.action === 'select-option') {
+    setCurrentExercise({...currentExercise, exerciseName: selectedOption ? selectedOption.value : ''});
   }
+}
+
+// Keep the original handleInputChange function for the input elements
+const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  setCurrentExercise({...currentExercise, [e.target.name]: e.target.value});
+}
 
   const handleAddExercise = () => {
     if (currentExercise.exerciseName) {
@@ -75,12 +85,14 @@ const LogPage: FC = () => {
             ))}
               <tr>
               <td>
-                <select className={styles.dropdown} name="exerciseName" value={currentExercise.exerciseName} onChange={handleInputChange}>
-                  <option value="" disabled>Select an exercise</option>
-                  {exerciseOptions.map((exercise, index) => (
-                    <option key={index} value={exercise}>{exercise}</option>
-                  ))}
-                </select>
+                <Select
+                  className={styles.dropdown}
+                  options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
+                  name='exerciseName'
+                  value={exerciseOptions.find(option => option === currentExercise.exerciseName) ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName } : null}
+                  onChange={handleSelectChange}
+                  isSearchable
+                />
               </td>
               <td>
                 <input className={styles.input} type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} />
