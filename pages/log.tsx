@@ -1,6 +1,6 @@
 import Image          from 'next/image';
 import Link           from 'next/link';
-import React, { FC, useState, ChangeEvent } from 'react';
+import React, { FC, useState, useEffect, ChangeEvent } from 'react';
 import DefLayout from '@/components/def_layout';
 import styles from './LogPage.module.css';
 
@@ -11,6 +11,7 @@ interface Exercise {
   numberOfSets: number;
   weight: number;
 }
+
 const LogPage: FC = () => {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [currentExercise, setCurrentExercise] = useState<Exercise>({
@@ -19,6 +20,21 @@ const LogPage: FC = () => {
     numberOfSets: 0,
     weight: 0
   });
+  const [exerciseOptions, setExerciseOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchExercises = async () => {
+      const response = await fetch('/api/DefaultExcSort');
+      if (!response.ok) {
+        throw new Error('Failed to fetch exercises');
+      }
+      const data = await response.json();
+      const exerciseNames = data.data.rows.map((row: { name: any; }) => row.name);
+      setExerciseOptions(exerciseNames);
+    };
+
+    fetchExercises();
+  }, []);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setCurrentExercise({...currentExercise, [e.target.name]: e.target.value});
@@ -57,13 +73,13 @@ const LogPage: FC = () => {
                 <td>{exercise.weight}</td>
               </tr>
             ))}
-            <tr>
+              <tr>
               <td>
                 <select className={styles.dropdown} name="exerciseName" value={currentExercise.exerciseName} onChange={handleInputChange}>
                   <option value="" disabled>Select an exercise</option>
-                  <option value="pushup">Push Up</option>
-                  <option value="squat">Squat</option>
-                  {/* ... add more exercises as options ... */}
+                  {exerciseOptions.map((exercise, index) => (
+                    <option key={index} value={exercise}>{exercise}</option>
+                  ))}
                 </select>
               </td>
               <td>
