@@ -25,7 +25,7 @@ const SearchBar = () => {
     const data = await response.json();
     const dataName = data.data.rows.map((row: { name: any; }) => row.name);
     console.log(data);
-    console.log(dataName);
+    console.log(data.data.rows);
     setResults(data.data.rows);
     //setResults(dataName) -- For only Excercise name (changed to account for description etc.)
   };

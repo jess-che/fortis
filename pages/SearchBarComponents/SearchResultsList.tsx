@@ -9,7 +9,7 @@ import "./SearchResultsList.css";
 interface Exercise {
   name: string;
   description?: string;
-  muscle_groups?: string;
+  muscle_group: string;
 }
 
 interface SearchResultsListProps {
@@ -24,7 +24,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
           {results.map((exercise, index) => (
             <li key={index}>
               <h2>{exercise.name}</h2>
-              <p><strong>Muscle Groups:</strong> {exercise.muscle_groups || "Dummy Muscle Groups"}</p>
+              <p><strong>Muscle Groups:</strong> {exercise.muscle_group}</p>
               <p><strong>Description:</strong> {exercise.description || "Dummy Description"}</p>
             </li>
           ))}
