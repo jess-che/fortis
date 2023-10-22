@@ -1,5 +1,3 @@
-import Image from 'next/image';
-import Link from 'next/link';
 import React, { FC, useState, ChangeEvent } from 'react';
 import DefLayout from '@/components/def_layout';
 import styles from './LogPage.module.css';
@@ -20,18 +18,20 @@ const LogPage: FC = () => {
     weight: 0
   });
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setCurrentExercise({...currentExercise, [e.target.name]: e.target.value});
   }
 
   const handleAddExercise = () => {
-    setExercises([...exercises, currentExercise]);
-    setCurrentExercise({
-      exerciseName: '',
-      numberOfReps: 0,
-      numberOfSets: 0,
-      weight: 0
-    });
+    if (currentExercise.exerciseName) {
+      setExercises([...exercises, currentExercise]);
+      setCurrentExercise({
+        exerciseName: '',
+        numberOfReps: 0,
+        numberOfSets: 0,
+        weight: 0
+      });
+    }
   }
 
   return (
@@ -55,13 +55,27 @@ const LogPage: FC = () => {
                 <td>{exercise.weight}</td>
               </tr>
             ))}
+            <tr>
+              <td>
+                <select className={styles.input} name="exerciseName" value={currentExercise.exerciseName} onChange={handleInputChange}>
+                  <option value="" disabled>Select an exercise</option>
+                  <option value="pushup">Push Up</option>
+                  <option value="squat">Squat</option>
+                  {/* ... add more exercises as options ... */}
+                </select>
+              </td>
+              <td>
+                <input className={styles.input} type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} />
+              </td>
+              <td>
+                <input className={styles.input} type="number" name="numberOfSets" placeholder="Number of Sets" value={currentExercise.numberOfSets} onChange={handleInputChange} />
+              </td>
+              <td>
+                <input className={styles.input} type="number" name="weight" placeholder="Weight" value={currentExercise.weight} onChange={handleInputChange} />
+              </td>
+            </tr>
           </tbody>
         </table>
-
-        <input className={styles.input} name="exerciseName" placeholder="Exercise Name" value={currentExercise.exerciseName} onChange={handleInputChange} />
-        <input className={styles.input} type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} />
-        <input className={styles.input} type="number" name="numberOfSets" placeholder="Number of Sets" value={currentExercise.numberOfSets} onChange={handleInputChange} />
-        <input className={styles.input} type="number" name="weight" placeholder="Weight" value={currentExercise.weight} onChange={handleInputChange} />
 
         <button className={styles.button} onClick={handleAddExercise}>Add Exercise</button>
       </div>
