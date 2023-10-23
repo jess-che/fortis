@@ -26,7 +26,7 @@ export default async (req, res) => {
                 // Check if exercise has all necessary properties
                 const { Uid, Aid, Eid, Weight, Rep, Set } = exercise;
 
-                await pool.query(insertQuery, [Uid, Aid, Seq_num, Eid, Weight, Rep, Set]);
+                await pool.query(insertQuery, [Uid, Aid, Eid, Weight, Rep, Set]);
             }
             res.status(200).json({ message: 'Exercises saved successfully' });
         } catch (err) {

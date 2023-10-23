@@ -39,7 +39,7 @@ const pool = new Pool({
 const getEID = `
     SELECT exercise."eid"
     FROM exercise
-    WHERE exercise."name" = $1;
+    WHERE exercise."name" LIKE $1;
     `;
 
 export default async (req, res) => {
@@ -51,7 +51,7 @@ export default async (req, res) => {
             const values = [`%${searchQuery}%`];
             console.log('hi');
             const results = await pool.query(getEID, values);
-            
+
             res.json({ success: true, data: results });
         } catch (err) {
             console.log('hello');

@@ -54,7 +54,7 @@ export default async (req, res) => {
             const values = [`${searchQuery}`];
             console.log('hi');
             const results = await pool.query(getAID, values);
-            
+
             res.json({ success: true, data: results });
         } catch (err) {
             console.log('hello');

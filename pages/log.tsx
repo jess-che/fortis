@@ -4,10 +4,7 @@ import React, { FC, useState, useEffect, ChangeEvent } from 'react';
 import DefLayout from '@/components/def_layout';
 import styles from './LogPage.module.css';
 import Select from 'react-select';
-
-
 import SearchBar from "./SearchBarComponents/SearchBar";
-
 
 
 interface Exercise {
@@ -15,10 +12,15 @@ interface Exercise {
   numberOfReps: number;
   numberOfSets: number;
   weight: number;
+  eid: number;
+  aid: number
 }
 
 const LogPage: FC = () => {
   const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [exerciseEids, setExerciseEids] = useState<number[]>([]);
+  const [aid, setAid] = useState(null); 
+
 
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
   const toggleSidePanel = () => {
@@ -29,11 +31,14 @@ const LogPage: FC = () => {
     exerciseName: '',
     numberOfReps: 0,
     numberOfSets: 0,
-    weight: 0
+    weight: 0,
+    eid:0,
+    aid: 0,
   });
   const [exerciseOptions, setExerciseOptions] = useState<string[]>([]);
 
   useEffect(() => {
+    
     const fetchExercises = async () => {
       const response = await fetch('/api/DefaultExcSort');
       if (!response.ok) {
@@ -41,18 +46,60 @@ const LogPage: FC = () => {
       }
       const data = await response.json();
       const exerciseNames = data.data.rows.map((row: { name: any; }) => row.name);
-      setExerciseOptions(exerciseNames);
-    };
+  
+      // Separate arrays for names and eids
+      const exerciseNamesWithEid = [];
+      const exerciseEids = [];
+      for (const name of exerciseNames) {
+        const eidResponse = await fetch('/api/getEID', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ searchQuery: name })
+        });
+  
+        if (!eidResponse.ok) {
+          throw new Error('Failed to fetch eid');
+        }
+  
+        const eidData = await eidResponse.json();
 
+        // Check if eidData, data, rows, and eid exist
+        if (!eidData || !eidData.data || !eidData.data.rows || eidData.data.rows.length === 0 || !eidData.data.rows[0].eid) {
+          console.log(eidData.data)
+          console.error('Missing data for name:', name, 'eidData:', eidData);
+          continue;  // Skip this iteration
+        }
+
+        exerciseNamesWithEid.push(name);
+        exerciseEids.push(parseInt(eidData.data.rows[0].eid));
+      }
+  
+      setExerciseOptions(exerciseNamesWithEid);
+      setExerciseEids(exerciseEids);  // Set the eids
+    };
+  
     fetchExercises();
   }, []);
 
   // Create a new handler for the Select component
-const handleSelectChange = (selectedOption: { value: string, label: string } | null, actionMeta: any) => {
-  if (actionMeta.action === 'select-option') {
-    setCurrentExercise({...currentExercise, exerciseName: selectedOption ? selectedOption.value : ''});
+  const handleSelectChange = (selectedOption: { value: string, label: string } | null, actionMeta: any) => {
+    if (actionMeta.action === 'select-option') {
+      const selectedExerciseName = selectedOption ? selectedOption.value : '';
+      // Find the eid that matches the selected exercise name
+      const eidIndex = exerciseOptions.findIndex(name => name === selectedExerciseName);
+      const selectedEid = eidIndex !== -1 ? exerciseEids[eidIndex] : 0;
+      setCurrentExercise({ ...currentExercise, exerciseName: selectedExerciseName, eid: selectedEid });
+    }
   }
-}
+
+// Create a new handler for the Select component
+// const handleSelectChange = (selectedOption: { value: string, label: string } | null, actionMeta: any) => {
+//   if (actionMeta.action === 'select-option') {
+//     setCurrentExercise({...currentExercise, exerciseName: selectedOption ? selectedOption.value : ''});
+//   }
+// }
 
 // Keep the original handleInputChange function for the input elements
 const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -83,17 +130,74 @@ const handleSaveExercises = async () => {
   }
 }
 
-  const handleAddExercise = () => {
-    if (currentExercise.exerciseName) {
-      setExercises([...exercises, currentExercise]);
+const fetchAid = async (query: any) => {
+  const response = await fetch('/api/getAID', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    // body: JSON.stringify({ eid })
+    body: JSON.stringify({
+      searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436"
+     }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch aid');
+  }
+
+  const data = await response.json();
+  console.log(data);
+  
+  // Check if data, data, rows, and aid exist
+  if (data && data.data && data.data.rows && data.data.rows.length > 0 && data.data.rows[0].aid) {
+    return parseInt(data.data.rows[0].aid);
+  } else {
+    console.error('Missing aid for eid:');
+    return null;
+  }
+};
+
+  // // USELESS STUFF, JUST CHECKING
+  // const fetchAid = async (query: any) => {
+  //   const response = await fetch('/api/getAID', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436"
+  //       //query
+  //     }),
+  //   });
+
+  //   if (!response.ok) {
+  //     throw new Error('Failed to save query');
+  //   }
+
+  //   const data = await response.json();
+  //   console.log(data)
+  // };
+
+  //   // END OF USELESS STUFF, JUST CHECKING
+
+
+const handleAddExercise = async () => {
+  if (currentExercise.exerciseName && currentExercise.eid) {
+    const aid = await fetchAid(currentExercise.eid);
+    if (aid !== null) {
+      setExercises([...exercises, { ...currentExercise, aid }]);
       setCurrentExercise({
+        eid: 0,
         exerciseName: '',
         numberOfReps: 0,
         numberOfSets: 0,
-        weight: 0
+        weight: 0,
+        aid: 0,
       });
     }
   }
+};
 
   // search bar
   const searchBarStyle = {
