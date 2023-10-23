@@ -116,6 +116,7 @@ const handleSaveExercises = async () => {
       },
       body: JSON.stringify(exercises)
     });
+    console.log(response)
 
     if (!response.ok) {
       throw new Error('Failed to save exercises');
