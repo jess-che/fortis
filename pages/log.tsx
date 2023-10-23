@@ -6,6 +6,9 @@ import styles from './LogPage.module.css';
 import Select from 'react-select';
 
 
+import SearchBar from "./SearchBarComponents/SearchBar";
+
+
 
 interface Exercise {
   exerciseName: string;
@@ -68,6 +71,18 @@ const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     }
   }
 
+  // search bar
+  const searchBarStyle = {
+    margin: 'auto',
+    width: '40%',
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+    alignItems: 'center',
+    minWidth: '200px',
+  };
+
+
+  
   return (
     <DefLayout>
       <div className={styles.container}>
@@ -117,14 +132,10 @@ const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
       </div>
   
       <aside className={styles.sidePanel}>
-        <Select
-          className={styles.dropdown}
-          options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
-          name='exerciseName'
-          onChange={handleSelectChange}
-          isSearchable
-          placeholder="Search..."
-        />
+          <div className="search-bar-container" style={searchBarStyle}>
+            <SearchBar />
+          </div>
+
         {/* Rest of the side panel content... */}
       </aside>
     </DefLayout>
