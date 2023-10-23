@@ -1,8 +1,6 @@
-
-
 //   // USELESS STUFF, JUST CHECKING
-//   const getAID = async (query: any) => {
-//     const response = await fetch('/api/getAID', {
+//   const HistoryActivities = async (query: any) => {
+//     const response = await fetch('/api/HistoryActivites', {
 //       method: 'POST',
 //       headers: {
 //         'Content-Type': 'application/json',
@@ -26,7 +24,7 @@
 
 
 // WHen you click a button: 
-//   "   getAID(value);    "  <-   This needs to be called.
+//   "   HistoryActivities(value);    "  <-   This needs to be called.
 
 
 
@@ -37,12 +35,11 @@ const pool = new Pool({
     connectionString: "postgres://default:Azy2srgWb9aU@ep-polished-cherry-55480419-pooler.us-east-1.postgres.vercel-storage.com/verceldb?sslmode=require"
 });
 
-const getAID = `
-    SELECT activity."Aid"
+const History = `
+    SELECT *
     FROM activity
     WHERE activity."Uid" = $1
-    ORDER BY activity."Date" DESC, activity."Start_time" DESC
-    LIMIT 1;
+    ORDER BY activity."Date" DESC, activity."Start_time" DESC;
     `;
 
 export default async (req, res) => {
@@ -53,7 +50,7 @@ export default async (req, res) => {
             // Insert user
             const values = [`${searchQuery}`];
             console.log('hi');
-            const results = await pool.query(getAID, values);
+            const results = await pool.query(History, values);
             
             res.json({ success: true, data: results });
         } catch (err) {

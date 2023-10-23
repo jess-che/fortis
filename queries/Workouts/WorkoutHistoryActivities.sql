@@ -1,4 +1,4 @@
 SELECT *
 FROM activity
 WHERE activity."Uid" = $1
-ORDER BY activity."Start_time" DESC;
+ORDER BY activity."Date" DESC, activity."Start_time" DESC;

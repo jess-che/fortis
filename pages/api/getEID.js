@@ -1,15 +1,14 @@
 
 
 //   // USELESS STUFF, JUST CHECKING
-//   const getAID = async (query: any) => {
-//     const response = await fetch('/api/getAID', {
+//   const getEID = async (query: any) => {
+//     const response = await fetch('/api/getEID', {
 //       method: 'POST',
 //       headers: {
 //         'Content-Type': 'application/json',
 //       },
 //       body: JSON.stringify({
-//         searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436"
-//         //query
+//         searchQuery: query
 //       }),
 //     });
 
@@ -26,7 +25,7 @@
 
 
 // WHen you click a button: 
-//   "   getAID(value);    "  <-   This needs to be called.
+//   "   getEID(value);    "  <-   This needs to be called.
 
 
 
@@ -37,12 +36,10 @@ const pool = new Pool({
     connectionString: "postgres://default:Azy2srgWb9aU@ep-polished-cherry-55480419-pooler.us-east-1.postgres.vercel-storage.com/verceldb?sslmode=require"
 });
 
-const getAID = `
-    SELECT activity."Aid"
-    FROM activity
-    WHERE activity."Uid" = $1
-    ORDER BY activity."Date" DESC, activity."Start_time" DESC
-    LIMIT 1;
+const getEID = `
+    SELECT exercise."eid"
+    FROM exercise
+    WHERE exercise."name" = $1;
     `;
 
 export default async (req, res) => {
@@ -51,9 +48,9 @@ export default async (req, res) => {
 
         try {
             // Insert user
-            const values = [`${searchQuery}`];
+            const values = [`%${searchQuery}%`];
             console.log('hi');
-            const results = await pool.query(getAID, values);
+            const results = await pool.query(getEID, values);
             
             res.json({ success: true, data: results });
         } catch (err) {
