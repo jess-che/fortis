@@ -1,15 +1,22 @@
-create table exercise
+create table public.exercise
 (
-    eid          integer not null
+    eid          integer generated always as identity
         constraint exercise_pk
             primary key,
-    name         varchar,
-    type         varchar,
-    muscle_group varchar,
-    popularity   integer,
-    equipment varchar,  -- add this to the database on the app...
-    favorite     boolean
+    name         citext  default 'Unnamed'::character varying not null
+        constraint exercise_pk2
+            unique,
+    type         citext  default 'Uncategorized'::character varying,
+    muscle_group citext  default 'Uncategorized'::character varying,
+    popularity   integer default 0,
+    favorite     boolean default false,
+    equipment    citext  default 'No Equipment'::character varying
 );
+
+comment on column public.exercise.popularity is '0 if private';
+
+alter table public.exercise
+    owner to "default";
 
 create table gym
 (
@@ -67,7 +74,9 @@ create table public.workouts
 (
     "Uid"     uuid              not null,
     "Aid"     integer           not null,
-    "Seq_num" integer           not null,
+    "Seq_num" integer generated always as identity
+        constraint workouts_pk
+            unique,
     "Eid"     integer           not null
         references public.exercise,
     "Weight"  integer default 0 not null,
@@ -76,6 +85,3 @@ create table public.workouts
     primary key ("Uid", "Aid", "Seq_num"),
     foreign key ("Aid", "Uid") references public.activity
 );
-
-alter table public.workouts
-    owner to "default";
