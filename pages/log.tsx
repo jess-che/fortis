@@ -61,6 +61,7 @@ const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 
 const handleSaveExercises = async () => {
   try {
+    console.log(exercises)
     const response = await fetch('/api/saveExercises', {
       method: 'POST',
       headers: {

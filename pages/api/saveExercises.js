@@ -1,8 +1,15 @@
 import { Pool } from 'pg';
 
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL
+    // connectionString: process.env.POSTGRES_URL
+    connectionString: "postgres://default:Azy2srgWb9aU@ep-polished-cherry-55480419-pooler.us-east-1.postgres.vercel-storage.com/verceldb?sslmode=require"
 });
+
+const insertQuery = `
+INSERT INTO public.workouts (Uid, Aid, Eid, Weight, Rep, Set)
+VALUES ($1, $2, $3, $4, $5, $6);
+`;
+
 
 export default async (req, res) => {
     if (req.method === 'POST') {
@@ -14,27 +21,16 @@ export default async (req, res) => {
         }
 
         try {
-            await pool.query('BEGIN');
-
+            console.log('hi');
             for (let exercise of exercises) {
                 // Check if exercise has all necessary properties
-                if (!exercise.Uid || !exercise.Aid || !exercise.Seq_num || !exercise.Eid || exercise.Weight === undefined || exercise.Rep === undefined || exercise.Set === undefined) {
-                    await pool.query('ROLLBACK');
-                    return res.status(400).json({ error: 'Each exercise must have a Uid, Aid, Seq_num, Eid, Weight, Rep, and Set' });
-                }
+                const { Uid, Aid, Eid, Weight, Rep, Set } = exercise;
 
-                const { Uid, Aid, Seq_num, Eid, Weight, Rep, Set } = exercise;
-                const insertQuery = `
-                    INSERT INTO public.workouts (Uid, Aid, Seq_num, Eid, Weight, Rep, Set)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7);
-                `;
                 await pool.query(insertQuery, [Uid, Aid, Seq_num, Eid, Weight, Rep, Set]);
             }
-
-            await pool.query('COMMIT');
             res.status(200).json({ message: 'Exercises saved successfully' });
         } catch (err) {
-            await pool.query('ROLLBACK');
+            console.log('hello');
             console.error(err);
             res.status(500).json({ error: err.message });
         }

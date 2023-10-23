@@ -103,7 +103,7 @@ const DiscoverPage: React.FC = () => {
     console.log(allResults);
     setResults(allResults);
   };
-
+  
   const [results, setResults] = useState<string[]>([]);
   // const handleWorkoutClick = (workoutName: string) => {console.log(`You clicked ${workoutName}`);};
   
