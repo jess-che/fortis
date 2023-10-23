@@ -59,6 +59,27 @@ const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
   setCurrentExercise({...currentExercise, [e.target.name]: e.target.value});
 }
 
+const handleSaveExercises = async () => {
+  try {
+    const response = await fetch('/api/saveExercises', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(exercises)
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to save exercises');
+    }
+
+    alert('Exercises saved successfully!');
+  } catch (err) {
+    console.error(err);
+    alert('Failed to save exercises');
+  }
+}
+
   const handleAddExercise = () => {
     if (currentExercise.exerciseName) {
       setExercises([...exercises, currentExercise]);
@@ -74,7 +95,7 @@ const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
   // search bar
   const searchBarStyle = {
     margin: 'auto',
-    width: '40%',
+    width: '90%',
     display: 'flex',
     flexDirection: 'column' as 'column',
     alignItems: 'center',
@@ -129,7 +150,10 @@ const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         </table>
   
         <button className={styles.button} onClick={handleAddExercise}>Add Exercise</button>
+        <button className={styles.button} onClick={handleSaveExercises}>Save Exercises</button>  {/* Add this line */}
       </div>
+
+      
   
       <aside className={styles.sidePanel}>
           <div className="search-bar-container" style={searchBarStyle}>

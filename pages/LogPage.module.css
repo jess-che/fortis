@@ -13,7 +13,7 @@
     border-collapse: collapse;
     margin: 2em 0;
     width: 100%;
-    max-width: 800px;
+    max-width: 700px;
 }
 
 .table th,
@@ -46,6 +46,7 @@
 
 .button {
     padding: 0.5em 1em;
+    margin-bottom: 40px;
     background-color: #444;
     color: #fff;
     border: none;
@@ -62,7 +63,7 @@
     position: fixed;
     right: 0;
     top: 65px;
-    width: 300px;
+    width: 370px;
     /* Or however wide you want the panel to be */
     height: calc(100vh - 65px);
     /* Assume your navigation bar is 60px tall */
@@ -71,7 +72,6 @@
     padding: 1em;
     overflow-y: auto;
     /* If the panel content is longer than the viewport height, this will enable scrolling */
-    box-shadow: -2px 0 5px rgba(0, 0, 0, .1), 0 0 0 1px #ddd;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, .1);
     /* Optional: add a shadow for a bit of depth */
-    border-left: 1px solid #ddd;
 }
