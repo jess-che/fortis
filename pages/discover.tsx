@@ -161,7 +161,7 @@ const DiscoverPage: React.FC = () => {
   );
 };
 
-// export default DiscoverPage;
+export default DiscoverPage;
 
 
 //   return (
@@ -226,6 +226,6 @@ const DiscoverPage: React.FC = () => {
   //   </DefLayout>
   // );
 
-export default DiscoverPage;
+// export default DiscoverPage;
 
 
