@@ -61,3 +61,21 @@ create table public.activity
 
 alter table public.activity
     owner to "default";
+
+
+create table public.workouts
+(
+    "Uid"     uuid              not null,
+    "Aid"     integer           not null,
+    "Seq_num" integer           not null,
+    "Eid"     integer           not null
+        references public.exercise,
+    "Weight"  integer default 0 not null,
+    "Rep"     integer default 1 not null,
+    "Set"     integer default 1 not null,
+    primary key ("Uid", "Aid", "Seq_num"),
+    foreign key ("Aid", "Uid") references public.activity
+);
+
+alter table public.workouts
+    owner to "default";
