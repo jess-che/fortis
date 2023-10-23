@@ -1,6 +1,6 @@
 //   // USELESS STUFF, JUST CHECKING
 // const HistoryWorkouts = async (uid, aid) => {
-//     const response = await fetch('/api/HistoryActivites', {
+//     const response = await fetch('/api/HistoryWorkouts', {
 //       method: 'POST',
 //       headers: {
 //         'Content-Type': 'application/json',
