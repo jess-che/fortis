@@ -186,6 +186,12 @@ const handleAddExercise = async () => {
   }
 };
 
+const handleRemoveExercise = (index: number) => {
+  const newExercises = [...exercises];
+  newExercises.splice(index, 1);
+  setExercises(newExercises);
+};
+
   // search bar
   const searchBarStyle = {
     margin: 'auto',
@@ -208,6 +214,7 @@ const handleAddExercise = async () => {
               <th>Number of Reps</th>
               <th>Number of Sets</th>
               <th>Weight</th>
+              <th>Action</th> {/* New column header */}
             </tr>
           </thead>
           <tbody>
@@ -217,6 +224,9 @@ const handleAddExercise = async () => {
                 <td>{exercise.numberOfReps}</td>
                 <td>{exercise.numberOfSets}</td>
                 <td>{exercise.weight}</td>
+                <td>
+                  <button onClick={() => handleRemoveExercise(index)}>Remove</button>
+                </td>
               </tr>
             ))}
               <tr>
@@ -228,8 +238,8 @@ const handleAddExercise = async () => {
                   value={exerciseOptions.find(option => option === currentExercise.exerciseName) ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName } : null}
                   onChange={handleSelectChange}
                   isSearchable
-                  loadingMessage={() => 'This is loading...'}
-                  noOptionsMessage={() => 'Loading...'}
+                  loadingMessage={() => 'Loading...'}
+                  noOptionsMessage={() => 'No options found.'}
                 />
                 <button className={styles.button} onClick={toggleSidePanel} id={styles["sidepanel-toggle-button"]}>Toggle Side Panel</button>
 
@@ -248,7 +258,7 @@ const handleAddExercise = async () => {
         </table>
   
         <button className={styles.button} onClick={handleAddExercise}>Add Exercise</button>
-        <button className={styles.button} onClick={handleSaveExercises}>Save Exercises</button>  {/* Add this line */}
+        <button className={styles.button} onClick={handleSaveExercises}>Save Exercises</button> 
       </div>
 
       {isSidePanelOpen && (
