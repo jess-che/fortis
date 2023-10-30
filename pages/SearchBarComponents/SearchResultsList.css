@@ -39,3 +39,8 @@
   max-height: 200px;
   overflow-y: auto;
   } */
+
+.results-list li.active {
+  background-color: green;
+  /* Replace with your preferred color */
+}

@@ -149,14 +149,6 @@ const fetchAid = async (query: any) => {
 
   const data = await response.json();
   console.log(data.data.rows[0].Aid);
-  
-  // Check if data, data, rows, and aid exist
-  // if (data && data.data && data.data.rows && data.data.rows.length > 0 && data.data.rows[0].aid) {
-  //   return parseInt(data.data.rows[0].Aid);
-  // } else {
-  //   console.error('Missing aid for eid:');
-  //   return null;
-  // }
   return parseInt(data.data.rows[0].Aid);
 };
 

@@ -1,8 +1,7 @@
 // SearchResultsList.tsx
 
 
-// SearchResultsList.tsx
-import React from "react";
+import React, { useState } from "react";
 import SharedResultsDiv from "./SharedResultsDiv";
 import "./SearchResultsList.css";
 
@@ -17,12 +16,22 @@ interface SearchResultsListProps {
 }
 
 const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
+  const [activeExercise, setActiveExercise] = useState<Exercise | null>(null);
+
+  const handleRowClick = (exercise: Exercise) => {
+    setActiveExercise(exercise);
+  };
+
   return (
     <SharedResultsDiv>
       {results && results.length > 0 ? (
         <ul className="results-list">
           {results.map((exercise, index) => (
-            <li key={index}>
+            <li 
+              key={index} 
+              className={activeExercise === exercise ? "active" : ""} 
+              onClick={() => handleRowClick(exercise)}
+            >
               <h2>{exercise.name}</h2>
               <p><strong>Muscle Groups:</strong> {exercise.muscle_group}</p>
               <p><strong>Description:</strong> {exercise.description || "Dummy Description"}</p>
