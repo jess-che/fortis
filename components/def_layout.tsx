@@ -14,7 +14,7 @@ export default function RootLayout({
         <div className="flex flex-col bg-[#121212]">
         {/* navbar -- make into component */}
         <div className="w-screen p-2 flex flex-row items-center h-15">
-        <Link href="/">
+            <Link href="/">
                 <div className="w-40 h-15 hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300">
                     <Image
                     src="/animated/navLogo.svg"
@@ -25,22 +25,22 @@ export default function RootLayout({
                 </div>
             </Link>
 
-            <div className="flex flex-row h-15 items-center justify-evenly">
-            <Link href="/history">
-                <p className="px-3 text-xl font-bold hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">History</p>
-            </Link>
-            <Link href="/log">
-                <p className="px-3 text-xl font-bold hover:gradient-text-gb hover:shadow-pink transition-shadow duration-300">Log</p>
-            </Link>
-            <Link href="/social">
-                <p className="px-3 text-xl font-bold hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300">Social</p>
-            </Link>
-            <Link href="/discover">
-                <p className="px-3 text-xl font-bold hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">Discover</p>
-            </Link>
+            <div className="w-full flex flex-row h-15 items-center justify-center">
+                <Link href="/history">
+                    <p className="px-3 text-xl font-bold hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">History</p>
+                </Link>
+                <Link href="/log">
+                    <p className="px-3 text-xl font-bold hover:gradient-text-gb hover:shadow-pink transition-shadow duration-300">Log</p>
+                </Link>
+                <Link href="/social">
+                    <p className="px-3 text-xl font-bold hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300">Social</p>
+                </Link>
+                <Link href="/discover">
+                    <p className="px-3 text-xl font-bold hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">Discover</p>
+                </Link>
             </div>
 
-            <div className="w-screen p-2 flex justify-end items-center"> 
+            <div className="p-2 flex justify-end items-center"> 
             <Link href="api/auth/logout">
                 <div className="flex px-3 items-center hover:shadow-blue transition-shadow duration-300"> 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-10 h-10 pr-1">
