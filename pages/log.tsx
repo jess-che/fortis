@@ -94,13 +94,6 @@ const LogPage: FC = () => {
     }
   }
 
-// Create a new handler for the Select component
-// const handleSelectChange = (selectedOption: { value: string, label: string } | null, actionMeta: any) => {
-//   if (actionMeta.action === 'select-option') {
-//     setCurrentExercise({...currentExercise, exerciseName: selectedOption ? selectedOption.value : ''});
-//   }
-// }
-
 // Keep the original handleInputChange function for the input elements
 const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
   setCurrentExercise({...currentExercise, [e.target.name]: e.target.value});
@@ -235,6 +228,7 @@ const handleAddExercise = async () => {
                   value={exerciseOptions.find(option => option === currentExercise.exerciseName) ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName } : null}
                   onChange={handleSelectChange}
                   isSearchable
+                  noOptionsMessage={() => 'Loading...'}
                 />
                 <button className={styles.button} onClick={toggleSidePanel} id={styles["sidepanel-toggle-button"]}>Toggle Side Panel</button>
 
