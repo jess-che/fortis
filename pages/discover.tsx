@@ -28,11 +28,11 @@ const DiscoverPage: React.FC = () => {
   };
 
   const workout_muscle_map: StringToArrayMappingType = {
-    "Push": ["Chest", "Shoulder", "Triceps"],
+    "Push": ["Chest", "Shoulders", "Triceps"],
     "Pull": ["Back", "Biceps"],
-    "Legs": ["Quadriceps", "Hamstrings", "Calves"],
-    "Core": ["Abs", "Back", "Obliques"],
-    "Cardio": [],
+    "Legs": ["Legs"],
+    "Core": ["Abs"],
+    "Cardio": ["Cardio"],
     "HIIT": []
   }
 
