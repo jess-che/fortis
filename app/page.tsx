@@ -75,9 +75,11 @@ const Home: React.FC = () => {
             />
             <div className="text-7xl font-bold glow-text text-center">Fort&iacute;s</div>
             <div className="mt-7 relative"> 
-              <button className="startNow rounded-md px-2 text-xl font-bold inset-0 text-center transition  hover:bg-transparent border-2 border-[#55BBA4]">
-                Start Now
-              </button>
+              <Link href="/api/auth/login">
+                <button className="startNow rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#55BBA4]">
+                  Start Now
+                </button>
+              </Link>
             </div>
 
 
