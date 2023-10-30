@@ -148,9 +148,6 @@ const fetchAid = async (query: any) => {
   }
 
   const data = await response.json();
-<<<<<<< HEAD
-  return parseInt(data.data.rows[0].aid);
-=======
   console.log(data.data.rows[0].Aid);
   
   // Check if data, data, rows, and aid exist
@@ -161,7 +158,6 @@ const fetchAid = async (query: any) => {
   //   return null;
   // }
   return parseInt(data.data.rows[0].Aid);
->>>>>>> 20ba7db5b39a23e0b4e1a3c053b2bb90dfaf6517
 };
 
   // // USELESS STUFF, JUST CHECKING
