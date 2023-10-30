@@ -22,7 +22,7 @@ const LogPage: FC = () => {
   const [aid, setAid] = useState(null); 
 
 
-  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
   const toggleSidePanel = () => {
     setIsSidePanelOpen(!isSidePanelOpen);
   };
@@ -244,6 +244,8 @@ const handleAddExercise = async () => {
                   onChange={handleSelectChange}
                   isSearchable
                 />
+                <button className={styles.button} onClick={toggleSidePanel} id={styles["sidepanel-toggle-button"]}>Toggle Side Panel</button>
+
               </td>
               <td>
                 <input className={styles.input} type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} />
@@ -262,15 +264,14 @@ const handleAddExercise = async () => {
         <button className={styles.button} onClick={handleSaveExercises}>Save Exercises</button>  {/* Add this line */}
       </div>
 
-      
-  
-      <aside className={styles.sidePanel}>
+      {isSidePanelOpen && (
+        <aside className={styles.sidePanel}>
           <div className="search-bar-container" style={searchBarStyle}>
             <SearchBar />
           </div>
-
-        {/* Rest of the side panel content... */}
-      </aside>
+          {/* Rest of the side panel content... */}
+        </aside>
+      )}
     </DefLayout>
   )
 }

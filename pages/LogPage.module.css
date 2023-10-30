@@ -7,6 +7,7 @@
     justify-content: center;
     padding: 2em;
     height: 100vh;
+    position: relative;
 }
 
 .table {
@@ -74,4 +75,10 @@
     /* If the panel content is longer than the viewport height, this will enable scrolling */
     box-shadow: -2px 0 5px rgba(0, 0, 0, .1);
     /* Optional: add a shadow for a bit of depth */
+}
+
+#sidepanel-toggle-button {
+    position: relative;
+    top: 0px;
+    left: 0px;
 }
