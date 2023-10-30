@@ -27,7 +27,7 @@ export default function RootLayout({
                 </div>
             </Link>
 
-            <div className="flex flex-row h-15 items-center justify-evenly">
+            <div className="w-full flex flex-row h-15 items-center justify-center">
             <Link href="/history">
                 <p className="px-3 text-xl font-bold hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">History</p>
             </Link>
@@ -42,7 +42,7 @@ export default function RootLayout({
             </Link>
             </div>
 
-            <div className="w-screen p-2 flex justify-end items-center"> 
+            <div className="p-2 flex justify-end items-center"> 
             
             <Link href="api/auth/login">
                 <div className="flex px-3 items-center hover:shadow-blue transition-shadow duration-300"> 
