@@ -11,9 +11,9 @@ export default function RootLayout({
   }) {
     return (
         <UserProvider>
-        <div className="flex flex-col bg-[#121212]">
+        <div className="min-h-screen w-screen flex flex-col bg-[#121212]">
         {/* navbar -- make into component */}
-        <div className="min-h-screen w-screen w-screen p-2 flex flex-row items-center h-15">
+        <div className="w-screen p-2 flex flex-row items-center h-15 z-10">
             <Link href="/">
                 <div className="w-40 h-15 hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300">
                     <Image
@@ -54,7 +54,16 @@ export default function RootLayout({
         </div>
         {/* end of nav */}
 
-        {children}
+        <div className="fixed top-0 left-0 w-full h-full">
+            <div className="w-full h-full">
+                <div className="absolute top-0 left-0 w-full h-full mix-blend-difference bg-gradient-to-br from-[#121212] via-[#407a6d] to-[#121212]"></div>
+                <div className="absolute top-0 left-0 w-full h-full mix-blend-multiply bg-gradient-to-r from-[#407a6d] via-[#6b1a39] to-[#407a6d]"></div>
+            </div>
+        </div>
+
+        <div className="flex-grow flex flex-col z-10">
+          {children}
+        </div>
         
         </div>
         </UserProvider>
