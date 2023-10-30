@@ -56,7 +56,7 @@ export default function RootLayout({
         </div>
         {/* end of nav */}
 
-        <div className="absolute top-0 left-0 w-full h-full">
+        <div className="fixed top-0 left-0 w-full h-full">
             <div className="w-full h-[60vh]">
                 <div className="absolute top-0 left-0 w-full h-[60vh] mix-blend-difference bg-gradient-to-br from-[#121212] via-[#407a6d] to-[#121212]"></div>
                 <div className="absolute top-0 left-0 w-full h-[60vh] mix-blend-multiply bg-gradient-to-r from-[#407a6d] via-[#121212] to-[#407a6d]"></div>
