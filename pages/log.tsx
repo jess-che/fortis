@@ -228,6 +228,7 @@ const handleAddExercise = async () => {
                   value={exerciseOptions.find(option => option === currentExercise.exerciseName) ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName } : null}
                   onChange={handleSelectChange}
                   isSearchable
+                  loadingMessage={() => 'This is loading...'}
                   noOptionsMessage={() => 'Loading...'}
                 />
                 <button className={styles.button} onClick={toggleSidePanel} id={styles["sidepanel-toggle-button"]}>Toggle Side Panel</button>

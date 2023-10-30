@@ -41,6 +41,5 @@
   } */
 
 .results-list li.active {
-  background-color: green;
-  /* Replace with your preferred color */
+  background-color: #55BBA480;
 }
