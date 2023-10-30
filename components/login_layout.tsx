@@ -14,8 +14,29 @@ export default function RootLayout({
     return (
         <UserProvider>
         <div className="min-h-screen w-screen flex flex-col bg-[#121212]">
+
+        <div className="fixed top-0 left-0 w-full h-full z-0">
+            <div className="w-full h-[60vh]">
+                <div className="absolute top-0 left-0 w-full h-[60vh] mix-blend-difference bg-gradient-to-br from-[#121212] via-[#407a6d] to-[#121212]"></div>
+                <div className="absolute top-0 left-0 w-full h-[60vh] mix-blend-multiply bg-gradient-to-r from-[#407a6d] via-[#6b1a39] to-[#407a6d]"></div>
+            </div>
+            
+            <div className="w-full h-[40vh] mt-auto">
+                <div className="absolute top-[60vh] left-0 w-full h-[40vh] mix-blend-difference bg-gradient-to-tr from-[#232424] via-[#407a6d] to-[#232424]"></div>
+                <div className="absolute top-[60vh] left-0 w-full h-[40vh] mix-blend-multiply bg-gradient-to-r from-[#407a6d] via-[#232424] to-[#407a6d]"></div> 
+            </div>
+        </div>
+
+
+
+        <div className="h-[10vh] flex w-full mb-5"></div>
+        
+        <div className="flex-grow flex flex-col z-10">
+          {children}
+        </div>
+
         {/* navbar -- make into component */}
-        <div className="w-screen p-2 flex flex-row items-center h-15 z-10">
+        <div className="fixed top-0 left-0 w-screen p-2 flex flex-row items-center h-[10vh] z-10 bg-nav-gradient backdrop-blur-md">
             <Link href="/">
                 <div className="w-40 h-15 hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300">
                     <Image
@@ -27,7 +48,7 @@ export default function RootLayout({
                 </div>
             </Link>
 
-            <div className="w-full flex flex-row h-15 items-center justify-center">
+            <div className="w-full flex flex-row h-[10vh] items-center justify-center">
                 <Link href="/history">
                     <p className="px-3 opacity-75 text-l hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">HISTORY</p>
                 </Link>
@@ -42,7 +63,7 @@ export default function RootLayout({
                 </Link>
             </div>
 
-            <div className="p-2 flex justify-end items-center"> 
+            <div className="p-2 flex justify-end items-center h-[10vh]"> 
                 <Link href="api/auth/login">
                     <div className="flex px-3 items-center hover:shadow-blue transition-shadow duration-300"> 
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-10 h-10 pr-1">
@@ -56,21 +77,7 @@ export default function RootLayout({
         </div>
         {/* end of nav */}
 
-        <div className="fixed top-0 left-0 w-full h-full">
-            <div className="w-full h-[60vh]">
-                <div className="absolute top-0 left-0 w-full h-[60vh] mix-blend-difference bg-gradient-to-br from-[#121212] via-[#407a6d] to-[#121212]"></div>
-                <div className="absolute top-0 left-0 w-full h-[60vh] mix-blend-multiply bg-gradient-to-r from-[#407a6d] via-[#6b1a39] to-[#407a6d]"></div>
-            </div>
-            
-            <div className="w-full h-[40vh] mt-auto">
-                <div className="absolute top-[60vh] left-0 w-full h-[40vh] mix-blend-difference bg-gradient-to-tr from-[#232424] via-[#407a6d] to-[#232424]"></div>
-                <div className="absolute top-[60vh] left-0 w-full h-[40vh] mix-blend-multiply bg-gradient-to-r from-[#407a6d] via-[#232424] to-[#407a6d]"></div> 
-            </div>
-        </div>
-
-        <div className="flex-grow flex flex-col z-10">
-          {children}
-        </div>
+       
         
         </div>
         </UserProvider>

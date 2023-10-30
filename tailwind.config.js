@@ -13,6 +13,7 @@ module.exports = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'nav-gradient': 'linear-gradient(to bottom, rgba(18,18,18, 1), rgba(18,18,18, 0))'
       },
       boxShadow: {
         'green': '0 4px 6px 0 rgba(85, 187, 164, 0.5)', 
