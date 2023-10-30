@@ -13,7 +13,7 @@ export default function RootLayout({
         <UserProvider>
         <div className="flex flex-col bg-[#121212]">
         {/* navbar -- make into component */}
-        <div className="w-screen p-2 flex flex-row items-center h-15">
+        <div className="min-h-screen w-screen w-screen p-2 flex flex-row items-center h-15">
             <Link href="/">
                 <div className="w-40 h-15 hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300">
                     <Image
