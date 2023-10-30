@@ -116,6 +116,7 @@ const handleSaveExercises = async () => {
       },
       body: JSON.stringify(exercises)
     });
+    console.log(response)
 
     if (!response.ok) {
       throw new Error('Failed to save exercises');
@@ -147,7 +148,20 @@ const fetchAid = async (query: any) => {
   }
 
   const data = await response.json();
+<<<<<<< HEAD
   return parseInt(data.data.rows[0].aid);
+=======
+  console.log(data.data.rows[0].Aid);
+  
+  // Check if data, data, rows, and aid exist
+  // if (data && data.data && data.data.rows && data.data.rows.length > 0 && data.data.rows[0].aid) {
+  //   return parseInt(data.data.rows[0].Aid);
+  // } else {
+  //   console.error('Missing aid for eid:');
+  //   return null;
+  // }
+  return parseInt(data.data.rows[0].Aid);
+>>>>>>> 20ba7db5b39a23e0b4e1a3c053b2bb90dfaf6517
 };
 
   // // USELESS STUFF, JUST CHECKING
