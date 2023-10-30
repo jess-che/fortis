@@ -40,7 +40,7 @@ const LogPage: FC = () => {
   useEffect(() => {
     
     const fetchExercises = async () => {
-      const response = await fetch('/api/DefaultExcSort');
+      const response = await fetch('/api/LimitExcSort');
       if (!response.ok) {
         throw new Error('Failed to fetch exercises');
       }
