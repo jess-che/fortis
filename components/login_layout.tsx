@@ -57,8 +57,15 @@ export default function RootLayout({
         {/* end of nav */}
 
         <div className="absolute top-0 left-0 w-full h-full">
-          <div className="w-full h-[60vh] bg-gradient-to-r from-blue-600 to-purple-700"></div>
-          <div className="w-full h-[40vh] bg-gradient-to-r from-red-600 to-green-700 mt-auto"></div>
+            <div className="w-full h-[60vh]">
+                <div className="absolute top-0 left-0 w-full h-[60vh] mix-blend-difference bg-gradient-to-br from-[#121212] via-[#407a6d] to-[#121212]"></div>
+                <div className="absolute top-0 left-0 w-full h-[60vh] mix-blend-multiply bg-gradient-to-r from-[#407a6d] via-[#121212] to-[#407a6d]"></div>
+            </div>
+            
+            <div className="w-full h-[40vh] mt-auto">
+                <div className="absolute top-[60vh] left-0 w-full h-[40vh] mix-blend-difference bg-gradient-to-tr from-[#232424] via-[#407a6d] to-[#232424]"></div>
+                <div className="absolute top-[60vh] left-0 w-full h-[40vh] mix-blend-multiply bg-gradient-to-r from-[#407a6d] via-[#232424] to-[#407a6d]"></div> 
+            </div>
         </div>
 
         <div className="flex-grow flex flex-col z-10">
