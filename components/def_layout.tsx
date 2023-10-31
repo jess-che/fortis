@@ -1,6 +1,6 @@
 import React from 'react';
 import Link  from 'next/link';
-import '@/app/globals.css'
+import '@/app/globals.css';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import Image          from 'next/image';
 

@@ -80,7 +80,7 @@ const Home: React.FC = () => {
               width={150}
               height={150}
             />
-
+            
             <div className="text-7xl font-bold glow-text text-center">Fort&iacute;s</div>
 
             <div className="mt-7 relative"> 

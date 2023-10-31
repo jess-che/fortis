@@ -1,2 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
 
+/* change all font to Nunito */
+body {
+    font-family: 'Nunito', sans-serif;
+}
 
+@keyframes fillBox {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.activity-item:hover::before {
+  animation: fillBox .5s ease-in forwards;
+}
+
+.activity-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: #55bba36a; 
+  z-index: -1;
+  transition: width 0.3s;
+  border-radius: 0.75rem; 
+}
