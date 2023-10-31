@@ -145,29 +145,6 @@ const fetchAid = async (query: any) => {
   return parseInt(data.data.rows[0].Aid);
 };
 
-  // // USELESS STUFF, JUST CHECKING
-  // const fetchAid = async (query: any) => {
-  //   const response = await fetch('/api/getAID', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436"
-  //       //query
-  //     }),
-  //   });
-
-  //   if (!response.ok) {
-  //     throw new Error('Failed to save query');
-  //   }
-
-  //   const data = await response.json();
-  //   console.log(data)
-  // };
-
-  //   // END OF USELESS STUFF, JUST CHECKING
-
 
 const handleAddExercise = async () => {
   if (currentExercise.exerciseName && currentExercise.eid) {
@@ -202,6 +179,31 @@ const handleRemoveExercise = (index: number) => {
     minWidth: '200px',
   };
 
+  const [editingIndex, setEditingIndex] = useState(-1);
+  const handleEditExercise = (index: number) => {
+    setEditingIndex(index);
+    setEditingExercise(exercises[index]); // This line is new
+  };
+
+  const [editingExercise, setEditingExercise] = useState<Exercise>({
+    exerciseName: '',
+    numberOfReps: 0,
+    numberOfSets: 0,
+    weight: 0,
+    eid: 0,
+    aid: 0,
+  });
+
+  // Modify the handleUneditExercise function
+const handleUneditExercise = (index: number) => {
+  const newExercises = [...exercises];
+  newExercises[index] = editingExercise;
+  setExercises(newExercises);
+
+  // Exit the editing mode
+  setEditingIndex(-1);
+};
+
 
   
   return (
@@ -218,17 +220,33 @@ const handleRemoveExercise = (index: number) => {
             </tr>
           </thead>
           <tbody>
-            {exercises.map((exercise, index) => (
-              <tr key={index}>
-                <td>{exercise.exerciseName}</td>
-                <td>{exercise.numberOfReps}</td>
-                <td>{exercise.numberOfSets}</td>
-                <td>{exercise.weight}</td>
-                <td>
-                  <button onClick={() => handleRemoveExercise(index)}>Remove</button>
-                </td>
-              </tr>
-            ))}
+          {exercises.map((exercise, index) => (
+    <tr key={index}>
+      {editingIndex === index ? (
+        <>
+        <td><input type="text" value={editingExercise.exerciseName} onChange={(event) => setEditingExercise({ ...editingExercise, exerciseName: event.target.value })} /></td>
+        <td><input type="number" value={editingExercise.numberOfReps} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfReps: Number(event.target.value) })} /></td>
+        <td><input type="number" value={editingExercise.numberOfSets} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfSets: Number(event.target.value) })} /></td>
+        <td><input type="number" value={editingExercise.weight} onChange={(event) => setEditingExercise({ ...editingExercise, weight: Number(event.target.value) })} /></td>
+        <td>
+          <button onClick={() => handleRemoveExercise(index)}>Remove</button>
+          <button onClick={() => handleUneditExercise(index)}>Done</button>
+        </td>
+      </>
+      ) : (
+        <>
+          <td>{exercise.exerciseName}</td>
+          <td>{exercise.numberOfReps}</td>
+          <td>{exercise.numberOfSets}</td>
+          <td>{exercise.weight}</td>
+          <td>
+            <button onClick={() => handleRemoveExercise(index)}>Remove</button>
+            <button onClick={() => handleEditExercise(index)}>Edit</button>
+          </td>
+        </>
+      )}
+    </tr>
+  ))}
               <tr>
               <td>
                 <Select
