@@ -49,6 +49,9 @@ export default function RootLayout({
             </Link>
 
             <div className="w-full flex flex-row h-[10vh] items-center justify-center">
+                <Link href="/profile">
+                    <p className="px-3 opacity-75 text-l hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">PROFILE</p>
+                </Link>
                 <Link href="/history">
                     <p className="px-3 opacity-75 text-l hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">HISTORY</p>
                 </Link>
