@@ -86,7 +86,7 @@
     width: 370px;
     /* Or however wide you want the panel to be */
     height: calc(100vh - 65px);
-    /* Assume your navigation bar is 60px tall */
+    /* Assume your navigation bar is 65px tall */
     background-color: inherit;
     /* Or any color you want */
     padding: 1em;

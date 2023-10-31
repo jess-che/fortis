@@ -83,6 +83,19 @@ const LogPage: FC = () => {
     fetchExercises();
   }, []);
 
+  // This useEffect loads the exercises from localStorage when this component first mounts
+  useEffect(() => {
+    const savedExercises = localStorage.getItem('exercises');
+    if (savedExercises) {
+      setExercises(JSON.parse(savedExercises));
+    }
+  }, []);  // This empty dependency array means this hook runs once when the component mounts
+
+  // This useEffect saves the exercises to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('exercises', JSON.stringify(exercises));
+  }, [exercises]);  // This dependency array means this hook runs whenever `exercises` changes
+
   // Create a new handler for the Select component
   const handleSelectChange = (selectedOption: { value: string, label: string } | null, actionMeta: any) => {
     if (actionMeta.action === 'select-option') {
@@ -182,7 +195,7 @@ const handleRemoveExercise = (index: number) => {
   const [editingIndex, setEditingIndex] = useState(-1);
   const handleEditExercise = (index: number) => {
     setEditingIndex(index);
-    setEditingExercise(exercises[index]); // This line is new
+    setEditingExercise(exercises[index]); 
   };
 
   const [editingExercise, setEditingExercise] = useState<Exercise>({
@@ -199,8 +212,6 @@ const handleUneditExercise = (index: number) => {
   const newExercises = [...exercises];
   newExercises[index] = editingExercise;
   setExercises(newExercises);
-
-  // Exit the editing mode
   setEditingIndex(-1);
 };
 
@@ -216,7 +227,7 @@ const handleUneditExercise = (index: number) => {
               <th>Number of Reps</th>
               <th>Number of Sets</th>
               <th>Weight</th>
-              <th>Action</th> {/* New column header */}
+              <th>Action</th> 
             </tr>
           </thead>
           <tbody>
@@ -241,7 +252,7 @@ const handleUneditExercise = (index: number) => {
           <td>{exercise.weight}</td>
           <td>
             <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30"/> </button>
-            <button onClick={() => handleEditExercise(index)}> <img src="/images/edit.png" alt="Edit icon" width="24" height="30"/> </button>
+            <button onClick={() => handleEditExercise(index)}> <img src="/images/edit1.png" alt="Edit icon" width="24" height="30"/> </button>
           </td>
         </>
       )}
@@ -284,7 +295,6 @@ const handleUneditExercise = (index: number) => {
           <div className="search-bar-container" style={searchBarStyle}>
             <SearchBar />
           </div>
-          {/* Rest of the side panel content... */}
         </aside>
       )}
     </DefLayout>
