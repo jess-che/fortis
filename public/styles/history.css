@@ -14,7 +14,7 @@ body {
   }
 }
 
-.activity-item:hover::before {
+.activity-item.clicked::before {
   animation: fillBox .5s ease-in forwards;
 }
 

@@ -148,7 +148,7 @@ const HistoryPage: FC = () => {
             <li key={i}
               onClick={() => setClickedIndex(clickedIndex === i ? null : i)}
               className={`activity-item relative list-none mx-3 p-2 rounded-xl border-t border-b border-white border-opacity-80 
-                        ${clickedIndex === i ? 'bg-[#55bba338] clicked' : 'glow transition hover:bg-transparent  border-b border-white border-opacity-80 '}
+                        ${clickedIndex === i ? 'clicked' : 'glow hover:bg-transparent  border-b border-white border-opacity-80 '}
                         `}>
               <div className="flex flex-col relative z-10">
                 <div className="text-2xl">{activity.Activity_name}</div>
