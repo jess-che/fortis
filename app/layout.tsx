@@ -2,14 +2,16 @@ import './globals.css';
 import { Nunito } from 'next/font/google';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 
+// special font
 const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito", display: "swap" });
 
+// metadata
 export const metadata = {
   title: 'Fortis',
   description: 'CS316 Project: Jessica Chen (jc939), Anirudh Jain (aj383), Swarajh Mehta (sm961), Austin Huang (ash110), Benjamin Chauhan (bsc32)',
 }
 
-
+// root file
 export default function RootLayout({
   children,
 }: {

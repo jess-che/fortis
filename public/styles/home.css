@@ -1,3 +1,4 @@
+/* glowing animation for Fortis */
 @keyframes glowing {
   0% {
     text-shadow: 0 0 5px #FFFFFF, 0 0 10px #121212, 0 0 15px #55BBA4, 0 0 20px #55BBA4;
@@ -6,11 +7,12 @@
     text-shadow: 0 0 10px #121212, 0 0 20px #121212, 0 0 25px #55BBA4, 0 0 30px #55BBA4;
   }
 }
-
 .glow-text {
   animation: glowing 2s infinite alternate;
 }
+/* end of glowing animation */
 
+/* button effect for start now */
 @keyframes fillBox {
   from {
     width: 0%;
@@ -19,11 +21,9 @@
     width: 100%;
   }
 }
-
 .startNow:hover::before {
   animation: fillBox 1.5s ease-in forwards;
 }
-
 .startNow::before {
   content: "";
   position: absolute;
@@ -36,7 +36,9 @@
   transition: width 0.3s;
   border-radius: 0.375rem;
 }
+/* end of button effect for start now */
 
+/* .. .. .... animation for scroll down */
 @keyframes ellipsisAnimation {
   0%, 100% {
     content: "..";
@@ -54,3 +56,4 @@
     content: "..";
   }
 }
+/* end of ellipse animation for scroll down */

@@ -11,8 +11,11 @@ export default function RootLayout({
   }) {
     return (
         <UserProvider>
+            
+        {/* main screen */}
         <div className="min-h-screen w-screen flex flex-col bg-[#121212]">
 
+        {/* background gradient */}
         <div className="fixed top-0 left-0 w-full h-full">
             <div className="w-full h-full">
                 <div className="absolute top-0 left-0 w-full h-full mix-blend-difference bg-gradient-to-br from-[#121212] via-[#407a6d] to-[#121212]"></div>
@@ -20,13 +23,15 @@ export default function RootLayout({
             </div>
         </div>
 
+        {/* navbar cushion */}
         <div className="h-[10vh] flex w-full mb-5"></div>
 
+        {/* divider so children rest on top of gradient */}
         <div className="flex-grow flex flex-col z-10">
           {children}
         </div>
 
-        {/* navbar -- make into component */}
+        {/* navbar */}
         <div className="fixed top-0 left-0 w-screen p-2 flex flex-row items-center h-[10vh] z-10 bg-nav-gradient backdrop-blur-md">
             <Link href="/">
                 <div className="w-40 h-15 hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300">
@@ -67,7 +72,6 @@ export default function RootLayout({
                     </div>
                 </Link>
             </div>
-
         </div>
         {/* end of nav */}
         
