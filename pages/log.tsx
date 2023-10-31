@@ -270,7 +270,7 @@ const handleUneditExercise = (index: number) => {
                   loadingMessage={() => 'Loading...'}
                   noOptionsMessage={() => 'No options found.'}
                 />
-                <button className={styles.button} onClick={toggleSidePanel} id={styles["sidepanel-toggle-button"]}>Toggle Side Panel</button>
+                <button className={styles.button} onClick={toggleSidePanel} id={styles["sidepanel-toggle-button"]}>All exercises</button>
 
               </td>
               <td>
@@ -286,8 +286,8 @@ const handleUneditExercise = (index: number) => {
           </tbody>
         </table>
   
-        <button className={styles.button} onClick={handleAddExercise}>Add Exercise</button>
-        <button className={styles.button} onClick={handleSaveExercises}>Save Exercises</button> 
+        <button className={styles.button} id={styles["add-exercise-button"]} onClick={handleAddExercise}>Add Exercise</button>
+        <button className={styles.button} id={styles["save-exercise-button"]} onClick={handleSaveExercises}>Finish Workout</button> 
       </div>
 
       {isSidePanelOpen && (

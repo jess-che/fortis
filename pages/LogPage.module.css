@@ -66,12 +66,14 @@
 
 .button {
     padding: 0.5em 1em;
-    margin-bottom: 40px;
     background-color: #2FABDD80;
     color: #fff;
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
 }
 
 .button:hover {
@@ -100,4 +102,18 @@
     position: relative;
     top: 0px;
     left: 0px;
+    width: max-content;
+}
+
+#add-exercise-button {
+    background-color: #2FABDD80;
+    margin-bottom: 40px;
+}
+
+#save-exercise-button {
+    background-color: #C32E6740;
+    margin-bottom: 20px;
+    width: max-content;
+    height: 80px;
+    font-size: x-large;
 }
