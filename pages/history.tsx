@@ -142,7 +142,15 @@ const HistoryPage: FC = () => {
 
         {/* summary of history */}
         <div className="flex flex-col h-[85vh] min-w-[20vw] bg-white bg-opacity-5 rounded-3xl border-2 border-white border-opacity-40 bg-blur items-center">
-          <div className="font-bold text-3xl p-3 text-center">Workout History</div>
+          <div className="flex flex-row min-w-[19vw] py-3 px-1 justify-between items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+              <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 010-1.06l7.5-7.5a.75.75 0 111.06 1.06L9.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5z" clipRule="evenodd" />
+            </svg>
+            <div className="font-bold text-3xl">Week</div> 
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+              <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 01-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 011.06-1.06l7.5 7.5z" clip-rule="evenodd" />
+            </svg>
+          </div>
 
           <div className="w-[10vw] h-[10vw] bg-red-400 mb-3 rounded-2xl flex-shrink-0 text-center opacity-50">placeholder, icon will go here</div>
           
