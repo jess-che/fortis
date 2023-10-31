@@ -73,22 +73,25 @@ const HistoryPage: FC = () => {
             throw new Error('Failed to retrieve history workouts');
           }
 
-          const workoutData = await workoutResponse.json();
+          // // const workoutData = await workoutResponse.json();
 
-          // Fetch exercise data for each workout
-          const workoutsWithExerciseData = await Promise.all(workoutData.data.rows.map(async (workout: any) => {
-            const exerciseData = await ExcDatafromEID(workout.Eid);
-            console.log("Fetched Exercise Data:", exerciseData); // Log the fetched exercise data
+          // // // Fetch exercise data for each workout
+          // // const workoutsWithExerciseData = await Promise.all(workoutData.data.rows.map(async (workout: any) => {
+          // //   const exerciseData = await ExcDatafromEID(workout.Eid);
+          // //   console.log("Fetched Exercise Data:", exerciseData); // Log the fetched exercise data
 
-            return {
-              ...workout,
-              exerciseData: exerciseData,
-            };
-          }));
+          // //   return {
+          // //     ...workout,
+          // //     exerciseData: exerciseData,
+          // //   };
+          // }));
 
-          return {
-            ...activity,
-            workouts: workoutsWithExerciseData,
+          // return {
+          //   ...activity,
+          //   workouts: workoutsWithExerciseData,
+          // };
+          return{
+            ...activity
           };
         }));
 
@@ -159,7 +162,7 @@ const HistoryPage: FC = () => {
               </div>
             </li>
           ))}
-        </ul>
+          </ul>
 
         </div>
 
