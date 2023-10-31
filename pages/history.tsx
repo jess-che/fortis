@@ -138,17 +138,19 @@ const HistoryPage: FC = () => {
       <div className="flex w-screen min-h-[90vh] justify-center items-center">
 
         {/* summary of history */}
-        <div className="flex flex-col h-[85vh] w-[20vw] bg-white bg-opacity-5 rounded-3xl border-2 border-white border-opacity-40 bg-blur">
-          <div className="font-bold text-[2vw] p-3">Workout History</div>
+        <div className="flex flex-col h-[85vh] min-w-[20vw] bg-white bg-opacity-5 rounded-3xl border-2 border-white border-opacity-40 bg-blur items-center">
+          <div className="font-bold text-3xl p-3 text-center">Workout History</div>
+
+          <div className="w-[10vw] h-[10vw] bg-red-400 mb-3 rounded-2xl flex-shrink-0 text-center opacity-50">placeholder, icon will go here</div>
           
-          <ul className="max-h-[75vh] overflow-y-auto">
+          <ul className="overflow-y-auto">
           {activityData.map((activity: any, i: number) => (
             <li key={i}
               onClick={() => setClickedIndex(clickedIndex === i ? null : i)}
               className={`activity-item relative list-none mx-3 p-2 rounded-xl border-t border-b border-white border-opacity-80 
-                        ${clickedIndex === i ? 'bg-white text-black' : 'transition hover:bg-transparent  border-b border-white border-opacity-80 '}
+                        ${clickedIndex === i ? 'bg-[#55bba338] clicked' : 'glow transition hover:bg-transparent  border-b border-white border-opacity-80 '}
                         `}>
-              <div className="mb-2 flex flex-col relative z-10">
+              <div className="flex flex-col relative z-10">
                 <div className="text-2xl">{activity.Activity_name}</div>
                 {/* <span>Aid: {activity.Aid}&emsp;</span> */}
                 <span>Date: {formatDate(activity.Date)}</span>
@@ -169,8 +171,6 @@ const HistoryPage: FC = () => {
         </div>
 
       </div>
-
-      
 
                 {/* <ul className="list-none p-0">
                   {activity.workouts.map((workout: any, j: number) => (
