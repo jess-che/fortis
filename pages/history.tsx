@@ -143,7 +143,7 @@ const HistoryPage: FC = () => {
 
           <div className="w-[10vw] h-[10vw] bg-red-400 mb-3 rounded-2xl flex-shrink-0 text-center opacity-50">placeholder, icon will go here</div>
           
-          <ul className="overflow-y-auto mb-3">
+          <ul className="overflow-y-auto mb-3 min-w-[19vw]">
           {activityData.map((activity: any, i: number) => (
             <li key={i}
               onClick={() => setClickedIndex(clickedIndex === i ? null : i)}
