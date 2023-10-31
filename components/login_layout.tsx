@@ -40,7 +40,7 @@ export default function RootLayout({
             <Link href="/">
                 <div className="w-40 h-15 hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300">
                     <Image
-                    src="/animated/navLogo.svg"
+                    src="/images/navLogo.svg"
                     alt="Nav Logo"
                     width={170}
                     height={55}

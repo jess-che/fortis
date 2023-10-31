@@ -3,12 +3,12 @@
     text-shadow: 0 0 5px #FFFFFF, 0 0 10px #121212, 0 0 15px #55BBA4, 0 0 20px #55BBA4;
   }
   100% {
-    text-shadow: 0 0 10px #121212, 0 0 20px #121212, 0 0 25px #55BBA4, 0 0 30px #55BBA4, 0 0 35px #55BBA4, 0 0 40px #55BBA4;
+    text-shadow: 0 0 10px #121212, 0 0 20px #121212, 0 0 25px #55BBA4, 0 0 30px #55BBA4;
   }
 }
 
 .glow-text {
-  animation: glowing 1s infinite alternate;
+  animation: glowing 2s infinite alternate;
 }
 
 @keyframes fillBox {
