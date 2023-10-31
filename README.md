@@ -62,11 +62,15 @@ Set up auth0:
 
 pnpm add @auth0/nextjs-auth0
 ```
-
 Set up pg:
 ```bash
 
 pnpm add pg
+```
+Set up react-select:
+```bash
+
+pnpm install react-select
 ```
 
 Finally, to run the development server:
