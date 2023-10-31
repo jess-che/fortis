@@ -112,6 +112,25 @@ const HistoryPage: FC = () => {
     return `${month}/${day}/${year}`;
   }
 
+  // format interval to something readable and printable
+  function intervalToString(interval:any) {
+    let str = '';
+
+    if (interval.days) {
+        str += interval.days + 'd ';
+    }
+    if (interval.hours) {
+        str += interval.hours + 'h ';
+    }
+    if (interval.minutes) {
+        str += interval.minutes + 'm ';
+    }
+    if (interval.seconds) {
+        str += interval.seconds + 's';
+    }
+
+    return str.trim();
+  }
 
   return (
     <DefLayout>
@@ -134,7 +153,7 @@ const HistoryPage: FC = () => {
                 {/* <span>Aid: {activity.Aid}&emsp;</span> */}
                 <span>Date: {formatDate(activity.Date)}</span>
                 {/* <span>Start Time: {activity.Start_Time}</span> */}
-                <span>Duration: {activity.Duration}</span>
+                <span>Duration: {intervalToString(activity.Duration)}</span>
               </div>
             </li>
           ))}
