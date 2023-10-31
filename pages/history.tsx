@@ -273,7 +273,7 @@ const HistoryPage: FC = () => {
         }
 
         const activityData = await activityResponse.json();
-
+        console.log(activityData)
         // Fetch workout data for each activity
         const activitiesWithWorkouts = await Promise.all(activityData.data.rows.map(async (activity: any) => {
           const workoutResponse = await fetch('/api/HistoryWorkouts', {
@@ -329,7 +329,12 @@ const HistoryPage: FC = () => {
             <li key={i} className="activity-item">
               <div className="activity-info">
                 <h2>{activity.Activity_name}</h2>
-                <span>Aid: {activity.Aid}</span>
+                <span>Aid: {activity.Aid}&emsp;</span>
+                <br/>
+                <span>Date: {activity.Date}&emsp;</span>
+                <br/>
+                <span>Start Time: {activity.Start_Time}</span>
+                <span>Duration: {activity.Duration}</span>
               </div>
               <ul className="workout-list">
                 {activity.workouts.map((workout: any, j: number) => (
