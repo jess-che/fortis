@@ -229,8 +229,8 @@ const handleUneditExercise = (index: number) => {
         <td><input type="number" value={editingExercise.numberOfSets} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfSets: Number(event.target.value) })} /></td>
         <td><input type="number" value={editingExercise.weight} onChange={(event) => setEditingExercise({ ...editingExercise, weight: Number(event.target.value) })} /></td>
         <td>
-          <button onClick={() => handleRemoveExercise(index)}>Remove</button>
-          <button onClick={() => handleUneditExercise(index)}>Done</button>
+          <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30"/> </button>
+          <button onClick={() => handleUneditExercise(index)}> <img src="/images/unedit.png" alt="Unedit icon" width="24" height="30"/> </button>
         </td>
       </>
       ) : (
@@ -240,8 +240,8 @@ const handleUneditExercise = (index: number) => {
           <td>{exercise.numberOfSets}</td>
           <td>{exercise.weight}</td>
           <td>
-            <button onClick={() => handleRemoveExercise(index)}>Remove</button>
-            <button onClick={() => handleEditExercise(index)}>Edit</button>
+            <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30"/> </button>
+            <button onClick={() => handleEditExercise(index)}> <img src="/images/edit.png" alt="Edit icon" width="24" height="30"/> </button>
           </td>
         </>
       )}
