@@ -6,7 +6,7 @@ import DefLayout      from '@/components/def_layout';
 import LoginLayout    from '@/components/login_layout';
 import { useUser }    from '@auth0/nextjs-auth0/client';
 import { useState, useEffect } from 'react';
-import '@/public/styles/home.css';                              // style sheet for animus
+import '@/public/styles/home.css';                              // style sheet for animations
 
 
 const Home: React.FC = () => {

@@ -1,234 +1,13 @@
-// // import Image from 'next/image';
-// // import Link from 'next/link';
-// // import React, { FC, useEffect, useState } from 'react';
-// // import DefLayout from '@/components/def_layout';
-
-
-// // const HistoryPage: React.FC = () => {
-// //   const [activityData, setActivityData] = useState<any[]>([]); // Define state to store the activity data
-
-// //   useEffect(() => {
-// //     const fetchData = async () => {
-// //       try {
-// //         const response = await fetch('/api/HistoryActivities', {
-// //           method: 'POST',
-// //           headers: {
-// //             'Content-Type': 'application/json',
-// //           },
-// //           body: JSON.stringify({
-// //             searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436",
-// //             //query
-// //           }),
-// //         });
-
-// //         if (!response.ok) {
-// //           throw new Error('Failed to fetch data');
-// //         }
-
-// //         const data = await response.json();
-// //         console.log(data);
-
-// //         // Extract and set the data in state
-// //         setActivityData(data.data.rows);
-// //       } catch (error) {
-// //         console.error('Error fetching data:', error);
-// //       }
-// //     };
-
-// //     fetchData();
-// //   }, []);
-
-// //   const HistoryActivities = async (query: any) => {
-// //     let allResults: string[] = [];
-
-// //     const response = await fetch('/api/HistoryActivities', {
-// //       method: 'POST',
-// //       headers: {
-// //         'Content-Type': 'application/json',
-// //       },
-// //       body: JSON.stringify({
-// //         searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436"
-// //         //query
-// //       }),
-// //     });
-
-// //     if (!response.ok) {
-// //       throw new Error('Failed to save query');
-// //     }
-
-// //     const data = await response.json();
-// //     console.log(data);
-// //     const dataNames = data.data.rows.map((row: { name: any; }) => row.name);
-// //     allResults = [...allResults, ...dataNames];
-// //     console.log(allResults.length);
-// //     for (let i = 0; i < allResults.length; i++) {
-// //       console.log(data.data.rows[i].Activity_name, data.data.rows[i].Aid);
-// //     }
-// //   };
-
-// //     // USELESS STUFF, JUST CHECKING
-// //   const HistoryWorkouts = async (uid: any, aid: any) => {
-// //     let allResults: string[] = [];
-
-// //     const response = await fetch('/api/HistoryWorkouts', {
-// //       method: 'POST',
-// //       headers: {
-// //         'Content-Type': 'application/json',
-// //       },
-// //       body: JSON.stringify({
-// //         uid: "b24e24f4-86b8-4b83-8947-b2472a43b436", 
-// //         aid: aid
-// //       }),
-// //     });
-
-// //     if (!response.ok) {
-// //       throw new Error('Failed to retrieve history');
-// //     }
-
-// //     const data = await response.json();
-// //     const dataNames = data.data.rows.map((row: { name: any; }) => row.name);
-// //     allResults = [...allResults, ...dataNames];
-// //     console.log(data);
-// //     console.log(allResults.length);
-// //     for (let i = 0; i < allResults.length; i++) {
-// //       console.log(data.data.rows[i].Aid, data.data.rows[i].Eid);
-// //     }
-// //     // setResults(allResults);
-// //   };
-
-// //   // const [results, setResults] = useState<string[]>([]);
-// //     // END OF USELESS STUFF, JUST CHECKING
-
-
-// // // WHen you click a button: 
-// // //   "   HistoryWorkouts(value);    "  <-   This needs to be called.
-
-// //   const result1 = HistoryActivities("");
-// //   const result2 = HistoryWorkouts("", 2);
-
-
-// //   return (
-// //     <DefLayout>
-// //       <div>
-// //         <h1>History Activities</h1>
-// //         <ul>
-// //           {activityData.map((row: any, i: number) => (
-// //             <li key={i}>
-// //               Activity Name: {row.Activity_name}, Aid: {row.Aid}
-// //             </li>
-// //           ))}
-// //         </ul>
-// //       </div>
-// //     </DefLayout>
-// //   )
-// // }
-
-// // export default HistoryPage;
-
-
-// import Image from 'next/image';
-// import Link from 'next/link';
-// import React, { FC, useEffect, useState } from 'react';
-// import DefLayout from '@/components/def_layout';
-
-// const HistoryPage: FC = () => {
-//   const [activityData, setActivityData] = useState<any[]>([]); // Define state to store the activity data
-//   const [workoutData, setWorkoutData] = useState<any[]>([]); // Define state to store the workout data
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const response = await fetch('/api/HistoryActivities', {
-//           method: 'POST',
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//           body: JSON.stringify({
-//             searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436",
-//             //query
-//           }),
-//         });
-
-//         if (!response.ok) {
-//           throw new Error('Failed to fetch data');
-//         }
-
-//         const data = await response.json();
-//         console.log(data);
-
-//         // Extract and set the activity data in state
-//         setActivityData(data.data.rows);
-//       } catch (error) {
-//         console.error('Error fetching activity data:', error);
-//       }
-//     };
-
-//     fetchData();
-//   }, []);
-
-//   const HistoryWorkouts = async (aid: any) => {
-//     try {
-//       const response = await fetch('/api/HistoryWorkouts', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//           uid: "b24e24f4-86b8-4b83-8947-b2472a43b436",
-//           aid: aid,
-//         }),
-//       });
-
-//       if (!response.ok) {
-//         throw new Error('Failed to retrieve history workouts');
-//       }
-
-//       const data = await response.json();
-//       console.log(data);
-
-//       // Extract and set the workout data in state
-//       setWorkoutData(data.data.rows);
-//     } catch (error) {
-//       console.error('Error fetching workout data:', error);
-//     }
-//   };
-
-//   return (
-//     <DefLayout>
-//       <div>
-//         <h1>History Activities</h1>
-//         <ul>
-//           {activityData.map((row: any, i: number) => (
-//             <li key={i}>
-//               Activity Name: {row.Activity_name}, Aid: {row.Aid}
-//               <button onClick={() => HistoryWorkouts(row.Aid)}>Fetch Workouts</button>
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-//       <div>
-//         <h2>Workout Data</h2>
-//         <ul>
-//           {workoutData.map((row: any, i: number) => (
-//             <li key={i}>
-//               Aid: {row.Aid}, Eid: {row.Eid}, Rep: {row.Rep}, Seq_num: {row.Seq_num}, Set: {row.Set}, Uid: {row.Uid}, Weight: {row.Weight}
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-//     </DefLayout>
-//   );
-// };
-
-// export default HistoryPage;
-
 import React, { FC, useEffect, useState } from 'react';
 import DefLayout from '@/components/def_layout';
-import './HistoryPage.css'; // Import the CSS for styling
+import './HistoryPage.css';                             // Import the CSS for styling
+import '@/public/styles/history.css';                      // style sheet for animations
 
 const HistoryPage: FC = () => {
+  // get activity data
   const [activityData, setActivityData] = useState<any[]>([]);
 
+  // get exercise data from EID
   const ExcDatafromEID = async (query: any) => {
     try {
       const response = await fetch('/api/ExcDatafromEID', {
@@ -255,6 +34,7 @@ const HistoryPage: FC = () => {
     }
   };
 
+  // get data for each activity
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -264,7 +44,7 @@ const HistoryPage: FC = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436",
+            searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436",            // uid, to be replaced
           }),
         });
 
@@ -282,7 +62,7 @@ const HistoryPage: FC = () => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              uid: "b24e24f4-86b8-4b83-8947-b2472a43b436",
+              uid: "b24e24f4-86b8-4b83-8947-b2472a43b436",                  // uid, to be replaced
               aid: activity.Aid,
             }),
           });
@@ -322,6 +102,19 @@ const HistoryPage: FC = () => {
 
   return (
     <DefLayout>
+      {/* main container */}
+      <div className="flex w-screen min-h-[90vh] justify-center items-center">
+        {/* summary of history */}
+        <div className="h-[85vh] w-[30vw] bg-white bg-opacity-10 rounded-3xl border-2 border-white opacity-40 bg-blur mr-[1vw]">
+
+        </div>
+        {/* summary of history */}
+        <div className="h-[85vh] w-[62vw] bg-white bg-opacity-10 rounded-3xl border-2 border-white opacity-40 bg-blur ml-[1vw]">
+          
+        </div>
+      </div>
+
+
       <div className="history-container">
         <h1>History Activities</h1>
         <ul className="activity-list">

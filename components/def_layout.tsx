@@ -24,7 +24,7 @@ export default function RootLayout({
         </div>
 
         {/* navbar cushion */}
-        <div className="h-[10vh] flex w-full mb-5"></div>
+        <div className="h-[10vh] flex w-full"></div>
 
         {/* divider so children rest on top of gradient */}
         <div className="flex-grow flex flex-col z-10">
