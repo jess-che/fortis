@@ -2,9 +2,14 @@ import React, { FC, useEffect, useState } from 'react';
 import DefLayout from '@/components/def_layout';
 import '@/public/styles/history.css';                      // style sheet for animations
 
+type DataType = {
+  workouts: any[]; 
+};
+
 const HistoryPage: FC = () => {
-  // get activity data
+  // activity and workout data
   const [activityData, setActivityData] = useState<any[]>([]);
+  const [data, setData] = useState<DataType | null>(null);
 
   // if workout is clicked
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
@@ -14,6 +19,9 @@ const HistoryPage: FC = () => {
 
   // if data is being fetched
   const [loading, setLoading] = useState(true);
+
+  // specificAid
+  const [specificAid, setSpecificAid] = useState(null);
 
   // get exercise data from EID
   const ExcDatafromEID = async (query: any) => {
@@ -42,7 +50,7 @@ const HistoryPage: FC = () => {
     }
   };
 
-  // get data for each activity
+  // get activities per week
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -67,39 +75,6 @@ const HistoryPage: FC = () => {
         console.log(activityData)
 
         const mapActivities = await Promise.all(activityData.data.rows.map(async (activity: any) => {
-          // const workoutResponse = await fetch('/api/HistoryWorkouts', {
-          //   method: 'POST',
-          //   headers: {
-          //     'Content-Type': 'application/json',
-          //   },
-          //   body: JSON.stringify({
-          //     uid: "b24e24f4-86b8-4b83-8947-b2472a43b436",                  // uid, to be replaced
-          //     aid: activity.Aid,
-          //   }),
-          // });
-
-          // if (!workoutResponse.ok) {
-          //   throw new Error('Failed to retrieve history workouts');
-          // }
-
-          // // const workoutData = await workoutResponse.json();
-
-          // // // Fetch exercise data for each workout
-          // // const workoutsWithExerciseData = await Promise.all(workoutData.data.rows.map(async (workout: any) => {
-          // //   const exerciseData = await ExcDatafromEID(workout.Eid);
-          // //   console.log("Fetched Exercise Data:", exerciseData); // Log the fetched exercise data
-
-          // //   return {
-          // //     ...workout,
-          // //     exerciseData: exerciseData,
-          // //   };
-          // }));
-
-          // return {
-          //   ...activity,
-          //   workouts: workoutsWithExerciseData,
-          // };
-
           return{
             ...activity
           };
@@ -115,6 +90,48 @@ const HistoryPage: FC = () => {
 
     fetchData();
   }, [weeksBefore]);
+
+  // get data for specific activity
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const workoutResponse = await fetch('/api/HistoryWorkouts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    uid: "b24e24f4-86b8-4b83-8947-b2472a43b436", // uid, to be replaced
+                    aid: specificAid,
+                }),
+            });
+  
+            if (!workoutResponse.ok) {
+                throw new Error('Failed to retrieve history workouts');
+            }
+  
+            const workoutData = await workoutResponse.json();
+  
+            const workoutsWithExerciseData = await Promise.all(workoutData.data.rows.map(async (workout: any) => {
+              const exerciseData = await ExcDatafromEID(workout.Eid);
+  
+              return {
+                ...workout,
+                exerciseData: exerciseData,
+              };
+            }));
+  
+            setData({
+              workouts: workoutsWithExerciseData,
+            });
+  
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+  
+    fetchData();
+  }, [specificAid]);  
 
   // format date in MM/DD/YYYY
   const formatDate = (dateString: any) => {
@@ -201,7 +218,10 @@ const HistoryPage: FC = () => {
           {/* load data */}
           {!loading && activityData.length > 0 && activityData.map((activity: any, i: number) => (
             <li key={i}
-              onClick={() => setClickedIndex(clickedIndex === i ? null : i)}
+              onClick={() => {
+                setClickedIndex(clickedIndex === i ? null : i);
+                setSpecificAid(activity.Aid);
+              }}
               className={`activity-item relative list-none mx-3 p-2 rounded-xl border-t border-b border-white border-opacity-80 
                         ${clickedIndex === i ? 'clicked' : 'glow hover:bg-transparent  border-b border-white border-opacity-80 '}
                         `}>
@@ -223,11 +243,68 @@ const HistoryPage: FC = () => {
 
         {/* summary of history */}
         <div className="h-[85vh] w-[72vw] bg-blur">
+          <ul className="space-y-4">
+            {data != null && data.workouts.map((workout, index) => (
+              <li key={index} className="border p-4 rounded shadow">
+                <div className="text-lg font-semibold">{workout.exerciseData?.name}</div>
+                <p className="text-gray-600">{workout.exerciseData?.description}</p>
+                <div className="text-sm text-gray-500">Muscle Group: {workout.exerciseData?.muscle_group}</div>
+                <div>Rep: {workout.Rep}</div>
+                <div>Seq_num: {workout.Seq_num}</div>
+                <div>Set: {workout.Set}</div>
+                <div>Weight: {workout.Weight}</div>
+              </li>
+            ))}
+          </ul>
+
+          {data === null || data.workouts.length === 0 && 
+            <div className="text-xl">No Data</div>
+          } 
+
         </div>
 
       </div>
 
-                {/* <ul className="list-none p-0">
+    </DefLayout>
+  );
+};
+
+export default HistoryPage;
+
+          // const workoutResponse = await fetch('/api/HistoryWorkouts', {
+          //   method: 'POST',
+          //   headers: {
+          //     'Content-Type': 'application/json',
+          //   },
+          //   body: JSON.stringify({
+          //     uid: "b24e24f4-86b8-4b83-8947-b2472a43b436",                  // uid, to be replaced
+          //     aid: activity.Aid,
+          //   }),
+          // });
+
+          // if (!workoutResponse.ok) {
+          //   throw new Error('Failed to retrieve history workouts');
+          // }
+
+          // // const workoutData = await workoutResponse.json();
+
+          // // // Fetch exercise data for each workout
+          // // const workoutsWithExerciseData = await Promise.all(workoutData.data.rows.map(async (workout: any) => {
+          // //   const exerciseData = await ExcDatafromEID(workout.Eid);
+          // //   console.log("Fetched Exercise Data:", exerciseData); // Log the fetched exercise data
+
+          // //   return {
+          // //     ...workout,
+          // //     exerciseData: exerciseData,
+          // //   };
+          // }));
+
+          // return {
+          //   ...activity,
+          //   workouts: workoutsWithExerciseData,
+          // };
+
+          {/* <ul className="list-none p-0">
                   {activity.workouts.map((workout: any, j: number) => (
                     <li key={j} className="grid grid-cols-3 gap-2.5 bg-black rounded-2xl mb-2 p-2">
                       <div>Eid: {workout.Eid}</div>
@@ -242,9 +319,3 @@ const HistoryPage: FC = () => {
                     </li>
                   ))}
                 </ul> */}
-
-    </DefLayout>
-  );
-};
-
-export default HistoryPage;

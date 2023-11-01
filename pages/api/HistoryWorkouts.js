@@ -1,33 +1,3 @@
-//   // USELESS STUFF, JUST CHECKING
-// const HistoryWorkouts = async (uid, aid) => {
-//     const response = await fetch('/api/HistoryWorkouts', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         uid: "b24e24f4-86b8-4b83-8947-b2472a43b436", 
-//         aid: aid
-//       }),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error('Failed to retrieve history');
-//     }
-
-//     const data = await response.json();
-//     console.log(data)
-// };
-
-
-//     // END OF USELESS STUFF, JUST CHECKING
-
-
-// WHen you click a button: 
-//   "   HistoryWorkouts(value);    "  <-   This needs to be called.
-
-
-
 import { Pool } from 'pg';
 
 const pool = new Pool({
