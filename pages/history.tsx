@@ -66,22 +66,21 @@ const HistoryPage: FC = () => {
         const activityData = await activityResponse.json();
         console.log(activityData)
 
-        // Fetch workout data for each activity
-        const activitiesWithWorkouts = await Promise.all(activityData.data.rows.map(async (activity: any) => {
-          const workoutResponse = await fetch('/api/HistoryWorkouts', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              uid: "b24e24f4-86b8-4b83-8947-b2472a43b436",                  // uid, to be replaced
-              aid: activity.Aid,
-            }),
-          });
+        const mapActivities = await Promise.all(activityData.data.rows.map(async (activity: any) => {
+          // const workoutResponse = await fetch('/api/HistoryWorkouts', {
+          //   method: 'POST',
+          //   headers: {
+          //     'Content-Type': 'application/json',
+          //   },
+          //   body: JSON.stringify({
+          //     uid: "b24e24f4-86b8-4b83-8947-b2472a43b436",                  // uid, to be replaced
+          //     aid: activity.Aid,
+          //   }),
+          // });
 
-          if (!workoutResponse.ok) {
-            throw new Error('Failed to retrieve history workouts');
-          }
+          // if (!workoutResponse.ok) {
+          //   throw new Error('Failed to retrieve history workouts');
+          // }
 
           // // const workoutData = await workoutResponse.json();
 
@@ -107,8 +106,8 @@ const HistoryPage: FC = () => {
         }));
 
         setLoading(false);
-        console.log("Final Activities with Workouts:", activitiesWithWorkouts); // Log the final data
-        setActivityData(activitiesWithWorkouts);
+        console.log("Mapped Activities", mapActivities); // Log the final data
+        setActivityData(mapActivities);
       } catch (error) {
         console.error('Error:', error);
       }
