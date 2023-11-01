@@ -176,9 +176,29 @@ const HistoryPage: FC = () => {
 
           <ul className="overflow-y-auto mb-3 min-w-[19vw]">
           {/* waiting for query */}
-          {loading && <div>Loading...</div>}
+          <style jsx>{`
+            .ellipsis::after {
+              content: ".";
+              animation: ellipsisAnimation 2s infinite;
+            }
+          `}</style>
+          {loading && 
+            <div className="flex flex-col items-center opacity-60">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-[6vw] h-[6vw] rotate-svg">
+                <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0112.548-3.364l1.903 1.903h-3.183a.75.75 0 100 1.5h4.992a.75.75 0 00.75-.75V4.356a.75.75 0 00-1.5 0v3.18l-1.9-1.9A9 9 0 003.306 9.67a.75.75 0 101.45.388zm15.408 3.352a.75.75 0 00-.919.53 7.5 7.5 0 01-12.548 3.364l-1.902-1.903h3.183a.75.75 0 000-1.5H2.984a.75.75 0 00-.75.75v4.992a.75.75 0 001.5 0v-3.18l1.9 1.9a9 9 0 0015.059-4.035.75.75 0 00-.53-.918z" clip-rule="evenodd" />
+              </svg>
+              <div className="text-xl ellipsis">Loading</div>
+            </div>
+          }
           {/* no data */}
-          {!loading && activityData.length === 0 && <div>No Data</div>} 
+          {!loading && activityData.length === 0 && 
+            <div className="flex flex-col items-center opacity-60">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" className="w-[6vw] h-[6vw]">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H6.911a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.25 2.25 0 00-.1.661z" />
+              </svg>
+              <div className="text-xl">No Data</div>
+            </div>
+          } 
           {/* load data */}
           {!loading && activityData.length > 0 && activityData.map((activity: any, i: number) => (
             <li key={i}
