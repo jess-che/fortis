@@ -12,6 +12,9 @@ const HistoryPage: FC = () => {
   // weeks -- used to query by week in sidebar
   const [weeksBefore, setWeeksBefore] = useState(1);
 
+  // if data is being fetched
+  const [loading, setLoading] = useState(true);
+
   // get exercise data from EID
   const ExcDatafromEID = async (query: any) => {
     try {
@@ -42,6 +45,8 @@ const HistoryPage: FC = () => {
   // get data for each activity
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+
       try {
         const activityResponse = await fetch('/api/HistoryActivities', {
           method: 'POST',
@@ -95,11 +100,13 @@ const HistoryPage: FC = () => {
           //   ...activity,
           //   workouts: workoutsWithExerciseData,
           // };
+
           return{
             ...activity
           };
         }));
 
+        setLoading(false);
         console.log("Final Activities with Workouts:", activitiesWithWorkouts); // Log the final data
         setActivityData(activitiesWithWorkouts);
       } catch (error) {
@@ -164,9 +171,16 @@ const HistoryPage: FC = () => {
           </div>
 
           <div className="w-[10vw] h-[10vw] bg-red-400 mb-3 rounded-2xl flex-shrink-0 text-center opacity-50">placeholder, icon will go here</div>
-          
+
+          <div className="h-[2px] w-[18vw] bg-white bg-opacity-50 mb-5"></div>
+
           <ul className="overflow-y-auto mb-3 min-w-[19vw]">
-          {activityData.map((activity: any, i: number) => (
+          {/* waiting for query */}
+          {loading && <div>Loading...</div>}
+          {/* no data */}
+          {!loading && activityData.length === 0 && <div>No Data</div>} 
+          {/* load data */}
+          {!loading && activityData.length > 0 && activityData.map((activity: any, i: number) => (
             <li key={i}
               onClick={() => setClickedIndex(clickedIndex === i ? null : i)}
               className={`activity-item relative list-none mx-3 p-2 rounded-xl border-t border-b border-white border-opacity-80 
