@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import DefLayout from '@/components/def_layout';
 import '@/public/styles/history.css';                      // style sheet for animations
+import Image          from 'next/image';
 
 type DataType = {
   workouts: any[]; 
@@ -254,6 +255,12 @@ const HistoryPage: FC = () => {
 
                 <div className="grid grid-cols-4 gap-5">
                   <div className="col-span-1 flex flex-row items-center">
+                      <Image
+                        src="/animated/rep.svg"
+                        alt="Pulsing Logo"
+                        width={40}
+                        height={40}
+                      />
                       <div className="text-white opacity-70">Rep: {workout.Rep}</div>
                   </div>
                   <div className="col-span-1 flex flex-row items-center">
