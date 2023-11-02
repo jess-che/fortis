@@ -247,7 +247,7 @@ const HistoryPage: FC = () => {
           <ul className="space-y-4">
             {data != null && data.workouts.map((workout, index) => (
               <li key={index} className="border p-4 rounded-xl border-white border-opacity-40 ">
-                <div className="text-xl font-semibold">{workout.exerciseData?.name}</div>
+                <div className="text-2xl font-semibold">{workout.exerciseData?.name}</div>
                 <p className="text-white opacity-70">{workout.exerciseData?.description}</p>
                 <div className="text-sm text-white opacity-60">Muscle Group: {workout.exerciseData?.muscle_group}</div>
                 
@@ -258,10 +258,10 @@ const HistoryPage: FC = () => {
                       <Image
                         src="/animated/rep.svg"
                         alt=""
-                        width={40}
-                        height={40}
+                        width={42}
+                        height={42}
                       />
-                      <div className="pl-2 text-white opacity-70">Rep: {workout.Rep}</div>
+                      <div className="text-lg pl-2 text-white opacity-70">Rep: {workout.Rep}</div>
                   </div>
                   <div className="col-span-1 flex flex-row items-center">
                       <Image
@@ -270,13 +270,25 @@ const HistoryPage: FC = () => {
                         width={40}
                         height={40}
                       />
-                      <div className="pl-2 text-white opacity-70">Set: {workout.Set}</div>
+                      <div className="text-lg pl-2 text-white opacity-70">Set: {workout.Set}</div>
                   </div>
                   <div className="col-span-1 flex flex-row items-center border-r">
-                      <div className="pl-2 text-white opacity-70">Weight: {workout.Weight}</div>
+                      <Image
+                        src="/animated/weight.svg"
+                        alt=""
+                        width={38}
+                        height={38}
+                      />
+                      <div className="text-lg pl-2 text-white opacity-70">Weight: {workout.Weight}</div>
                   </div>
                   <div className="col-span-1 flex flex-row items-center">
-                      <div className="text-white pl-2">Total Weight: {workout.Rep * workout.Set * workout.Weight}</div>
+                      <Image
+                        src="/animated/totalWeight.svg"
+                        alt=""
+                        width={45}
+                        height={45}
+                      />
+                      <div className="text-xl text-white pl-1">Total Weight: {workout.Rep * workout.Set * workout.Weight}</div>
                   </div>
                 </div>
               </li>
