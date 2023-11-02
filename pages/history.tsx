@@ -245,6 +245,38 @@ const HistoryPage: FC = () => {
         {/* summary of history */}
         <div className="h-[85vh] w-[70vw] bg-blur overflow-y-auto">
           <ul className="space-y-4">
+            {specificAid === null &&
+              <div>
+                <div className="text-xl">No Data</div>
+              </div> 
+            } 
+
+            {specificAid != null && 
+              <div> 
+                {specificAid !== null && activityData.find(activity => activity.Aid === specificAid) && (
+                  <>
+                    <div className="text-3xl font-bold">
+                      {activityData.find(activity => activity.Aid === specificAid).Activity_name}
+                    </div>
+                    <div className="text-xl opacity-70">
+                      Date: {" "} {formatDate(
+                        activityData.find(activity => activity.Aid === specificAid).Date
+                      )} {" "} || {" "} 
+                      Duration: {" "} {intervalToString(
+                        activityData.find(activity => activity.Aid === specificAid).Duration
+                      )}
+                    </div>
+                  </>
+                )}
+              </div> 
+            } 
+
+            {specificAid != null && data != null && data.workouts.length === 0 && 
+              <div>
+                <div className="text-xl">No Exercise Data</div>
+              </div> 
+            } 
+
             {data != null && data.workouts.map((workout, index) => (
               <li key={index} className="border p-4 rounded-xl border-white border-opacity-40 ">
                 <div className="text-2xl font-semibold">{workout.exerciseData?.name}</div>
@@ -294,10 +326,6 @@ const HistoryPage: FC = () => {
               </li>
             ))}
           </ul>
-
-          {data === null || data.workouts.length === 0 && 
-            <div className="text-xl">No Data</div>
-          } 
 
         </div>
 
