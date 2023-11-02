@@ -169,7 +169,7 @@ const HistoryPage: FC = () => {
       <div className="flex w-screen min-h-[90vh] justify-center items-center">
 
         {/* summary of history */}
-        <div className="flex flex-col h-[85vh] min-w-[20vw] bg-white bg-opacity-5 rounded-3xl border-2 border-white border-opacity-40 bg-blur items-center">
+        <div className="flex flex-col h-[85vh] min-w-[20vw] max-w-[27vw] bg-white bg-opacity-5 rounded-3xl border border-white border-opacity-40 bg-blur items-center">
           <div className="flex flex-row min-w-[19vw] py-3 px-1 justify-between items-center">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"
               onClick={() => weeksBefore > 1 && setWeeksBefore(prev => prev - 1)} // move to the previous week only if weeksBefore > 0
@@ -242,17 +242,30 @@ const HistoryPage: FC = () => {
         <div className="h-[80vh] w-[2px] mx-[1vw] bg-white bg-opacity-50"></div>
 
         {/* summary of history */}
-        <div className="h-[85vh] w-[72vw] bg-blur">
+        <div className="h-[85vh] w-[70vw] bg-blur overflow-y-auto">
           <ul className="space-y-4">
             {data != null && data.workouts.map((workout, index) => (
-              <li key={index} className="border p-4 rounded shadow">
-                <div className="text-lg font-semibold">{workout.exerciseData?.name}</div>
-                <p className="text-gray-600">{workout.exerciseData?.description}</p>
-                <div className="text-sm text-gray-500">Muscle Group: {workout.exerciseData?.muscle_group}</div>
-                <div>Rep: {workout.Rep}</div>
-                <div>Seq_num: {workout.Seq_num}</div>
-                <div>Set: {workout.Set}</div>
-                <div>Weight: {workout.Weight}</div>
+              <li key={index} className="border p-4 rounded-xl border-white border-opacity-40 ">
+                <div className="text-xl font-semibold">{workout.exerciseData?.name}</div>
+                <p className="text-white opacity-70">{workout.exerciseData?.description}</p>
+                <div className="text-sm text-white opacity-60">Muscle Group: {workout.exerciseData?.muscle_group}</div>
+                
+                <div className="w-[66vw] h-[1px] m-[1vw] bg-white bg-opacity-50"></div>
+
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="col-span-1 flex flex-row items-center">
+                      <div>Rep: {workout.Rep}</div>
+                  </div>
+                  <div className="col-span-1 flex flex-row items-center">
+                      <div>Seq_num: {workout.Seq_num}</div>
+                  </div>
+                  <div className="col-span-1 flex flex-row items-center">
+                      <div>Set: {workout.Set}</div>
+                  </div>
+                  <div className="col-span-1 flex flex-row items-center">
+                      <div>Weight: {workout.Weight}</div>
+                  </div>
+              </div>
               </li>
             ))}
           </ul>
