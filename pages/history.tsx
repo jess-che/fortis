@@ -252,20 +252,20 @@ const HistoryPage: FC = () => {
                 
                 <div className="w-[66vw] h-[1px] m-[1vw] bg-white bg-opacity-50"></div>
 
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-4 gap-5">
                   <div className="col-span-1 flex flex-row items-center">
-                      <div>Rep: {workout.Rep}</div>
+                      <div className="text-white opacity-70">Rep: {workout.Rep}</div>
                   </div>
                   <div className="col-span-1 flex flex-row items-center">
-                      <div>Seq_num: {workout.Seq_num}</div>
+                      <div className="text-white opacity-70">Set: {workout.Set}</div>
+                  </div>
+                  <div className="col-span-1 flex flex-row items-center border-r">
+                      <div className="text-white opacity-70">Weight: {workout.Weight}</div>
                   </div>
                   <div className="col-span-1 flex flex-row items-center">
-                      <div>Set: {workout.Set}</div>
+                      <div>Total Weight: {workout.Rep * workout.Set * workout.Weight}</div>
                   </div>
-                  <div className="col-span-1 flex flex-row items-center">
-                      <div>Weight: {workout.Weight}</div>
-                  </div>
-              </div>
+                </div>
               </li>
             ))}
           </ul>
