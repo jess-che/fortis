@@ -257,20 +257,26 @@ const HistoryPage: FC = () => {
                   <div className="col-span-1 flex flex-row items-center">
                       <Image
                         src="/animated/rep.svg"
-                        alt="Pulsing Logo"
+                        alt=""
                         width={40}
                         height={40}
                       />
-                      <div className="text-white opacity-70">Rep: {workout.Rep}</div>
+                      <div className="pl-2 text-white opacity-70">Rep: {workout.Rep}</div>
                   </div>
                   <div className="col-span-1 flex flex-row items-center">
-                      <div className="text-white opacity-70">Set: {workout.Set}</div>
+                      <Image
+                        src="/animated/set.svg"
+                        alt=""
+                        width={40}
+                        height={40}
+                      />
+                      <div className="pl-2 text-white opacity-70">Set: {workout.Set}</div>
                   </div>
                   <div className="col-span-1 flex flex-row items-center border-r">
-                      <div className="text-white opacity-70">Weight: {workout.Weight}</div>
+                      <div className="pl-2 text-white opacity-70">Weight: {workout.Weight}</div>
                   </div>
                   <div className="col-span-1 flex flex-row items-center">
-                      <div>Total Weight: {workout.Rep * workout.Set * workout.Weight}</div>
+                      <div className="text-white pl-2">Total Weight: {workout.Rep * workout.Set * workout.Weight}</div>
                   </div>
                 </div>
               </li>
