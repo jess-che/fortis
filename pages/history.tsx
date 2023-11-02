@@ -256,21 +256,21 @@ const HistoryPage: FC = () => {
                 <div className="grid grid-cols-4 gap-5">
                   <div className="col-span-1 flex flex-row items-center">
                       <Image
-                        src="/animated/rep.svg"
-                        alt=""
-                        width={42}
-                        height={42}
-                      />
-                      <div className="text-lg pl-2 text-white opacity-70">Rep: {workout.Rep}</div>
-                  </div>
-                  <div className="col-span-1 flex flex-row items-center">
-                      <Image
                         src="/animated/set.svg"
                         alt=""
                         width={40}
                         height={40}
                       />
                       <div className="text-lg pl-2 text-white opacity-70">Set: {workout.Set}</div>
+                  </div>
+                  <div className="col-span-1 flex flex-row items-center">
+                      <Image
+                        src="/animated/rep.svg"
+                        alt=""
+                        width={42}
+                        height={42}
+                      />
+                      <div className="text-lg pl-2 text-white opacity-70">Rep: {workout.Rep}</div>
                   </div>
                   <div className="col-span-1 flex flex-row items-center border-r">
                       <Image
