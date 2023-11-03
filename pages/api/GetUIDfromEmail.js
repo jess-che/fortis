@@ -47,7 +47,7 @@ export default async (req, res) => {
             const values = [`%${searchQuery}%`];
             console.log('hi2');
             const results = await pool.query(searchUserEmail, values);
-            
+
             res.json({ success: true, data: results });
         } catch (err) {
             console.log('hello2');

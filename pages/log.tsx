@@ -171,7 +171,7 @@ const fetchAid = async (query: any) => {
   // THIS IS FOR SAVING EXERCISES TO THE DATABASE
 const handleSaveExercises = async () => {
   try {
-    // console.log(exercises)
+    console.log(exercises)
     const response = await fetch('/api/saveExercises', {
       method: 'POST',
       headers: {

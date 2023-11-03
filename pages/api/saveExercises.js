@@ -6,15 +6,15 @@ const pool = new Pool({
 });
 
 const insertQuery = `
-INSERT INTO public.workouts ("Uid", "Aid", "Eid", "Weight", "Rep", "Set")
-VALUES ($1, $2, $3, $4, $5, $6);
+INSERT INTO public.workouts ("Uid", "Aid", "Seq_num", "Eid", "Weight", "Rep", "Set")
+VALUES ($1, $2, $3, $4, $5, $6, $7);
 `;
 
 
 export default async (req, res) => {
     if (req.method === 'POST') {
         const exercises = req.body;
-        console.log(exercises[0]);
+        console.log(exercises);
 
         // Check if exercises is an array
         if (!Array.isArray(exercises[0])) {
@@ -23,12 +23,17 @@ export default async (req, res) => {
 
         try {
             console.log('hi');
+            let seq_num = 0;
             for (let exercise of exercises[0]) {
                 // Check if exercise has all necessary properties
-                const { Uid, Aid, Eid, Weight, Rep, Set } = exercise;
+                // const { Uid, Aid, Eid, Weight, Rep, Set } = exercise;
+                // const { Aid, Eid, name, Rep, Set, Uid, Weight } = exercise;
+                const { aid, eid, exerciseName, numberOfReps, numberOfSets, uid, weight } = exercise;
                 console.log(exercise)
+                seq_num++;
 
-                await pool.query(insertQuery, [Uid, Aid, Eid, Weight, Rep, Set]);
+                // await pool.query(insertQuery, [Uid, Aid, Eid, Weight, Rep, Set]);
+                await pool.query(insertQuery, [uid, aid, seq_num, eid, weight, numberOfReps, numberOfSets]);
             }
             res.status(200).json({ message: 'Exercises saved successfully' });
         } catch (err) {
