@@ -14,17 +14,19 @@ VALUES ($1, $2, $3, $4, $5, $6);
 export default async (req, res) => {
     if (req.method === 'POST') {
         const exercises = req.body;
+        console.log(exercises[0]);
 
         // Check if exercises is an array
-        if (!Array.isArray(exercises)) {
+        if (!Array.isArray(exercises[0])) {
             return res.status(400).json({ error: 'Exercises data must be an array' });
         }
 
         try {
             console.log('hi');
-            for (let exercise of exercises) {
+            for (let exercise of exercises[0]) {
                 // Check if exercise has all necessary properties
                 const { Uid, Aid, Eid, Weight, Rep, Set } = exercise;
+                console.log(exercise)
 
                 await pool.query(insertQuery, [Uid, Aid, Eid, Weight, Rep, Set]);
             }

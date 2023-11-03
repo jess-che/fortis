@@ -14,32 +14,32 @@ interface Exercise {
   numberOfSets: number;
   weight: number;
   eid: number;
-  aid: number
+  aid: number;
+  uid: string;
 }
 
 
 const LogPage: FC = () => {
 
+  // Auth0 here onwards
   const { user, error, isLoading } = useUser();
-
   if (isLoading) {
     // Handle loading state, e.g., show a loading spinner
     return <div>Loading...</div>;
   }
-
   if (error) {
     // Handle the error state, e.g., display an error message
-    return <div>Error: {error.message}</div>;
+    // return <div>Error: {error.message}</div>;
+    let userEmail = "dummy";
   }
-
   let userEmail = "dummy";
   if (user) {
     userEmail = user.email || "ello";
   }
+  // END OF Auth0
 
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [exerciseEids, setExerciseEids] = useState<number[]>([]);
-  const [aid, setAid] = useState(null); 
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
   const toggleSidePanel = () => {
     setIsSidePanelOpen(!isSidePanelOpen);
@@ -52,11 +52,14 @@ const LogPage: FC = () => {
     weight: 0,
     eid:0,
     aid: 0,
+    uid:'',
   });
   const [exerciseOptions, setExerciseOptions] = useState<string[]>([]);
 
   useEffect(() => {
-    
+
+    // this is all for getting exercises and displaying
+    // not related to saveExercises at all    
     const fetchExercises = async () => {
       const response = await fetch('/api/LimitExcSort');
       if (!response.ok) {
@@ -101,18 +104,6 @@ const LogPage: FC = () => {
     fetchExercises();
   }, []);
 
-  // This useEffect loads the exercises from localStorage when this component first mounts
-  useEffect(() => {
-    const savedExercises = localStorage.getItem('exercises');
-    if (savedExercises) {
-      setExercises(JSON.parse(savedExercises));
-    }
-  }, []);  // This empty dependency array means this hook runs once when the component mounts
-
-  // This useEffect saves the exercises to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('exercises', JSON.stringify(exercises));
-  }, [exercises]);  // This dependency array means this hook runs whenever `exercises` changes
 
   // Create a new handler for the Select component
   const handleSelectChange = (selectedOption: { value: string, label: string } | null, actionMeta: any) => {
@@ -125,36 +116,13 @@ const LogPage: FC = () => {
     }
   }
 
-// Keep the original handleInputChange function for the input elements
-const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-  setCurrentExercise({...currentExercise, [e.target.name]: e.target.value});
-}
-
-const handleSaveExercises = async () => {
-  try {
-    console.log(exercises)
-    const response = await fetch('/api/saveExercises', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(exercises)
-    });
-    console.log(response)
-
-    if (!response.ok) {
-      throw new Error('Failed to save exercises');
-    }
-
-    const data = await response.json();
-    console.log(data.message);
-    alert('Exercises saved successfully!');
-  } catch (err) {
-    console.error(err);
-    alert('Failed to save exercises');
+  // Keep the original handleInputChange function for the input elements
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCurrentExercise({...currentExercise, [e.target.name]: e.target.value});
   }
-}
 
+
+// WE GET THE AID FROM THE DATABASE
 const fetchAid = async (query: any) => {
   const response = await fetch('/api/getAID', {
     method: 'POST',
@@ -172,16 +140,85 @@ const fetchAid = async (query: any) => {
   }
 
   const data = await response.json();
-  console.log(data.data.rows[0].Aid);
+  // console.log(data.data.rows[0].Aid);
   return parseInt(data.data.rows[0].Aid);
 };
 
+  // WE GET THE UID FROM THE DB USING THE EMAIL OF LOGGED IN USER 
+  const getUID = async (query: any) => {
+    const response = await fetch('/api/getUIDfromEmail', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        searchQuery: query
+      }),
+      // body: JSON.stringify({
+      //   searchQuery: "lalalanmao10@gmail.com"
+      //  }),
+    });
 
+    if (!response.ok) {
+      throw new Error('Failed to save query');
+    }
+
+    const data = await response.json();
+    console.log(data)
+    return data.data.rows[0].uid;
+  };
+
+  // THIS IS FOR SAVING EXERCISES TO THE DATABASE
+const handleSaveExercises = async () => {
+  try {
+    // console.log(exercises)
+    const response = await fetch('/api/saveExercises', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify([exercises])
+    });
+    console.log(response)
+    console.log('Response body:', await response.text());
+
+    if (!response.ok) {
+      throw new Error('Failed to save exercises');
+    }
+
+    const data = await response.json();
+    console.log(data.message);
+    alert('Exercises saved successfully!');
+  } catch (err) {
+    console.error(err);
+    alert('Failed to save exercises');
+  }
+}
+
+
+  // This useEffect loads the exercises from localStorage when this component first mounts
+  // this is only caching and data persistence, not related to actual functionality 
+  useEffect(() => {
+    const savedExercises = localStorage.getItem('exercises');
+    if (savedExercises) {
+      setExercises(JSON.parse(savedExercises));
+    }
+  }, []);  // This empty dependency array means this hook runs once when the component mounts
+  // This useEffect saves the exercises to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('exercises', JSON.stringify(exercises));
+  }, [exercises]);  // This dependency array means this hook runs whenever `exercises` changes
+
+
+
+// THIS IS ONLY FOR MODIFYING EXERCISES TO THE LOCAL STORAGE, NOT CONNECTED TO DATABASE YET
 const handleAddExercise = async () => {
   if (currentExercise.exerciseName && currentExercise.eid) {
     const aid = await fetchAid(currentExercise.eid);
+    const uid = await getUID(user?.email);
+    // let uid = "abcd";
     if (aid !== null) {
-      setExercises([...exercises, { ...currentExercise, aid }]);
+      setExercises([...exercises, { ...currentExercise, aid, uid }]);
       setCurrentExercise({
         eid: 0,
         exerciseName: '',
@@ -189,49 +226,59 @@ const handleAddExercise = async () => {
         numberOfSets: 0,
         weight: 0,
         aid: 0,
+        uid: '',
       });
     }
   }
 };
 
+// LOCAL
 const handleRemoveExercise = (index: number) => {
   const newExercises = [...exercises];
   newExercises.splice(index, 1);
   setExercises(newExercises);
 };
 
-  // search bar
-  const searchBarStyle = {
-    margin: 'auto',
-    width: '90%',
-    display: 'flex',
-    flexDirection: 'column' as 'column',
-    alignItems: 'center',
-    minWidth: '200px',
-  };
-
-  const [editingIndex, setEditingIndex] = useState(-1);
-  const handleEditExercise = (index: number) => {
-    setEditingIndex(index);
-    setEditingExercise(exercises[index]); 
-  };
-
-  const [editingExercise, setEditingExercise] = useState<Exercise>({
-    exerciseName: '',
-    numberOfReps: 0,
-    numberOfSets: 0,
-    weight: 0,
-    eid: 0,
-    aid: 0,
-  });
-
-  // Modify the handleUneditExercise function
+// Modify the handleUneditExercise function
 const handleUneditExercise = (index: number) => {
   const newExercises = [...exercises];
   newExercises[index] = editingExercise;
   setExercises(newExercises);
   setEditingIndex(-1);
 };
+
+
+
+
+  
+// WHY THE FUCK IS THIS HERE -- ?
+// search bar
+const searchBarStyle = {
+  margin: 'auto',
+  width: '90%',
+  display: 'flex',
+  flexDirection: 'column' as 'column',
+  alignItems: 'center',
+  minWidth: '200px',
+};
+
+const [editingIndex, setEditingIndex] = useState(-1);
+const handleEditExercise = (index: number) => {
+  setEditingIndex(index);
+  setEditingExercise(exercises[index]); 
+};
+
+const [editingExercise, setEditingExercise] = useState<Exercise>({
+  exerciseName: '',
+  numberOfReps: 0,
+  numberOfSets: 0,
+  weight: 0,
+  eid: 0,
+  aid: 0,
+  uid: '', 
+});
+
+
 
 
   
