@@ -23,7 +23,7 @@ export default async (req, res) => {
 
         try {
             console.log('hi');
-            let seq_num = 0;
+            let seq_num = 1;
             for (let exercise of exercises[0]) {
                 // Check if exercise has all necessary properties
                 // const { Uid, Aid, Eid, Weight, Rep, Set } = exercise;
