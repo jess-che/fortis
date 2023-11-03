@@ -5,6 +5,7 @@ import DefLayout from '@/components/def_layout';
 import styles from './LogPage.module.css';
 import Select from 'react-select';
 import SearchBar from "./SearchBarComponents/SearchBar";
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 
 interface Exercise {
@@ -223,7 +224,7 @@ const handleUneditExercise = (index: number) => {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>Exercise Name</th>
+              <th>Exercise Name {UserProvider.name} </th>
               <th>Number of Reps</th>
               <th>Number of Sets</th>
               <th>Weight</th>
