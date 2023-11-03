@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import DefLayout from '@/components/def_layout';
 import '@/public/styles/history.css';                      // style sheet for animations
 import Image          from 'next/image';
+import Link  from 'next/link';
 
 type DataType = {
   workouts: any[]; 
@@ -252,7 +253,7 @@ const HistoryPage: FC = () => {
             } 
 
             {specificAid != null && 
-              <div> 
+              <div className="flex items-center justify-between"> 
                 {specificAid !== null && activityData.find(activity => activity.Aid === specificAid) && (
                   <>
                     <div className="text-3xl font-bold">
@@ -268,6 +269,28 @@ const HistoryPage: FC = () => {
                     </div>
                   </>
                 )}
+
+                <div className="flex flex-row">
+                  <div className="flex flex-row"> 
+                    <Link href="/" className="inline-flex items-center border-r">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                      </svg>
+
+                      <p className="pl-2 pr-3 text-white text-opacity-75 text-l hover:gradient-text-bp duration-300 text-center">EDIT</p>
+                    </Link>
+                  </div>
+
+                  <div className="pl-3 flex flex-row"> 
+                    <Link href="/" className="inline-flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+                      </svg>
+
+                      <p className="pl-2 text-white text-opacity-75 text-l hover:gradient-text-pg duration-300 text-center">SAVE</p>
+                    </Link>
+                  </div>
+                </div>  
               </div> 
             } 
 
