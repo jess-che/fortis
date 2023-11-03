@@ -2,9 +2,23 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC, useState } from 'react';
 import DefLayout from '@/components/def_layout';
+import './StreakGraphs.css'; 
+import StreakGraph from './StreakGraph'; // Adjust the path as needed
+
+
 
 const ProfilePage: React.FC = () => {
   // Define state variables to store user information
+  interface DataPoint {
+    date: string;
+    duration: number;
+  }
+  
+  // Declare the type of the state variable as an array of DataPoint objects
+  const [parsedData, setParsedData] = useState<DataPoint[]>([]);
+  const [isLoading, setIsLoading] = useState(false); // new state for loading indicator
+
+
   const [name, setName] = useState('John Doe');
   const [email, setEmail] = useState('johndoe@example.com');
   const [age, setAge] = useState(30);
@@ -54,11 +68,81 @@ const ProfilePage: React.FC = () => {
     }
   };
 
+   // The AnalStreaks function to fetch and process data
+   const AnalStreaks = async (query: any) => {
+    setIsLoading(true); // Set loading to true before fetching data
+    try {
+      const response = await fetch('api/AnalStreaks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const responseData = await response.json();
+
+      if (responseData.data && Array.isArray(responseData.data.rows)) {
+        // This will hold dates as keys and durations as values
+        const durationByDate: Record<string, number> = {};
+
+        responseData.data.rows.forEach((row: any) => {
+          const date = new Date(row.Date).toLocaleDateString("en-US");
+          const duration = (row.Duration.hours || 0) * 60 + (row.Duration.minutes || 0);
+          durationByDate[date] = (durationByDate[date] || 0) + duration;
+        });
+
+        // Convert the durationByDate object into an array of DataPoint objects
+        const newParsedData: DataPoint[] = Object.entries(durationByDate).map(([date, duration]): DataPoint => ({
+          date,
+          duration
+        }));
+
+        setParsedData(newParsedData); // Update state with the new parsed data
+      } else {
+        console.error('Unexpected data structure:', responseData);
+      }
+    } catch (error) {
+      console.error('Error in AnalStreaks:', error);
+    }
+    setIsLoading(false); // Set loading to false after fetching data
+  };
+
+  
+  const handleAnalStreaksButtonClick = async () => {
+    //if (user && user.email) {
+      try {
+        await AnalStreaks({ email: "lalanmao10@gmail.com" });
+        console.log('AnalStreaks called successfully');
+      } catch (error) {
+        console.error('Error calling AnalStreaks:', error);
+      }
+    //} else {
+    //  console.error('User email is not available.');
+    //}
+  };
+
   return (
     <DefLayout>
+    <div className="let me cook">
+      <button onClick={handleAnalStreaksButtonClick}>Get Streaks</button>
+      {!isLoading && parsedData.length > 0 ? (
+          <StreakGraph parsedData={parsedData} />
+        ) : (
+          isLoading ? <p>Loading...</p> : <p>No data to display</p>
+        )}    
+    </div>
+
     <div className="container">
         <div className="profile-container">
             <h1>Profile</h1>
+
             <div className="profile-info">
             <div>
                 <strong>Name:</strong> {isEditingName ? (
