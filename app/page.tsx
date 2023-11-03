@@ -17,10 +17,10 @@ const Home: React.FC = () => {
   const [showTextBox, setShowTextBox] = useState(false);        
   const [showScrollArrow, setShowScrollArrow] = useState(true);
 
-  // sets status of TextBox and Scroll Arrow depending on scroll amount
   useEffect(() => {
+    // This function will be called on scroll events
     const handleScroll = () => {
-      if (window.scrollY > 5) {  // how much to scroll to reveal text
+      if (window.scrollY > 5) {
         setShowTextBox(true);
         setShowScrollArrow(false);
       } else {
@@ -28,12 +28,40 @@ const Home: React.FC = () => {
         setShowScrollArrow(true);
       }
     };
-
+  
+    // Add the scroll event listener
     window.addEventListener('scroll', handleScroll);
+  
+    // Call AnalStreaks with the user's email if the user is logged in
+    if (user && !isLoading && !error) {
+      AnalStreaks({ email: user.email }).catch(console.error);
+    }
+  
+    // Cleanup function to remove the event listener when the component unmounts
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [user, isLoading, error]); // Dependencies for useEffect
+  
+  const AnalStreaks = async (query: any) => {
+    const response = await fetch('/api/AnalStreaks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436"
+        //query
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to save query');
+    }
+
+    const data = await response.json();
+    console.log(data)
+  };
 
   // request to save user to database
   const saveUserToDatabase = async (user: any) => {
