@@ -5,7 +5,7 @@ import DefLayout from '@/components/def_layout';
 import styles from './LogPage.module.css';
 import Select from 'react-select';
 import SearchBar from "./SearchBarComponents/SearchBar";
-import { UserProvider } from '@auth0/nextjs-auth0/client';
+import { useUser }    from '@auth0/nextjs-auth0/client';
 
 
 interface Exercise {
@@ -17,12 +17,29 @@ interface Exercise {
   aid: number
 }
 
+
 const LogPage: FC = () => {
+
+  const { user, error, isLoading } = useUser();
+
+  if (isLoading) {
+    // Handle loading state, e.g., show a loading spinner
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    // Handle the error state, e.g., display an error message
+    return <div>Error: {error.message}</div>;
+  }
+
+  let userEmail = "dummy";
+  if (user) {
+    userEmail = user.email || "ello";
+  }
+
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [exerciseEids, setExerciseEids] = useState<number[]>([]);
   const [aid, setAid] = useState(null); 
-
-
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
   const toggleSidePanel = () => {
     setIsSidePanelOpen(!isSidePanelOpen);
@@ -224,7 +241,7 @@ const handleUneditExercise = (index: number) => {
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>Exercise Name {UserProvider.name} </th>
+              <th>Exercise Name {userEmail} </th>
               <th>Number of Reps</th>
               <th>Number of Sets</th>
               <th>Weight</th>
