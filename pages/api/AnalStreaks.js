@@ -5,11 +5,22 @@ const pool = new Pool({
     connectionString: "postgres://default:Azy2srgWb9aU@ep-polished-cherry-55480419-pooler.us-east-1.postgres.vercel-storage.com/verceldb?sslmode=require"
 });
 
-const Streaks = `
+const Streaks1 = `
     SELECT Date, Duration
     FROM activity
     WHERE activity."Uid" = $1
     ORDER BY Date DESC;
+    `; 
+
+    const Streaks = `
+    SELECT "Date", "Duration"
+    FROM activity
+    WHERE "Uid" = (
+        SELECT "uid" FROM users
+        WHERE "Email" LIKE $1
+        LIMIT 1
+    )
+    ORDER BY "Date" DESC;
     `; 
 
 
