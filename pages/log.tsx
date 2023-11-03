@@ -151,14 +151,14 @@ const fetchAid = async (query: any) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      // body: JSON.stringify({
-      //   searchQuery: query
-      // }),
       body: JSON.stringify({
-        searchQuery: "lalalanmao10@gmail.com",
-       }),
+        searchQuery: query
+      }),
+      // body: JSON.stringify({
+      //   searchQuery: "lalalanmao10@gmail.com",
+      //  }),
     });
-    // console.log(response);
+    console.log(response);
     if (!response.ok) {
       throw new Error('Failed to save query');
     }
