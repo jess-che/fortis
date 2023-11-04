@@ -68,6 +68,34 @@ const ProfilePage: React.FC = () => {
     }
   };
 
+  const Bob = async (query: any) => {
+    try {
+      const res = await fetch('api/Bob', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436",
+        }),
+      });
+  
+      if (!res.ok) {
+        throw new Error('Failed to fetch data');
+      }
+  
+      const data = await res.json();
+      const muscleGroups = data.data.rows.map((row: { muscle_group: any; total_sets: string; }) => ({
+        muscle_group: row.muscle_group,
+        sets: parseInt(row.total_sets)
+      }));
+  
+      console.log(muscleGroups);
+    } catch (error) {
+      console.error('Error in Bob:', error);
+    }
+  };
+
    // The AnalStreaks function to fetch and process data
    const AnalStreaks = async (query: any) => {
     setIsLoading(true); // Set loading to true before fetching data
@@ -118,11 +146,19 @@ const ProfilePage: React.FC = () => {
   const handleAnalStreaksButtonClick = async () => {
     //if (user && user.email) {
       try {
+        await Bob({email: "lalanmao@gmail.com"});
+        console.log('Bobby Done')
+      } catch (error) {
+        console.error('Error calling Bob:', error);
+      }
+
+      try {
         await AnalStreaks({ email: "lalanmao10@gmail.com" });
         console.log('AnalStreaks called successfully');
       } catch (error) {
         console.error('Error calling AnalStreaks:', error);
       }
+
     //} else {
     //  console.error('User email is not available.');
     //}
