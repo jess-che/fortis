@@ -262,7 +262,11 @@ const ProfilePage: React.FC = () => {
     }
   `}</style>
     <div>
-    <MuscleModel muscleGroups={muscleGroups} />
+      {muscleGroups.length > 0 ? (
+        <MuscleModel muscleGroups={muscleGroups} />
+      ) : (
+        <p>Loading muscle groups...</p> // or some placeholder text
+      )}
     </div>
     <div className="container">
         <div className="profile-container">
