@@ -7,12 +7,13 @@ const pool = new Pool({
 
 const timey = `
     SELECT 
-        SUM(EXTRACT(EPOCH FROM "Duration") / 60) AS total_workout_minutes
+        SUM(CASE WHEN "Date" >= current_date - INTERVAL '1 week' THEN EXTRACT(EPOCH FROM "Duration") / 60 ELSE 0 END) AS total_workout_minutes,
+        SUM(CASE WHEN "Date" >= current_date - INTERVAL '2 week' AND "Date" < current_date - INTERVAL '1 week' THEN EXTRACT(EPOCH FROM "Duration") / 60 ELSE 0 END) AS previous_week_minutes
     FROM 
         public.activity
     WHERE 
         "Uid" = $1
-        AND "Date" >= current_date - INTERVAL '1 week';
+        AND "Date" >= current_date - INTERVAL '2 week';
     `; 
 
 

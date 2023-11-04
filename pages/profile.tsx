@@ -17,7 +17,11 @@ const ProfilePage: React.FC = () => {
   // Declare the type of the state variable as an array of DataPoint objects
   const [parsedData, setParsedData] = useState<DataPoint[]>([]);
   const [isLoading, setIsLoading] = useState(false); // new state for loading indicator
-  const [workoutTime, setWorkoutTime] = useState('');
+  const [workoutTimeText, setWorkoutTimeText] = useState('');
+  const [workoutChangeText, setWorkoutChangeText] = useState('');
+  const [isPositiveChange, setIsPositiveChange] = useState(false);
+
+
 
 
 
@@ -88,18 +92,32 @@ const ProfilePage: React.FC = () => {
   
       const data = await res.json();
       const totalMinutes = Math.round(parseFloat(data.data.rows[0].total_workout_minutes));
+      const previousWeekMinutes = Math.round(parseFloat(data.data.rows[0].previous_week_minutes));
+  
+      // Calculate percentage change
+      let percentageChange = 0;
+      if (previousWeekMinutes > 0) {
+        percentageChange = ((totalMinutes - previousWeekMinutes) / previousWeekMinutes) * 100;
+      }
+  
       const hours = Math.floor(totalMinutes / 60);
       const minutes = totalMinutes % 60;
   
       const formattedTime = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+      const changeClass = percentageChange > 0 ? 'positive-change' : 'negative-change';
+      setWorkoutTimeText(`${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`);
+      setWorkoutChangeText(`${percentageChange.toFixed(1)}%`);
+      setIsPositiveChange(percentageChange > 0);
+  
       console.log(formattedTime);
-      setWorkoutTime(formattedTime);
+
       return formattedTime; // This line returns the formatted time, which can be used elsewhere
     } catch (error) {
       console.error('Error in time:', error);
       return ''; // Return an empty string or some default value in case of an error
     }
-  };  
+  }; 
+  
 
   const Bob = async (query: any) => {
     try {
@@ -216,16 +234,31 @@ const ProfilePage: React.FC = () => {
     </div>
     <div className="workout-time-display">
         <h2>Weekly Workout Summary</h2>
-        <p>Workout Time This Week: <span className="workout-time">{workoutTime}</span></p>
-    </div>
+        <p>Workout Time This Week: 
+          <span className="workout-time"   >
+            {workoutTimeText}     
+            {workoutChangeText && (
+              <span className={isPositiveChange ? 'positive-change' : 'negative-change'}>
+                ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
+              </span>
+            )}
+          </span>
+        </p>
+      </div>
 
     <style jsx>{`
-      .workout-time {
-          font-weight: bold;
-          font-size: 1.2em;
-          color: #007bff; /* Or any color that suits your design */
-      }
-    `}</style>
+    .workout-time {
+        font-weight: bold;
+        font-size: 1.2em;
+        color: #007bff; /*Or any color that suits your design */
+    }
+    .positive-change {
+      color: #228B22 !important;
+    }
+    .negative-change {
+      color: red !important;
+    }
+  `}</style>
 
     <div className="container">
         <div className="profile-container">
