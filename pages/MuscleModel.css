@@ -1,0 +1,27 @@
+.muscle-model-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .muscle-group-box {
+    flex-basis: calc(33% - 10px);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .muscle-group-box h3 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #333;
+  }
+  
+  .muscle-group-box p {
+    margin: 5px 0 0;
+    font-size: 1em;
+  }
+  

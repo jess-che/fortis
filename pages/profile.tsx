@@ -4,6 +4,8 @@ import React, { FC, useState } from 'react';
 import DefLayout from '@/components/def_layout';
 import './StreakGraphs.css'; 
 import StreakGraph from './StreakGraph'; // Adjust the path as needed
+import MuscleModel from './MuscleModel'; // Adjust the path as needed
+
 
 
 
@@ -20,8 +22,7 @@ const ProfilePage: React.FC = () => {
   const [workoutTimeText, setWorkoutTimeText] = useState('');
   const [workoutChangeText, setWorkoutChangeText] = useState('');
   const [isPositiveChange, setIsPositiveChange] = useState(false);
-
-
+  const [muscleGroups, setMuscleGroups] = useState([]);
 
 
 
@@ -141,6 +142,7 @@ const ProfilePage: React.FC = () => {
         sets: parseInt(row.total_sets)
       }));
   
+      setMuscleGroups(muscleGroups); // Update the state
       console.log(muscleGroups);
     } catch (error) {
       console.error('Error in Bob:', error);
@@ -259,7 +261,9 @@ const ProfilePage: React.FC = () => {
       color: $990F02;
     }
   `}</style>
-
+    <div>
+    <MuscleModel muscleGroups={muscleGroups} />
+    </div>
     <div className="container">
         <div className="profile-container">
             <h1>Profile</h1>
