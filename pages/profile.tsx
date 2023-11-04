@@ -253,10 +253,10 @@ const ProfilePage: React.FC = () => {
         color: #007bff; /*Or any color that suits your design */
     }
     .positive-change {
-      color: #228B22 !important;
+      color: #228B22;
     }
     .negative-change {
-      color: red !important;
+      color: $990F02;
     }
   `}</style>
 
