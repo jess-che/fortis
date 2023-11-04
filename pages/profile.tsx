@@ -17,6 +17,8 @@ const ProfilePage: React.FC = () => {
   // Declare the type of the state variable as an array of DataPoint objects
   const [parsedData, setParsedData] = useState<DataPoint[]>([]);
   const [isLoading, setIsLoading] = useState(false); // new state for loading indicator
+  const [workoutTime, setWorkoutTime] = useState('');
+
 
 
   const [name, setName] = useState('John Doe');
@@ -67,6 +69,37 @@ const ProfilePage: React.FC = () => {
       }
     }
   };
+
+  const time = async (query: any) => {
+    try {
+      const res = await fetch('api/TotalTime', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436",
+        }),
+      });
+  
+      if (!res.ok) {
+        throw new Error('Failed to fetch data');
+      }
+  
+      const data = await res.json();
+      const totalMinutes = Math.round(parseFloat(data.data.rows[0].total_workout_minutes));
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+  
+      const formattedTime = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+      console.log(formattedTime);
+      setWorkoutTime(formattedTime);
+      return formattedTime; // This line returns the formatted time, which can be used elsewhere
+    } catch (error) {
+      console.error('Error in time:', error);
+      return ''; // Return an empty string or some default value in case of an error
+    }
+  };  
 
   const Bob = async (query: any) => {
     try {
@@ -146,6 +179,13 @@ const ProfilePage: React.FC = () => {
   const handleAnalStreaksButtonClick = async () => {
     //if (user && user.email) {
       try {
+        await time({email: "lalanmao@gmail.com"});
+        console.log('time Done')
+      } catch (error) {
+        console.error('Error calling time:', error);
+      }
+
+      try {
         await Bob({email: "lalanmao@gmail.com"});
         console.log('Bobby Done')
       } catch (error) {
@@ -174,6 +214,18 @@ const ProfilePage: React.FC = () => {
           isLoading ? <p>Loading...</p> : <p>No data to display</p>
         )}    
     </div>
+    <div className="workout-time-display">
+        <h2>Weekly Workout Summary</h2>
+        <p>Workout Time This Week: <span className="workout-time">{workoutTime}</span></p>
+    </div>
+
+    <style jsx>{`
+      .workout-time {
+          font-weight: bold;
+          font-size: 1.2em;
+          color: #007bff; /* Or any color that suits your design */
+      }
+    `}</style>
 
     <div className="container">
         <div className="profile-container">
