@@ -1,9 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
-import DefLayout from '@/components/def_layout';
-import '@/public/styles/history.css';                      // style sheet for animations
-import Image          from 'next/image';
-import Link  from 'next/link';
+import DefLayout                          from '@/components/def_layout';
+import Image                              from 'next/image';
+import Link                               from 'next/link';
+import '@/public/styles/history.css';     // style sheet for animations
 
+// define type
 type DataType = {
   workouts: any[]; 
 };
@@ -13,17 +14,15 @@ const HistoryPage: FC = () => {
   const [activityData, setActivityData] = useState<any[]>([]);
   const [data, setData] = useState<DataType | null>(null);
 
-  // if workout is clicked
+  // set if workout is clicked
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);
+  // specificAid of clicked workout
+  const [specificAid, setSpecificAid] = useState(null);
 
   // weeks -- used to query by week in sidebar
   const [weeksBefore, setWeeksBefore] = useState(1);
-
-  // if data is being fetched
+  // if data is being fetched for sidebar
   const [loading, setLoading] = useState(true);
-
-  // specificAid
-  const [specificAid, setSpecificAid] = useState(null);
 
   // get exercise data from EID
   const ExcDatafromEID = async (query: any) => {
@@ -246,14 +245,17 @@ const HistoryPage: FC = () => {
         {/* summary of history */}
         <div className="h-[85vh] w-[70vw] bg-blur overflow-y-auto">
           <ul className="space-y-4">
+            {/* no activity been clicked */}
             {specificAid === null &&
               <div>
                 <div className="text-xl">No Data</div>
               </div> 
             } 
 
+            {/* if there is an activity clicked */}
             {specificAid != null && 
-              <div className="flex items-center justify-between"> 
+              <div className="flex justify-between items-center"> 
+                {/* display data (name, date, duration) */}
                 {specificAid !== null && activityData.find(activity => activity.Aid === specificAid) && (
                   <>
                     <div className="text-3xl font-bold">
@@ -270,6 +272,7 @@ const HistoryPage: FC = () => {
                   </>
                 )}
 
+                {/* link to save or edit */}
                 <div className="flex flex-row">
                   <div className="flex flex-row"> 
                     <Link href="/" className="inline-flex items-center border-r">
@@ -277,7 +280,7 @@ const HistoryPage: FC = () => {
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                       </svg>
 
-                      <p className="pl-2 pr-3 text-white text-opacity-75 text-l hover:gradient-text-bp duration-300 text-center">EDIT</p>
+                      <p className="pl-2 pr-3 text-white text-opacity-75 text-lg hover:gradient-text-bp duration-300 text-center">EDIT</p>
                     </Link>
                   </div>
 
@@ -287,19 +290,19 @@ const HistoryPage: FC = () => {
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
                       </svg>
 
-                      <p className="pl-2 text-white text-opacity-75 text-l hover:gradient-text-pg duration-300 text-center">SAVE</p>
+                      <p className="pl-2 text-white text-opacity-75 text-lg hover:gradient-text-pg duration-300 text-center">SAVE</p>
                     </Link>
                   </div>
                 </div>  
               </div> 
             } 
-
+            {/* if clicked but no data */}
             {specificAid != null && data != null && data.workouts.length === 0 && 
               <div>
                 <div className="text-xl">No Exercise Data</div>
               </div> 
             } 
-
+            {/* clicked and data -- display eacch exercise */}
             {data != null && data.workouts.map((workout, index) => (
               <li key={index} className="border p-4 rounded-xl border-white border-opacity-40 ">
                 <div className="text-2xl font-semibold">{workout.exerciseData?.name}</div>
