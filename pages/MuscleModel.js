@@ -6,18 +6,14 @@ import { useState, useEffect } from 'react';
 const MAX_SETS = 20; // Maximum number of sets for full color intensity
 
 const MuscleModel = ({ muscleGroups }) => {
-  const [view, setView] = useState('front'); // 'front' or 'back'
+  const [view, setView] = useState('front');          // 'front' or 'back' view
 
+  // fail safe check
   if (!muscleGroups || muscleGroups.length === 0) {
     return <p>No muscle group data available.</p>;
   }
 
-  const getColorForSets = (sets) => {
-    const intensity = Math.min(sets / MAX_SETS, 1);
-    const colorIntensity = Math.floor(255 * intensity);
-    return `rgb(${colorIntensity}, 0, 0)`;
-  };
-
+  // opacity based on set time
   const getOpacityForSets = (sets) => {
     // If there are no sets, the opacity is 0
     if (sets === 0) {
@@ -33,15 +29,17 @@ const MuscleModel = ({ muscleGroups }) => {
 
   return (
     <div className="flex flex-row items-center">
+      {/* model (front view) */}
       {view === 'front' && (
         <div className="relative">
+          {/* default man */}
           <Image
             src="/images/front_bobby/Front.svg"
             alt="Front View"
             width={400}
             height={700}
           />
-          {/* Render front muscle groups */}
+          {/* Render front muscle groups with correct opacity */}
           {muscleGroups.map((group, index) => {
             const imageOpacity = getOpacityForSets(group.sets);
             const imageSrc = `/images/front_bobby/Front_${group.muscle_group}.svg`;
@@ -61,7 +59,7 @@ const MuscleModel = ({ muscleGroups }) => {
           })}
         </div>
       )}
-
+      {/* model (back view) */}
       {view === 'back' && (
         <div className="relative">
           <Image
@@ -70,9 +68,8 @@ const MuscleModel = ({ muscleGroups }) => {
             width={400}
             height={700}
           />
-          {/* Render back muscle groups */}
+          {/* Render front muscle groups with correct opacity */}
           {muscleGroups.map((group, index) => {
-            // Only show back muscles
             const imageOpacity = getOpacityForSets(group.sets);
             const imageSrc = `/images/back_bobby/Back_${group.muscle_group}.svg`;
 
@@ -92,7 +89,9 @@ const MuscleModel = ({ muscleGroups }) => {
         </div>
       )}
 
+      {/* legend + flip */}
       <div className="flex flex-col">
+        {/* legend */}
         {muscleGroups.map((group, index) => (
           <div
             className="flex flex-row items-center pt-2"
@@ -106,10 +105,11 @@ const MuscleModel = ({ muscleGroups }) => {
           </div>
         ))}
 
+        {/* flip front or back view */}
         <div className="flex justify-center mt-4">
           {view === 'front' ? (
             <div
-              className="cursor-pointer"
+              className="cursor-pointer hover:opacity-75"
               onClick={() => setView('back')}
             >
               <Image
@@ -121,7 +121,7 @@ const MuscleModel = ({ muscleGroups }) => {
             </div>
           ) : (
             <div
-              className="cursor-pointer"
+              className="cursor-pointer hover:opacity-75"
               onClick={() => setView('front')}
             >
               <Image
