@@ -7,7 +7,7 @@ const pool = new Pool({
 
 const FilterExcMuscle = `
     SELECT * FROM exercise
-    WHERE muscle_group = $1
+    WHERE muscle_group LIKE $1
     ORDER BY popularity DESC;
     `; 
 
