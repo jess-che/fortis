@@ -28,13 +28,14 @@ const DiscoverPage: React.FC = () => {
   };
 
   const workout_muscle_map: StringToArrayMappingType = {
-    "Push": ["Chest", "Shoulder", "Triceps"],
-    "Pull": ["Back", "Biceps"],
-    "Legs": ["Quadriceps", "Hamstrings", "Calves"],
-    "Core": ["Abs", "Back", "Obliques"],
-    "Cardio": [],
+    "Push": ["Chest", "Shoulders", "Triceps"],
+    "Pull": ["Back", "Biceps", "Forearm"],
+    "Legs": ["Quadriceps", "Hamstrings", "Calves", "Glutes"],
+    "Core": ["Core"],
+    "Cardio": ["Cardio"],
     "HIIT": []
   }
+
 
   // Inline styles for workout-name and workout-rectangle
   // const workoutNameStyle = {
