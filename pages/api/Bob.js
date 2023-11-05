@@ -7,20 +7,22 @@ const pool = new Pool({
 
 const Bobby = `
     SELECT 
-        e.muscle_group,
+        unnested_muscle_group AS muscle_group,
         SUM(w."Set") AS total_sets
     FROM 
         public.workouts w
-    JOIN 
+    INNER JOIN 
         public.exercise e ON w."Eid" = e.eid
-    JOIN 
+    INNER JOIN 
         public.activity a ON w."Aid" = a."Aid" AND w."Uid" = a."Uid"
+    CROSS JOIN 
+        LATERAL unnest(string_to_array(e.muscle_group, ', ')) AS unnested_muscle_group
     WHERE 
         w."Uid" = $1
         AND a."Date" >= current_date - INTERVAL '1 week'
     GROUP BY 
-        e.muscle_group;
-    `; 
+        unnested_muscle_group;
+`;
 
 
 export default async (req, res) => {

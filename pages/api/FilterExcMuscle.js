@@ -7,9 +7,9 @@ const pool = new Pool({
 
 const FilterExcMuscle = `
     SELECT * FROM exercise
-    WHERE muscle_group LIKE $1
+    WHERE muscle_group ILIKE '%' || $1 || '%'
     ORDER BY popularity DESC;
-    `; 
+`;
 
 export default async (req, res) => {
     if (req.method === 'POST') {
