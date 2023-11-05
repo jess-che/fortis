@@ -1,10 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
 const MAX_SETS = 20; // Maximum number of sets for full color intensity
 
 const MuscleModel = ({ muscleGroups }) => {
+  const [view, setView] = useState('front'); // 'front' or 'back'
+
   if (!muscleGroups || muscleGroups.length === 0) {
     return <p>No muscle group data available.</p>;
   }
@@ -30,32 +33,64 @@ const MuscleModel = ({ muscleGroups }) => {
 
   return (
     <div className="flex flex-row items-center">
-      <div className="relative">
-        <Image
-          src="/images/front_bobby/Front.svg"
-          alt=""
-          width={400}
-          height={700}
-        />
-        {muscleGroups.map((group, index) => {
-          const imageOpacity = getOpacityForSets(group.sets);
-          const imageSrc = `/images/front_bobby/Front_${group.muscle_group}.svg`;
+      {view === 'front' && (
+        <div className="relative">
+          <Image
+            src="/images/front_bobby/Front.svg"
+            alt="Front View"
+            width={400}
+            height={700}
+          />
+          {/* Render front muscle groups */}
+          {muscleGroups.map((group, index) => {
+            const imageOpacity = getOpacityForSets(group.sets);
+            const imageSrc = `/images/front_bobby/Front_${group.muscle_group}.svg`;
 
-          return (
-            <Image
-              key={index}
-              className="absolute top-0 left-0"
-              style={{ opacity: imageOpacity }}
-              src={imageSrc}
-              alt={group.muscle_group}
-              width={400}
-              height={700}
-              onError={(e) => { e.target.style.display = 'none'; }} // Hides the image if it fails to load
-            />
-          );
-        })}
-      </div>
+            return (
+              <Image
+                key={index}
+                className="absolute top-0 left-0"
+                style={{ opacity: imageOpacity }}
+                src={imageSrc}
+                alt={group.muscle_group}
+                width={400}
+                height={700}
+                onError={(e) => { e.target.style.display = 'none'; }}
+              />
+            );
+          })}
+        </div>
+      )}
 
+      {view === 'back' && (
+        <div className="relative">
+          <Image
+            src="/images/back_bobby/Back.svg"
+            alt="Back View"
+            width={400}
+            height={700}
+          />
+          {/* Render back muscle groups */}
+          {muscleGroups.map((group, index) => {
+            // Only show back muscles
+            const imageOpacity = getOpacityForSets(group.sets);
+            const imageSrc = `/images/back_bobby/Back_${group.muscle_group}.svg`;
+
+            return (
+              <Image
+                key={index}
+                className="absolute top-0 left-0"
+                style={{ opacity: imageOpacity }}
+                src={imageSrc}
+                alt={group.muscle_group}
+                width={400}
+                height={700}
+                onError={(e) => { e.target.style.display = 'none'; }}
+              />
+            );
+          })}
+        </div>
+      )}
 
       <div className="flex flex-col">
         {muscleGroups.map((group, index) => (
@@ -70,6 +105,34 @@ const MuscleModel = ({ muscleGroups }) => {
             </div>
           </div>
         ))}
+
+        <div className="flex justify-center mt-4">
+          {view === 'front' ? (
+            <div
+              className="cursor-pointer"
+              onClick={() => setView('back')}
+            >
+              <Image
+                src="/images/Flip_Back.svg" // Path to the back view image
+                alt="Back View"
+                width={80}
+                height={40}
+              />
+            </div>
+          ) : (
+            <div
+              className="cursor-pointer"
+              onClick={() => setView('front')}
+            >
+              <Image
+                src="/images/Flip_Front.svg" // Path to the front view image
+                alt="Front View"
+                width={80}
+                height={40}
+              />
+            </div>
+          )}
+        </div>
       </div>
 
     </div>
