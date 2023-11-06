@@ -106,6 +106,9 @@ const LogPage: FC = () => {
     fetchExercises();
   }, []);
 
+  useEffect(() => {
+    getUID("lalalanmao10@gmail.com");
+  }, []);
 
   // Create a new handler for the Select component
   const handleSelectChange = (selectedOption: { value: string, label: string } | null, actionMeta: any) => {
@@ -171,10 +174,6 @@ const fetchAid = async (query: any) => {
     console.log("banana")
     return data.data.rows[0].uid;
   };
-
-  useEffect(() => {
-    getUID("lalalanmao10@gmail.com").catch(err => console.error(err));
-  }, []);
 
   // THIS IS FOR SAVING EXERCISES TO THE DATABASE
 const handleSaveExercises = async () => {
