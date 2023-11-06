@@ -199,12 +199,12 @@ const handleSaveExercises = async () => {
       throw new Error('Failed to save exercises');
     }
 
-    const data = await response.json();
-    console.log(data.message);
+    // const data = await response.json();
+    // console.log(data.message);
     alert('Exercises saved successfully!');
   } catch (err) {
     console.error(err);
-    alert('Failed to save exercises');
+    // alert('Failed to save exercises');
   }
 }
 
