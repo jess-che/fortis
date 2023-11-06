@@ -41,6 +41,8 @@ const LogPage: FC = () => {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [exerciseEids, setExerciseEids] = useState<number[]>([]);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
+  const [UID, setUID] = useState('');
+
   const toggleSidePanel = () => {
     setIsSidePanelOpen(!isSidePanelOpen);
   };
@@ -155,7 +157,7 @@ const fetchAid = async (query: any) => {
       //   searchQuery: query
       // }),
       body: JSON.stringify({
-        searchQuery: "lalalanmao10@gmail.com",
+        searchQuery: query,
        }),
     });
     console.log(response);
@@ -164,9 +166,14 @@ const fetchAid = async (query: any) => {
     }
 
     const data = await response.json();
-    console.log(data)
+    setUID(data.data.rows[0].uid)
+    console.log(UID)
     return data.data.rows[0].uid;
   };
+
+  useEffect(() => {
+    getUID("lalalanmao10@gmail.com").catch(err => console.error(err));
+  }, []);
 
   // THIS IS FOR SAVING EXERCISES TO THE DATABASE
 const handleSaveExercises = async () => {
@@ -210,13 +217,12 @@ const handleSaveExercises = async () => {
   }, [exercises]);  // This dependency array means this hook runs whenever `exercises` changes
 
 
-
 // THIS IS ONLY FOR MODIFYING EXERCISES TO THE LOCAL STORAGE, NOT CONNECTED TO DATABASE YET
 const handleAddExercise = async () => {
   if (currentExercise.exerciseName && currentExercise.eid) {
     const aid = await fetchAid(currentExercise.eid);
-    const uid = await getUID(user?.email);
-    // let uid = "abcd";
+    //const uid = await getUID(user?.email);
+    const uid = UID
     if (aid !== null) {
       setExercises([...exercises, { ...currentExercise, aid, uid }]);
       setCurrentExercise({
@@ -230,6 +236,7 @@ const handleAddExercise = async () => {
       });
     }
   }
+  console.log(UID)
 };
 
 // LOCAL
@@ -277,8 +284,6 @@ const [editingExercise, setEditingExercise] = useState<Exercise>({
   aid: 0,
   uid: '', 
 });
-
-
 
 
   

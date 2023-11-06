@@ -53,7 +53,7 @@ const DiscoverPage: React.FC = () => {
         throw new Error('Failed to fetch exercise data');
       }
       const data = await response.json();
-      console.log("Exercise Data:", data); // Log to inspect the structure
+      // console.log("Exercise Data:", data); // Log to inspect the structure
       return data.data.rows[0];
     } catch (error) {
       console.error('Error fetching exercise data:', error);
@@ -140,7 +140,7 @@ const DiscoverPage: React.FC = () => {
       if (prevWorkout === workoutName) {
         return null; // if the workout is clicked again, unselect it
       } else {
-        console.log(workoutName);
+        // console.log(workoutName);
         return workoutName; // otherwise, select the clicked workout
       }
     });
