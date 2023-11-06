@@ -34,7 +34,7 @@ const pool = new Pool({
 });
 
 const searchUserEmail = `
-    SELECT "uid" FROM users
+    SELECT * FROM users
     WHERE Email LIKE $1
     `;
 
