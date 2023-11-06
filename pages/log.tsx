@@ -151,6 +151,7 @@ const fetchAid = async (query: any) => {
 
   // WE GET THE UID FROM THE DB USING THE EMAIL OF LOGGED IN USER 
   const getUID = async (query: any) => {
+    try{
     const response = await fetch('/api/getUIDfromEmail', {
       method: 'POST',
       headers: {
@@ -173,7 +174,12 @@ const fetchAid = async (query: any) => {
     console.log(UID)
     console.log("banana")
     return data.data.rows[0].uid;
-  };
+  }
+  catch{
+    console.log("Unable to fetch UID using getUIDfromEmail. Manually setting it to b24.... now");
+    setUID("b24e24f4-86b8-4b83-8947-b2472a43b436")
+  }
+};
 
   // THIS IS FOR SAVING EXERCISES TO THE DATABASE
 const handleSaveExercises = async () => {
