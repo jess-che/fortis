@@ -5,11 +5,25 @@ import DefLayout from '@/components/def_layout';
 import './StreakGraphs.css'; 
 import StreakGraph from './StreakGraph'; // Adjust the path as needed
 import MuscleModel from './MuscleModel'; // Adjust the path as needed
-
+import { useUser }    from '@auth0/nextjs-auth0/client';
 
 
 
 const ProfilePage: React.FC = () => {
+
+  // Auth0 here onwards
+  const { user, error} = useUser();
+  if (error) {
+    // Handle the error state, e.g., display an error message
+    // return <div>Error: {error.message}</div>;
+    let userEmail = "dummy";
+  }
+  let userEmail = "dummy";
+  if (user) {
+    userEmail = user.email || "ello";
+  }
+  // END OF Auth0
+
   // Define state variables to store user information
   interface DataPoint {
     date: string;
@@ -226,48 +240,6 @@ const ProfilePage: React.FC = () => {
 
   return (
     <DefLayout>
-    <div className="let me cook">
-      <button onClick={handleAnalStreaksButtonClick}>Get Streaks</button>
-      {!isLoading && parsedData.length > 0 ? (
-          <StreakGraph parsedData={parsedData} />
-        ) : (
-          isLoading ? <p>Loading...</p> : <p>No data to display</p>
-        )}    
-    </div>
-    <div className="workout-time-display">
-        <h2>Weekly Workout Summary</h2>
-        <p>Workout Time This Week: 
-          <span className="workout-time"   >
-            {workoutTimeText}     
-            {workoutChangeText && (
-              <span className={isPositiveChange ? 'positive-change' : 'negative-change'}>
-                ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
-              </span>
-            )}
-          </span>
-        </p>
-      </div>
-
-    <style jsx>{`
-    .workout-time {
-        font-weight: bold;
-        font-size: 1.2em;
-        color: #007bff; /*Or any color that suits your design */
-    }
-    .positive-change {
-      color: #228B22;
-    }
-    .negative-change {
-      color: $990F02;
-    }
-  `}</style>
-    <div>
-      {muscleGroups.length > 0 ? (
-        <MuscleModel muscleGroups={muscleGroups} />
-      ) : (
-        <p>Loading muscle groups...</p> // or some placeholder text
-      )}
-    </div>
     <div className="container">
         <div className="profile-container">
             <h1>Profile</h1>
@@ -386,6 +358,50 @@ const ProfilePage: React.FC = () => {
             
         </div>
       </div>
+      
+    <div className="let me cook">
+      <button onClick={handleAnalStreaksButtonClick}>Get Streaks</button>
+      {!isLoading && parsedData.length > 0 ? (
+          <StreakGraph parsedData={parsedData} />
+        ) : (
+          isLoading ? <p>Loading...</p> : <p>No data to display</p>
+        )}    
+    </div>
+    <div className="workout-time-display">
+        <h2>Weekly Workout Summary</h2>
+        <p>Workout Time This Week: 
+          <span className="workout-time"   >
+            {workoutTimeText}     
+            {workoutChangeText && (
+              <span className={isPositiveChange ? 'positive-change' : 'negative-change'}>
+                ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
+              </span>
+            )}
+          </span>
+        </p>
+      </div>
+
+    <style jsx>{`
+    .workout-time {
+        font-weight: bold;
+        font-size: 1.2em;
+        color: #007bff; /*Or any color that suits your design */
+    }
+    .positive-change {
+      color: #228B22;
+    }
+    .negative-change {
+      color: $990F02;
+    }
+  `}</style>
+    <div>
+      {muscleGroups.length > 0 ? (
+        <MuscleModel muscleGroups={muscleGroups} />
+      ) : (
+        <p>Loading muscle groups...</p> // or some placeholder text
+      )}
+    </div>
+    
 
       <style jsx>{`
         .container {

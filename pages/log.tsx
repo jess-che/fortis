@@ -32,15 +32,17 @@ const LogPage: FC = () => {
     // return <div>Error: {error.message}</div>;
     let userEmail = "dummy";
   }
-  let userEmail = "dummy";
-  if (user) {
-    userEmail = user.email || "ello";
-  }
+  let userEmail = "lalalanmao10@gmail.com";
+  //if (user) {
+  //  userEmail = user.email || "ello";
+  //}
   // END OF Auth0
 
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [exerciseEids, setExerciseEids] = useState<number[]>([]);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
+  const [UID, setUID] = useState('');
+
   const toggleSidePanel = () => {
     setIsSidePanelOpen(!isSidePanelOpen);
   };
@@ -104,6 +106,9 @@ const LogPage: FC = () => {
     fetchExercises();
   }, []);
 
+  useEffect(() => {
+    getUID({userEmail});
+  }, []);
 
   // Create a new handler for the Select component
   const handleSelectChange = (selectedOption: { value: string, label: string } | null, actionMeta: any) => {
@@ -155,7 +160,7 @@ const fetchAid = async (query: any) => {
       //   searchQuery: query
       // }),
       body: JSON.stringify({
-        searchQuery: "lalalanmao10@gmail.com",
+        searchQuery: query,
        }),
     });
     console.log(response);
@@ -164,7 +169,9 @@ const fetchAid = async (query: any) => {
     }
 
     const data = await response.json();
-    console.log(data)
+    setUID(data.data.rows[0].uid)
+    console.log(UID)
+    console.log("banana")
     return data.data.rows[0].uid;
   };
 
@@ -210,13 +217,14 @@ const handleSaveExercises = async () => {
   }, [exercises]);  // This dependency array means this hook runs whenever `exercises` changes
 
 
-
 // THIS IS ONLY FOR MODIFYING EXERCISES TO THE LOCAL STORAGE, NOT CONNECTED TO DATABASE YET
 const handleAddExercise = async () => {
   if (currentExercise.exerciseName && currentExercise.eid) {
     const aid = await fetchAid(currentExercise.eid);
-    const uid = await getUID(user?.email);
-    // let uid = "abcd";
+    //const uid = await getUID(user?.email);
+    getUID({userEmail});
+    const uid = UID
+    console.log("monkey" + uid)
     if (aid !== null) {
       setExercises([...exercises, { ...currentExercise, aid, uid }]);
       setCurrentExercise({
@@ -226,7 +234,7 @@ const handleAddExercise = async () => {
         numberOfSets: 0,
         weight: 0,
         aid: 0,
-        uid: '',
+        uid: UID,
       });
     }
   }
@@ -279,8 +287,6 @@ const [editingExercise, setEditingExercise] = useState<Exercise>({
 });
 
 
-
-
   
   return (
     <DefLayout>
@@ -288,7 +294,7 @@ const [editingExercise, setEditingExercise] = useState<Exercise>({
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>Exercise Name {userEmail} </th>
+              <th>Exercise Name {userEmail} {UID} </th>
               <th>Number of Reps</th>
               <th>Number of Sets</th>
               <th>Weight</th>
