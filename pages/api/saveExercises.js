@@ -7,7 +7,7 @@ const pool = new Pool({
 
 const insertQuery = `
 INSERT INTO public.workouts ("Uid", "Aid", "Seq_num", "Eid", "Weight", "Rep", "Set")
-VALUES ($1, $2, $3, $4, $5, $6, $7);
+VALUES ($1, $2, DEFAULT, $3, $4, $5, $6);
 `;
 
 
@@ -23,17 +23,17 @@ export default async (req, res) => {
 
         try {
             console.log('hi');
-            let seq_num = 1;
+            // let seq_num = 1;
             for (let exercise of exercises[0]) {
                 // Check if exercise has all necessary properties
                 // const { Uid, Aid, Eid, Weight, Rep, Set } = exercise;
                 // const { Aid, Eid, name, Rep, Set, Uid, Weight } = exercise;
                 const { aid, eid, exerciseName, numberOfReps, numberOfSets, uid, weight } = exercise;
                 console.log(exercise)
-                seq_num++;
+                // seq_num++;
 
                 // await pool.query(insertQuery, [Uid, Aid, Eid, Weight, Rep, Set]);
-                await pool.query(insertQuery, [uid, aid, seq_num, eid, weight, numberOfReps, numberOfSets]);
+                await pool.query(insertQuery, [uid, aid, eid, weight, numberOfReps, numberOfSets]);
             }
             res.status(200).json({ message: 'Exercises saved successfully' });
         } catch (err) {
