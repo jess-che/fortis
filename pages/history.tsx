@@ -166,7 +166,7 @@ const HistoryPage: FC = () => {
 
   const getWeekRange = (weeksBefore: any) => {
     const today = new Date();
-    const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay() - (weeksBefore * 7)+1));
+    const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay() - (weeksBefore * 7)));
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(endOfWeek.getDate() + 6);
 
