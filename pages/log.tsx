@@ -223,6 +223,7 @@ const handleAddExercise = async () => {
     const aid = await fetchAid(currentExercise.eid);
     //const uid = await getUID(user?.email);
     const uid = UID
+    console.log(uid)
     if (aid !== null) {
       setExercises([...exercises, { ...currentExercise, aid, uid }]);
       setCurrentExercise({
@@ -236,7 +237,6 @@ const handleAddExercise = async () => {
       });
     }
   }
-  console.log(UID)
 };
 
 // LOCAL
@@ -293,7 +293,7 @@ const [editingExercise, setEditingExercise] = useState<Exercise>({
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>Exercise Name {userEmail} </th>
+              <th>Exercise Name {userEmail} {UID} </th>
               <th>Number of Reps</th>
               <th>Number of Sets</th>
               <th>Weight</th>
