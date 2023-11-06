@@ -16,8 +16,8 @@ const History = `
     SELECT *
     FROM activity
     WHERE activity."Uid" = $1 
-    AND activity."Date" BETWEEN (CURRENT_DATE - $2::integer * INTERVAL '1 week' + INTERVAL '1 day') 
-                        AND (CURRENT_DATE - $2::integer * INTERVAL '1 week' + INTERVAL '7 days')
+    AND activity."Date" BETWEEN (CURRENT_DATE - $2::integer * INTERVAL '1 week') 
+                        AND (CURRENT_DATE - $2::integer * INTERVAL '1 week' + INTERVAL '6 days')
     ORDER BY activity."Date" DESC, activity."Start_time" DESC;
 `;
 
