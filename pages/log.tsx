@@ -107,7 +107,7 @@ const LogPage: FC = () => {
   }, []);
 
   useEffect(() => {
-    getUID("lalalanmao10@gmail.com");
+    getUID({userEmail});
   }, []);
 
   // Create a new handler for the Select component
