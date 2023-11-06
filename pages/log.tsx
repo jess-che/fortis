@@ -168,6 +168,7 @@ const fetchAid = async (query: any) => {
     const data = await response.json();
     setUID(data.data.rows[0].uid)
     console.log(UID)
+    console.log("banana")
     return data.data.rows[0].uid;
   };
 
@@ -223,7 +224,7 @@ const handleAddExercise = async () => {
     const aid = await fetchAid(currentExercise.eid);
     //const uid = await getUID(user?.email);
     const uid = UID
-    console.log(uid)
+    console.log("monkey" + uid)
     if (aid !== null) {
       setExercises([...exercises, { ...currentExercise, aid, uid }]);
       setCurrentExercise({
@@ -233,7 +234,7 @@ const handleAddExercise = async () => {
         numberOfSets: 0,
         weight: 0,
         aid: 0,
-        uid: '',
+        uid: UID,
       });
     }
   }
