@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
-const MAX_SETS = 25; // Maximum number of sets for full color intensity
+const MAX_SETS = 40; // Maximum number of sets for full color intensity
 
 const MuscleModel = ({ muscleGroups }) => {
   const [view, setView] = useState('front');          // 'front' or 'back' view
@@ -24,7 +24,7 @@ const MuscleModel = ({ muscleGroups }) => {
     const normalized = (sets - 1) / (MAX_SETS - 1);
 
     // Scale the normalized value to range from 0.2 to 1
-    return 0.2 + normalized * 0.8;
+    return 0.3 + normalized * 0.7;
   };
 
   return (
