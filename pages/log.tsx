@@ -222,6 +222,7 @@ const handleAddExercise = async () => {
   if (currentExercise.exerciseName && currentExercise.eid) {
     const aid = await fetchAid(currentExercise.eid);
     //const uid = await getUID(user?.email);
+    getUID({userEmail});
     const uid = UID
     console.log("monkey" + uid)
     if (aid !== null) {
