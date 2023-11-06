@@ -32,10 +32,10 @@ const LogPage: FC = () => {
     // return <div>Error: {error.message}</div>;
     let userEmail = "dummy";
   }
-  let userEmail = "dummy";
-  if (user) {
-    userEmail = user.email || "ello";
-  }
+  let userEmail = "lalalanmao10@gmail.com";
+  //if (user) {
+  //  userEmail = user.email || "ello";
+  //}
   // END OF Auth0
 
   const [exercises, setExercises] = useState<Exercise[]>([]);
