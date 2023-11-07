@@ -187,7 +187,7 @@ const LogPage: FC = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify([exercises])
+        body: JSON.stringify(exercises)
       });
       console.log(response)
       console.log('Response body:', await response.text());
