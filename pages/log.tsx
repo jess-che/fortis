@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 'use client'
-import Image          from 'next/image';
-import Link           from 'next/link';
-=======
 import Image from 'next/image';
 import Link from 'next/link';
->>>>>>> e59ba31528f5eb47c95b593b9cd300581d8614d0
 import React, { FC, useState, useEffect, ChangeEvent } from 'react';
 import DefLayout from '@/components/def_layout';
 import styles from './LogPage.module.css';
@@ -130,64 +125,9 @@ const LogPage: FC = () => {
     setCurrentExercise({ ...currentExercise, [e.target.name]: e.target.value });
   }
 
-<<<<<<< HEAD
-
-// WE GET THE AID FROM THE DATABASE
-const fetchAid = async (query: any) => {
-  const response = await fetch('/api/getAID', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    // body: JSON.stringify({ eid })
-    body: JSON.stringify({
-      searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436"
-     }),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch aid');
-  }
-
-  const data = await response.json();
-  // console.log(data.data.rows[0].Aid);
-  return parseInt(data.data.rows[0].Aid);
-};
-
-  // WE GET THE UID FROM THE DB USING THE EMAIL OF LOGGED IN USER 
-  const getUID = async (query: any) => {
-    const response = await fetch('/api/getUIDfromEmail', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // body: JSON.stringify({
-      //   searchQuery: query
-      // }),
-      body: JSON.stringify({
-        searchQuery: query,
-       }),
-    });
-    console.log(response);
-    if (!response.ok) {
-      throw new Error('Failed to save query');
-    }
-
-    const data = await response.json();
-    console.log(data)
-    return data.data.rows[0].uid;
-  };
-
-  // THIS IS FOR SAVING EXERCISES TO THE DATABASE
-const handleSaveExercises = async () => {
-  try {
-    console.log(exercises)
-    const response = await fetch('/api/saveExercises', {
-=======
   // WE GET THE AID FROM THE DATABASE
   const fetchAid = async (query: any) => {
     const response = await fetch('/api/getAID', {
->>>>>>> e59ba31528f5eb47c95b593b9cd300581d8614d0
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -280,27 +220,6 @@ const handleSaveExercises = async () => {
   }, [exercises]);  // This dependency array means this hook runs whenever `exercises` changes
 
 
-<<<<<<< HEAD
-
-// THIS IS ONLY FOR MODIFYING EXERCISES TO THE LOCAL STORAGE, NOT CONNECTED TO DATABASE YET
-const handleAddExercise = async () => {
-  if (currentExercise.exerciseName && currentExercise.eid) {
-    const aid = await fetchAid(currentExercise.eid);
-    console.log(user?.email)
-    const uid = await getUID(user?.email);
-    // let uid = "abcd";
-    if (aid !== null) {
-      setExercises([...exercises, { ...currentExercise, aid, uid }]);
-      setCurrentExercise({
-        eid: 0,
-        exerciseName: '',
-        numberOfReps: 0,
-        numberOfSets: 0,
-        weight: 0,
-        aid: 0,
-        uid: '',
-      });
-=======
   // THIS IS ONLY FOR MODIFYING EXERCISES TO THE LOCAL STORAGE, NOT CONNECTED TO DATABASE YET
   const handleAddExercise = async () => {
     if (currentExercise.exerciseName && currentExercise.eid) {
@@ -321,7 +240,6 @@ const handleAddExercise = async () => {
           uid: UID,
         });
       }
->>>>>>> e59ba31528f5eb47c95b593b9cd300581d8614d0
     }
   };
 
