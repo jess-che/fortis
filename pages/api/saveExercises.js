@@ -7,7 +7,7 @@ const pool = new Pool({
 
 const insertQuery = `
 INSERT INTO public.workouts ("Uid", "Aid", "Seq_num", "Eid", "Weight", "Rep", "Set")
-VALUES ($1, $2, DEFAULT, $3, $4, $5, $6);
+VALUES ($1, $2, 70, $3, $4, $5, $6);
 `;
 
 

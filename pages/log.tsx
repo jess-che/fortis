@@ -293,7 +293,7 @@ const LogPage: FC = () => {
       <div className={styles.container}>
         {/* pls don't delete -- jessica will work on log here without ruining stuff */}
         <div>
-          <Link href="/log/activity">
+          <Link href="/log2/activity">
             <p className="px-3 opacity-75 text-l hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">JESSICA's TRYING TO FIGURE OUT LOG</p>
           </Link>
         </div>
