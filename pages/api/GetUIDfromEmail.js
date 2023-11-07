@@ -35,7 +35,7 @@ const pool = new Pool({
 
 const searchUserEmail = `
     SELECT * FROM users
-    WHERE Email LIKE $1
+    WHERE email LIKE $1
     `;
 
 export default async (req, res) => {
