@@ -150,7 +150,7 @@ const LogPage: FC = () => {
   // WE GET THE UID FROM THE DB USING THE EMAIL OF LOGGED IN USER 
   const getUID = async (query: any) => {
     try {
-      const response = await fetch('/api/getUIDfromEmail', {
+      const response = await fetch('/api/GetUIDfromEmail', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
