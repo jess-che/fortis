@@ -41,6 +41,7 @@ const searchUserEmail = `
 export default async (req, res) => {
     if (req.method === 'POST') {
         const searchQuery = req.body.searchQuery;
+        console.log(searchQuery);
 
         try {
             // Insert user
