@@ -1,3 +1,4 @@
+'use client'
 import Image          from 'next/image';
 import Link           from 'next/link';
 import React, { FC, useState, useEffect, ChangeEvent } from 'react';
@@ -155,7 +156,7 @@ const fetchAid = async (query: any) => {
       //   searchQuery: query
       // }),
       body: JSON.stringify({
-        searchQuery: "lalalanmao10@gmail.com",
+        searchQuery: query,
        }),
     });
     console.log(response);
@@ -215,6 +216,7 @@ const handleSaveExercises = async () => {
 const handleAddExercise = async () => {
   if (currentExercise.exerciseName && currentExercise.eid) {
     const aid = await fetchAid(currentExercise.eid);
+    console.log(user?.email)
     const uid = await getUID(user?.email);
     // let uid = "abcd";
     if (aid !== null) {
