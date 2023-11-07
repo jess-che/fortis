@@ -3,8 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
-const MAX_SETS = 40; // Maximum number of sets for full color intensity
-
 const MuscleModel = ({ muscleGroups }) => {
   const [view, setView] = useState('front');          // 'front' or 'back' view
 
@@ -15,16 +13,39 @@ const MuscleModel = ({ muscleGroups }) => {
 
   // opacity based on set time
   const getOpacityForSets = (sets) => {
+    // Define the MAX_SETS for each interval
+    const MAX_SETS_1_4 = 4;
+    const MAX_SETS_4_12 = 12;
+    const MAX_SETS_12_20 = 20;
+    const MAX_SETS_20_28 = 28;
+
     // If there are no sets, the opacity is 0
     if (sets === 0) {
       return 0;
     }
 
-    // Normalize sets value from 0 to 1, but consider the range only starts at 0.2 for sets of 1
-    const normalized = (sets - 1) / (MAX_SETS - 1);
+    // 1-4 = .1 - .2 opacity
+    if (sets >= 1 && sets <= MAX_SETS_1_4) {
+      return 0.1 + (sets - 1) * (0.2 - 0.1) / (MAX_SETS_1_4 - 1);
+    }
 
-    // Scale the normalized value to range from 0.2 to 1
-    return 0.3 + normalized * 0.7;
+    // 4-12 = .3-.5 opacity
+    if (sets > MAX_SETS_1_4 && sets <= MAX_SETS_4_12) {
+      return 0.3 + (sets - MAX_SETS_1_4) * (0.5 - 0.3) / (MAX_SETS_4_12 - MAX_SETS_1_4);
+    }
+
+    // 12-20 = .55-.75 opacity
+    if (sets > MAX_SETS_4_12 && sets <= MAX_SETS_12_20) {
+      return 0.55 + (sets - MAX_SETS_4_12) * (0.75 - 0.55) / (MAX_SETS_12_20 - MAX_SETS_4_12);
+    }
+
+    // 20-28 = .8-1 opacity
+    if (sets > MAX_SETS_12_20 && sets <= MAX_SETS_20_28) {
+      return 0.8 + (sets - MAX_SETS_12_20) * (1 - 0.8) / (MAX_SETS_20_28 - MAX_SETS_12_20);
+    }
+
+    // If sets is out of the specified range
+    return 1;
   };
 
   return (
@@ -97,7 +118,7 @@ const MuscleModel = ({ muscleGroups }) => {
             className="flex flex-row items-center pt-2"
             key={index}
           >
-            <div className="w-4 h-4 rounded-full bg-[#55BBA4] mr-2 border border-white border-opacity-50" style={{ opacity: getOpacityForSets(group.sets) }} />
+            <div className="w-4 h-4 rounded-full bg-[#C32E67] mr-2 border border-white border-opacity-50" style={{ opacity: getOpacityForSets(group.sets) }} />
             <div>
               <div className="text-sm font-medium">{group.muscle_group}</div>
               <div className="text-xs">Sets: {group.sets}</div>

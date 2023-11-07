@@ -1,12 +1,17 @@
+<<<<<<< HEAD
 'use client'
 import Image          from 'next/image';
 import Link           from 'next/link';
+=======
+import Image from 'next/image';
+import Link from 'next/link';
+>>>>>>> e59ba31528f5eb47c95b593b9cd300581d8614d0
 import React, { FC, useState, useEffect, ChangeEvent } from 'react';
 import DefLayout from '@/components/def_layout';
 import styles from './LogPage.module.css';
 import Select from 'react-select';
 import SearchBar from "./SearchBarComponents/SearchBar";
-import { useUser }    from '@auth0/nextjs-auth0/client';
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 
 interface Exercise {
@@ -19,9 +24,7 @@ interface Exercise {
   uid: string;
 }
 
-
 const LogPage: FC = () => {
-
   // Auth0 here onwards
   const { user, error, isLoading } = useUser();
   if (isLoading) {
@@ -33,15 +36,17 @@ const LogPage: FC = () => {
     // return <div>Error: {error.message}</div>;
     let userEmail = "dummy";
   }
-  let userEmail = "dummy";
-  if (user) {
-    userEmail = user.email || "ello";
-  }
+  let userEmail = "lalalanmao10@gmail.com";
+  //if (user) {
+  //  userEmail = user.email || "ello";
+  //}
   // END OF Auth0
 
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [exerciseEids, setExerciseEids] = useState<number[]>([]);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
+  const [UID, setUID] = useState('');
+
   const toggleSidePanel = () => {
     setIsSidePanelOpen(!isSidePanelOpen);
   };
@@ -51,9 +56,9 @@ const LogPage: FC = () => {
     numberOfReps: 0,
     numberOfSets: 0,
     weight: 0,
-    eid:0,
+    eid: 0,
     aid: 0,
-    uid:'',
+    uid: '',
   });
   const [exerciseOptions, setExerciseOptions] = useState<string[]>([]);
 
@@ -68,7 +73,7 @@ const LogPage: FC = () => {
       }
       const data = await response.json();
       const exerciseNames = data.data.rows.map((row: { name: any; }) => row.name);
-  
+
       // Separate arrays for names and eids
       const exerciseNamesWithEid = [];
       const exerciseEids = [];
@@ -80,11 +85,11 @@ const LogPage: FC = () => {
           },
           body: JSON.stringify({ searchQuery: name })
         });
-  
+
         if (!eidResponse.ok) {
           throw new Error('Failed to fetch eid');
         }
-  
+
         const eidData = await eidResponse.json();
 
         // Check if eidData, data, rows, and eid exist
@@ -97,14 +102,17 @@ const LogPage: FC = () => {
         exerciseNamesWithEid.push(name);
         exerciseEids.push(parseInt(eidData.data.rows[0].eid));
       }
-  
+
       setExerciseOptions(exerciseNamesWithEid);
       setExerciseEids(exerciseEids);  // Set the eids
     };
-  
+
     fetchExercises();
   }, []);
 
+  useEffect(() => {
+    getUID({ userEmail });
+  }, []);
 
   // Create a new handler for the Select component
   const handleSelectChange = (selectedOption: { value: string, label: string } | null, actionMeta: any) => {
@@ -119,9 +127,10 @@ const LogPage: FC = () => {
 
   // Keep the original handleInputChange function for the input elements
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCurrentExercise({...currentExercise, [e.target.name]: e.target.value});
+    setCurrentExercise({ ...currentExercise, [e.target.name]: e.target.value });
   }
 
+<<<<<<< HEAD
 
 // WE GET THE AID FROM THE DATABASE
 const fetchAid = async (query: any) => {
@@ -174,28 +183,88 @@ const handleSaveExercises = async () => {
   try {
     console.log(exercises)
     const response = await fetch('/api/saveExercises', {
+=======
+  // WE GET THE AID FROM THE DATABASE
+  const fetchAid = async (query: any) => {
+    const response = await fetch('/api/getAID', {
+>>>>>>> e59ba31528f5eb47c95b593b9cd300581d8614d0
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify([exercises])
+      // body: JSON.stringify({ eid })
+      body: JSON.stringify({
+        searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436"
+      }),
     });
-    console.log(response)
-    console.log('Response body:', await response.text());
 
     if (!response.ok) {
-      throw new Error('Failed to save exercises');
+      throw new Error('Failed to fetch aid');
     }
 
     const data = await response.json();
-    console.log(data.message);
-    alert('Exercises saved successfully!');
-  } catch (err) {
-    console.error(err);
-    alert('Failed to save exercises');
-  }
-}
+    // console.log(data.data.rows[0].Aid);
+    return parseInt(data.data.rows[0].Aid);
+  };
 
+  // WE GET THE UID FROM THE DB USING THE EMAIL OF LOGGED IN USER 
+  const getUID = async (query: any) => {
+    try {
+      const response = await fetch('/api/getUIDfromEmail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // body: JSON.stringify({
+        //   searchQuery: query
+        // }),
+        body: JSON.stringify({
+          searchQuery: query,
+        }),
+      });
+      console.log(response);
+      if (!response.ok) {
+        throw new Error('Failed to save query');
+      }
+
+      const data = await response.json();
+      setUID(data.data.rows[0].uid)
+      console.log(UID)
+      console.log("banana")
+      return data.data.rows[0].uid;
+    }
+    catch {
+      console.log("Unable to fetch UID using getUIDfromEmail. Manually setting it to b24.... now");
+      setUID("b24e24f4-86b8-4b83-8947-b2472a43b436")
+    }
+  };
+
+  // THIS IS FOR SAVING EXERCISES TO THE DATABASE
+  const handleSaveExercises = async () => {
+    try {
+      console.log(exercises)
+      const response = await fetch('/api/saveExercises', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(exercises)
+      });
+      console.log(response)
+      console.log('Response body:', await response.text());
+
+      if (!response.ok) {
+        throw new Error('Failed to save exercises');
+      }
+
+      // const data = await response.json();
+      // console.log(data.message);
+      alert('Exercises saved successfully!');
+    } catch (err) {
+      console.error(err);
+      // alert('Failed to save exercises');
+    }
+  }
 
   // This useEffect loads the exercises from localStorage when this component first mounts
   // this is only caching and data persistence, not related to actual functionality 
@@ -211,6 +280,7 @@ const handleSaveExercises = async () => {
   }, [exercises]);  // This dependency array means this hook runs whenever `exercises` changes
 
 
+<<<<<<< HEAD
 
 // THIS IS ONLY FOR MODIFYING EXERCISES TO THE LOCAL STORAGE, NOT CONNECTED TO DATABASE YET
 const handleAddExercise = async () => {
@@ -230,102 +300,126 @@ const handleAddExercise = async () => {
         aid: 0,
         uid: '',
       });
+=======
+  // THIS IS ONLY FOR MODIFYING EXERCISES TO THE LOCAL STORAGE, NOT CONNECTED TO DATABASE YET
+  const handleAddExercise = async () => {
+    if (currentExercise.exerciseName && currentExercise.eid) {
+      const aid = await fetchAid(currentExercise.eid);
+      //const uid = await getUID(user?.email);
+      getUID({ userEmail });
+      const uid = UID
+      console.log("monkey" + uid)
+      if (aid !== null) {
+        setExercises([...exercises, { ...currentExercise, aid, uid }]);
+        setCurrentExercise({
+          eid: 0,
+          exerciseName: '',
+          numberOfReps: 0,
+          numberOfSets: 0,
+          weight: 0,
+          aid: 0,
+          uid: UID,
+        });
+      }
+>>>>>>> e59ba31528f5eb47c95b593b9cd300581d8614d0
     }
-  }
-};
+  };
 
-// LOCAL
-const handleRemoveExercise = (index: number) => {
-  const newExercises = [...exercises];
-  newExercises.splice(index, 1);
-  setExercises(newExercises);
-};
+  // LOCAL
+  const handleRemoveExercise = (index: number) => {
+    const newExercises = [...exercises];
+    newExercises.splice(index, 1);
+    setExercises(newExercises);
+  };
 
-// Modify the handleUneditExercise function
-const handleUneditExercise = (index: number) => {
-  const newExercises = [...exercises];
-  newExercises[index] = editingExercise;
-  setExercises(newExercises);
-  setEditingIndex(-1);
-};
-
-
-
-
-  
-// WHY THE FUCK IS THIS HERE -- ?
-// search bar
-const searchBarStyle = {
-  margin: 'auto',
-  width: '90%',
-  display: 'flex',
-  flexDirection: 'column' as 'column',
-  alignItems: 'center',
-  minWidth: '200px',
-};
-
-const [editingIndex, setEditingIndex] = useState(-1);
-const handleEditExercise = (index: number) => {
-  setEditingIndex(index);
-  setEditingExercise(exercises[index]); 
-};
-
-const [editingExercise, setEditingExercise] = useState<Exercise>({
-  exerciseName: '',
-  numberOfReps: 0,
-  numberOfSets: 0,
-  weight: 0,
-  eid: 0,
-  aid: 0,
-  uid: '', 
-});
+  // Modify the handleUneditExercise function
+  const handleUneditExercise = (index: number) => {
+    const newExercises = [...exercises];
+    newExercises[index] = editingExercise;
+    setExercises(newExercises);
+    setEditingIndex(-1);
+  };
 
 
 
 
-  
+
+  // WHY THE FUCK IS THIS HERE -- ?
+  // search bar
+  const searchBarStyle = {
+    margin: 'auto',
+    width: '90%',
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+    alignItems: 'center',
+    minWidth: '200px',
+  };
+
+  const [editingIndex, setEditingIndex] = useState(-1);
+  const handleEditExercise = (index: number) => {
+    setEditingIndex(index);
+    setEditingExercise(exercises[index]);
+  };
+
+  const [editingExercise, setEditingExercise] = useState<Exercise>({
+    exerciseName: '',
+    numberOfReps: 0,
+    numberOfSets: 0,
+    weight: 0,
+    eid: 0,
+    aid: 0,
+    uid: '',
+  });
+
   return (
     <DefLayout>
       <div className={styles.container}>
+        {/* pls don't delete -- jessica will work on log here without ruining stuff */}
+        <div>
+          <Link href="/log2/activity">
+            <p className="px-3 opacity-75 text-l hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">JESSICA's TRYING TO FIGURE OUT LOG</p>
+          </Link>
+        </div>
+        {/* pls don't delete */}
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>Exercise Name {userEmail} </th>
+              <th>Exercise Name {userEmail} {UID} </th>
               <th>Number of Reps</th>
               <th>Number of Sets</th>
               <th>Weight</th>
-              <th>Action</th> 
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-          {exercises.map((exercise, index) => (
-    <tr key={index}>
-      {editingIndex === index ? (
-        <>
-        <td><input type="text" value={editingExercise.exerciseName} onChange={(event) => setEditingExercise({ ...editingExercise, exerciseName: event.target.value })} /></td>
-        <td><input type="number" value={editingExercise.numberOfReps} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfReps: Number(event.target.value) })} /></td>
-        <td><input type="number" value={editingExercise.numberOfSets} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfSets: Number(event.target.value) })} /></td>
-        <td><input type="number" value={editingExercise.weight} onChange={(event) => setEditingExercise({ ...editingExercise, weight: Number(event.target.value) })} /></td>
-        <td>
-          <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30"/> </button>
-          <button onClick={() => handleUneditExercise(index)}> <img src="/images/unedit.png" alt="Unedit icon" width="24" height="30"/> </button>
-        </td>
-      </>
-      ) : (
-        <>
-          <td>{exercise.exerciseName}</td>
-          <td>{exercise.numberOfReps}</td>
-          <td>{exercise.numberOfSets}</td>
-          <td>{exercise.weight}</td>
-          <td>
-            <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30"/> </button>
-            <button onClick={() => handleEditExercise(index)}> <img src="/images/edit1.png" alt="Edit icon" width="24" height="30"/> </button>
-          </td>
-        </>
-      )}
-    </tr>
-  ))}
-              <tr>
+            {exercises.map((exercise, index) => (
+              <tr key={index}>
+                {editingIndex === index ? (
+                  <>
+                    <td><input type="text" value={editingExercise.exerciseName} onChange={(event) => setEditingExercise({ ...editingExercise, exerciseName: event.target.value })} /></td>
+                    <td><input type="number" value={editingExercise.numberOfReps} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfReps: Number(event.target.value) })} /></td>
+                    <td><input type="number" value={editingExercise.numberOfSets} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfSets: Number(event.target.value) })} /></td>
+                    <td><input type="number" value={editingExercise.weight} onChange={(event) => setEditingExercise({ ...editingExercise, weight: Number(event.target.value) })} /></td>
+                    <td>
+                      <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
+                      <button onClick={() => handleUneditExercise(index)}> <img src="/images/unedit.png" alt="Unedit icon" width="24" height="30" /> </button>
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <td>{exercise.exerciseName}</td>
+                    <td>{exercise.numberOfReps}</td>
+                    <td>{exercise.numberOfSets}</td>
+                    <td>{exercise.weight}</td>
+                    <td>
+                      <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
+                      <button onClick={() => handleEditExercise(index)}> <img src="/images/edit1.png" alt="Edit icon" width="24" height="30" /> </button>
+                    </td>
+                  </>
+                )}
+              </tr>
+            ))}
+            <tr>
               <td>
                 <Select
                   className={styles.dropdown}
@@ -352,9 +446,9 @@ const [editingExercise, setEditingExercise] = useState<Exercise>({
             </tr>
           </tbody>
         </table>
-  
+
         <button className={styles.button} id={styles["add-exercise-button"]} onClick={handleAddExercise}>Add Exercise</button>
-        <button className={styles.button} id={styles["save-exercise-button"]} onClick={handleSaveExercises}>Finish Workout</button> 
+        <button className={styles.button} id={styles["save-exercise-button"]} onClick={handleSaveExercises}>Finish Workout</button>
       </div>
 
       {isSidePanelOpen && (

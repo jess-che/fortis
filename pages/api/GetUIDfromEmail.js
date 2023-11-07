@@ -34,13 +34,13 @@ const pool = new Pool({
 });
 
 const searchUserEmail = `
-    SELECT "uid" FROM users
+    SELECT * FROM users
     WHERE Email LIKE $1
     `;
 
 export default async (req, res) => {
     if (req.method === 'POST') {
-        const searchQuery = req.body.searchQuery;;
+        const searchQuery = req.body.searchQuery;
 
         try {
             // Insert user
