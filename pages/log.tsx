@@ -35,6 +35,8 @@ const LogPage: FC = () => {
   if (user) {
    userEmail = user.email || "ello";
   }
+
+  console.log(userEmail);
   // END OF Auth0
 
   const [exercises, setExercises] = useState<Exercise[]>([]);
