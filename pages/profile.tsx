@@ -2,17 +2,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC, useState } from 'react';
 import DefLayout from '@/components/def_layout';
-import './StreakGraphs.css'; 
+import './StreakGraphs.css';
 import StreakGraph from './StreakGraph'; // Adjust the path as needed
 import MuscleModel from './MuscleModel'; // Adjust the path as needed
-import { useUser }    from '@auth0/nextjs-auth0/client';
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 
 
 const ProfilePage: React.FC = () => {
 
   // Auth0 here onwards
-  const { user, error} = useUser();
+  const { user, error } = useUser();
   if (error) {
     // Handle the error state, e.g., display an error message
     // return <div>Error: {error.message}</div>;
@@ -29,7 +29,7 @@ const ProfilePage: React.FC = () => {
     date: string;
     duration: number;
   }
-  
+
   // Declare the type of the state variable as an array of DataPoint objects
   const [parsedData, setParsedData] = useState<DataPoint[]>([]);
   const [isLoading, setIsLoading] = useState(false); // new state for loading indicator
@@ -48,7 +48,7 @@ const ProfilePage: React.FC = () => {
   const [gender, setGender] = useState('Male');
   const [units, setUnits] = useState('Imperial');
   const [privacy, setPrivacy] = useState("Public");
-  
+
   // Define state variables to track edit mode
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingAge, setIsEditingAge] = useState(false);
@@ -100,30 +100,30 @@ const ProfilePage: React.FC = () => {
           searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436",
         }),
       });
-  
+
       if (!res.ok) {
         throw new Error('Failed to fetch data');
       }
-  
+
       const data = await res.json();
       const totalMinutes = Math.round(parseFloat(data.data.rows[0].total_workout_minutes));
       const previousWeekMinutes = Math.round(parseFloat(data.data.rows[0].previous_week_minutes));
-  
+
       // Calculate percentage change
       let percentageChange = 0;
       if (previousWeekMinutes > 0) {
         percentageChange = ((totalMinutes - previousWeekMinutes) / previousWeekMinutes) * 100;
       }
-  
+
       const hours = Math.floor(totalMinutes / 60);
       const minutes = totalMinutes % 60;
-  
+
       const formattedTime = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
       const changeClass = percentageChange > 0 ? 'positive-change' : 'negative-change';
       setWorkoutTimeText(`${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`);
       setWorkoutChangeText(`${percentageChange.toFixed(1)}%`);
       setIsPositiveChange(percentageChange > 0);
-  
+
       console.log(formattedTime);
 
       return formattedTime; // This line returns the formatted time, which can be used elsewhere
@@ -131,8 +131,8 @@ const ProfilePage: React.FC = () => {
       console.error('Error in time:', error);
       return ''; // Return an empty string or some default value in case of an error
     }
-  }; 
-  
+  };
+
 
   const Bob = async (query: any) => {
     try {
@@ -145,17 +145,17 @@ const ProfilePage: React.FC = () => {
           searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436",
         }),
       });
-  
+
       if (!res.ok) {
         throw new Error('Failed to fetch data');
       }
-  
+
       const data = await res.json();
       const muscleGroups = data.data.rows.map((row: { muscle_group: any; total_sets: string; }) => ({
         muscle_group: row.muscle_group,
         sets: parseInt(row.total_sets)
       }));
-  
+
       setMuscleGroups(muscleGroups); // Update the state
       console.log(muscleGroups);
     } catch (error) {
@@ -163,8 +163,8 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-   // The AnalStreaks function to fetch and process data
-   const AnalStreaks = async (query: any) => {
+  // The AnalStreaks function to fetch and process data
+  const AnalStreaks = async (query: any) => {
     setIsLoading(true); // Set loading to true before fetching data
     try {
       const response = await fetch('api/AnalStreaks', {
@@ -209,29 +209,29 @@ const ProfilePage: React.FC = () => {
     setIsLoading(false); // Set loading to false after fetching data
   };
 
-  
+
   const handleAnalStreaksButtonClick = async () => {
     //if (user && user.email) {
-      try {
-        await time({email: "lalanmao@gmail.com"});
-        console.log('time Done')
-      } catch (error) {
-        console.error('Error calling time:', error);
-      }
+    try {
+      await time({ email: "lalanmao@gmail.com" });
+      console.log('time Done')
+    } catch (error) {
+      console.error('Error calling time:', error);
+    }
 
-      try {
-        await Bob({email: "lalanmao@gmail.com"});
-        console.log('Bobby Done')
-      } catch (error) {
-        console.error('Error calling Bob:', error);
-      }
+    try {
+      await Bob({ email: "lalanmao@gmail.com" });
+      console.log('Bobby Done')
+    } catch (error) {
+      console.error('Error calling Bob:', error);
+    }
 
-      try {
-        await AnalStreaks({ email: "lalanmao10@gmail.com" });
-        console.log('AnalStreaks called successfully');
-      } catch (error) {
-        console.error('Error calling AnalStreaks:', error);
-      }
+    try {
+      await AnalStreaks({ email: "lalanmao10@gmail.com" });
+      console.log('AnalStreaks called successfully');
+    } catch (error) {
+      console.error('Error calling AnalStreaks:', error);
+    }
 
     //} else {
     //  console.error('User email is not available.');
@@ -240,138 +240,138 @@ const ProfilePage: React.FC = () => {
 
   return (
     <DefLayout>
-    <div className="container">
+      <div className="container">
         <div className="profile-container">
-            <h1>Profile</h1>
+          <h1>Profile</h1>
 
-            <div className="profile-info">
+          <div className="profile-info">
             <div>
-                <strong>Name:</strong> {isEditingName ? (
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={handleSaveOnEnter} onBlur={() => setIsEditingName(false)}/>
-                ) : (
+              <strong>Name:</strong> {isEditingName ? (
+                <input type="text" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={handleSaveOnEnter} onBlur={() => setIsEditingName(false)} />
+              ) : (
                 name
-                )} 
-                {isEditingName ? (
+              )}
+              {isEditingName ? (
                 <button className="edit-button" onClick={() => setIsEditingName(false)}>Save</button>
-                ) : (
+              ) : (
                 <button className="edit-button" onClick={() => setIsEditingName(true)}>Edit</button>
-                )}
+              )}
             </div>
             <p><strong>Email:</strong> {email}</p>
             <div>
-                <strong>Age:</strong> {isEditingAge ? (
-                <input type="number" value={age} onChange={(e) => setAge(Number(e.target.value))} onKeyDown={handleSaveOnEnter} onBlur={() => setIsEditingAge(false)}/>
-                ) : (
+              <strong>Age:</strong> {isEditingAge ? (
+                <input type="number" value={age} onChange={(e) => setAge(Number(e.target.value))} onKeyDown={handleSaveOnEnter} onBlur={() => setIsEditingAge(false)} />
+              ) : (
                 age
-                )} 
-                {isEditingAge ? (
+              )}
+              {isEditingAge ? (
                 <button className="edit-button" onClick={() => setIsEditingAge(false)}>Save</button>
-                ) : (
+              ) : (
                 <button className="edit-button" onClick={() => setIsEditingAge(true)}>Edit</button>
-                )}
+              )}
             </div>
             <div>
-                <strong>Height:</strong> {isEditingHeight ? (
+              <strong>Height:</strong> {isEditingHeight ? (
                 <input type="number" value={height} onChange={(e) => setHeight(Number(e.target.value))} onKeyDown={handleSaveOnEnter} onBlur={() => setIsEditingHeight(false)} />
-                ) : (
+              ) : (
                 height
-                )} cm
-                {isEditingHeight ? (
+              )} cm
+              {isEditingHeight ? (
                 <button className="edit-button" onClick={() => setIsEditingHeight(false)}>Save</button>
-                ) : (
+              ) : (
                 <button className="edit-button" onClick={() => setIsEditingHeight(true)}>Edit</button>
-                )}
+              )}
             </div>
             <div>
-                <strong>Weight:</strong> {isEditingWeight ? (
-                <input type="number" value={weight} onChange={(e) => setWeight(Number(e.target.value))} onKeyDown={handleSaveOnEnter} onBlur={() => setIsEditingWeight(false)}/>
-                ) : (
+              <strong>Weight:</strong> {isEditingWeight ? (
+                <input type="number" value={weight} onChange={(e) => setWeight(Number(e.target.value))} onKeyDown={handleSaveOnEnter} onBlur={() => setIsEditingWeight(false)} />
+              ) : (
                 weight
-                )} kg
-                {isEditingWeight ? (
+              )} kg
+              {isEditingWeight ? (
                 <button className="edit-button" onClick={() => setIsEditingWeight(false)}>Save</button>
-                ) : (
+              ) : (
                 <button className="edit-button" onClick={() => setIsEditingWeight(true)}>Edit</button>
-                )}
+              )}
             </div>
             <div>
-                <strong>Gender:</strong> {isEditingGender ? (
+              <strong>Gender:</strong> {isEditingGender ? (
                 <select value={gender} onChange={(e) => setGender(e.target.value)} onKeyDown={handleSaveOnEnter} onBlur={() => setIsEditingGender(false)}>
-                    <option value="Man">Man</option>
-                    <option value="Woman">Woman</option>
-                    <option value="Other">Other</option>
+                  <option value="Man">Man</option>
+                  <option value="Woman">Woman</option>
+                  <option value="Other">Other</option>
                 </select>
-                ) : (
+              ) : (
                 gender
-                )}
-                {isEditingGender ? (
+              )}
+              {isEditingGender ? (
                 <button className="edit-button" onClick={() => setIsEditingGender(false)}>Save</button>
-                ) : (
+              ) : (
                 <button className="edit-button" onClick={() => setIsEditingGender(true)}>Edit</button>
-                )}
+              )}
             </div>
-            </div>
+          </div>
         </div>
 
         <div className="preferences">
-            <div>
-                <strong>Unit of Measurement:</strong> {isEditingUnits ? (
-                <select value={units} onChange={(e) => setUnits(e.target.value)} onKeyDown={handleSaveOnEnter} onBlur={() => setIsEditingUnits(false)}>
-                    <option value="Imperial">Imperial</option>
-                    <option value="Metric">Metric</option>
-                </select>
-                ) : (
-                units
-                )}
-                {isEditingUnits ? (
-                <button className="edit-button" onClick={() => setIsEditingUnits(false)}>Save</button>
-                ) : (
-                <button className="edit-button" onClick={() => setIsEditingUnits(true)}>Edit</button>
-                )}
-            </div>
+          <div>
+            <strong>Unit of Measurement:</strong> {isEditingUnits ? (
+              <select value={units} onChange={(e) => setUnits(e.target.value)} onKeyDown={handleSaveOnEnter} onBlur={() => setIsEditingUnits(false)}>
+                <option value="Imperial">Imperial</option>
+                <option value="Metric">Metric</option>
+              </select>
+            ) : (
+              units
+            )}
+            {isEditingUnits ? (
+              <button className="edit-button" onClick={() => setIsEditingUnits(false)}>Save</button>
+            ) : (
+              <button className="edit-button" onClick={() => setIsEditingUnits(true)}>Edit</button>
+            )}
+          </div>
 
-            <div>
-                <strong>Privacy:</strong> {isEditingPrivacy ? (
-                <select value={privacy} onChange={(e) => setPrivacy(e.target.value)} onKeyDown={handleSaveOnEnter} onBlur={() => setIsEditingPrivacy(false)}>
-                    <option value="Public">Public</option>
-                    <option value="Private">Private</option>
-                </select>
-                ) : (
-                privacy
-                )}
-                {isEditingPrivacy ? (
-                <button className="edit-button" onClick={() => setIsEditingPrivacy(false)}>Save</button>
-                ) : (
-                <button className="edit-button" onClick={() => setIsEditingPrivacy(true)}>Edit</button>
-                )}
-            </div>
+          <div>
+            <strong>Privacy:</strong> {isEditingPrivacy ? (
+              <select value={privacy} onChange={(e) => setPrivacy(e.target.value)} onKeyDown={handleSaveOnEnter} onBlur={() => setIsEditingPrivacy(false)}>
+                <option value="Public">Public</option>
+                <option value="Private">Private</option>
+              </select>
+            ) : (
+              privacy
+            )}
+            {isEditingPrivacy ? (
+              <button className="edit-button" onClick={() => setIsEditingPrivacy(false)}>Save</button>
+            ) : (
+              <button className="edit-button" onClick={() => setIsEditingPrivacy(true)}>Edit</button>
+            )}
+          </div>
 
-            <div>
-                <button className="lightdarkmode">Light/Dark Mode</button>
-            </div>
+          <div>
+            <button className="lightdarkmode">Light/Dark Mode</button>
+          </div>
 
-            <div>
-                <button className="delete-account">Delete Account</button>
-            </div>
-            
+          <div>
+            <button className="delete-account">Delete Account</button>
+          </div>
 
-            
+
+
         </div>
       </div>
-      
-    <div className="let me cook">
-      <button onClick={handleAnalStreaksButtonClick}>Get Streaks</button>
-      {!isLoading && parsedData.length > 0 ? (
+
+      <div className="let me cook">
+        <button onClick={handleAnalStreaksButtonClick}>Get Streaks</button>
+        {!isLoading && parsedData.length > 0 ? (
           <StreakGraph parsedData={parsedData} />
         ) : (
           isLoading ? <p>Loading...</p> : <p>No data to display</p>
-        )}    
-    </div>
-    <div className="workout-time-display">
+        )}
+      </div>
+      <div className="workout-time-display">
         <h2>Weekly Workout Summary</h2>
-        <p>Workout Time This Week: 
+        <p>Workout Time This Week:
           <span className="workout-time"   >
-            {workoutTimeText}     
+            {workoutTimeText}
             {workoutChangeText && (
               <span className={isPositiveChange ? 'positive-change' : 'negative-change'}>
                 ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
@@ -381,27 +381,27 @@ const ProfilePage: React.FC = () => {
         </p>
       </div>
 
-    <style jsx>{`
-    .workout-time {
-        font-weight: bold;
-        font-size: 1.2em;
-        color: #007bff; /*Or any color that suits your design */
-    }
-    .positive-change {
-      color: #228B22;
-    }
-    .negative-change {
-      color: $990F02;
-    }
-  `}</style>
-    <div>
-      {muscleGroups.length > 0 ? (
-        <MuscleModel muscleGroups={muscleGroups} />
-      ) : (
-        <p>Loading muscle groups...</p> // or some placeholder text
-      )}
-    </div>
-    
+      <style jsx>{`
+      .workout-time {
+          font-weight: bold;
+          font-size: 1.2em;
+          color: #007bff; /*Or any color that suits your design */
+      }
+      .positive-change {
+        color: #228B22;
+      }
+      .negative-change {
+        color: $990F02;
+      }
+    `}</style>
+      <div>
+        {muscleGroups.length > 0 ? (
+          <MuscleModel muscleGroups={muscleGroups} />
+        ) : (
+          <p>Loading muscle groups...</p> // or some placeholder text
+        )}
+      </div>
+
 
       <style jsx>{`
         .container {
