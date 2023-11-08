@@ -111,6 +111,7 @@ const HistoryPage: FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);   // set loading to true while data is being fetched
+      const uid = UID;
 
       try {
         const activityResponse = await fetch('/api/HistoryActivities', {
@@ -119,7 +120,7 @@ const HistoryPage: FC = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            searchQuery: getUID({ userEmail }),
+            searchQuery: uid,
             weeksBefore: weeksBefore
           }),
         });
@@ -152,6 +153,8 @@ const HistoryPage: FC = () => {
   // get data for specific activity
   useEffect(() => {
     const fetchData = async () => {
+      const uid = UID;
+
       try {
         const workoutResponse = await fetch('/api/HistoryWorkouts', {
           method: 'POST',
@@ -159,7 +162,7 @@ const HistoryPage: FC = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            uid: getUID({ userEmail }),
+            uid: uid,
             aid: specificAid,
           }),
         });
