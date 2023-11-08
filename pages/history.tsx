@@ -107,9 +107,9 @@ const HistoryPage: FC = () => {
   // ---- end of API fn calls ----
 
   // ---- start of API calls with useEffect ----
-  // useEffect(() => {
-  //   getUID({ userEmail });
-  // }, []);
+  useEffect(() => {
+    getUID({ userEmail });
+  }, []);
 
   // get activities per week
   useEffect(() => {
