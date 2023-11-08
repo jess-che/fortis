@@ -423,6 +423,7 @@ const Home: React.FC = () => {
   // since you got here, you are logged in 
   // thus get the uid from email and set the cookies
   getUID(user.email);
+  handleNameSave();
   // ---- end of auth0 logic ----
 
   return (
