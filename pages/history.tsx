@@ -69,8 +69,8 @@ const HistoryPage: FC = () => {
     }
     catch {
       // !! FOR DEVELOPMENT ONLY !! 
-      console.log("Unable to fetch UID using getUIDfromEmail. Manually setting it to b24.... now");
-      setUID("b24e24f4-86b8-4b83-8947-b2472a43b436")
+      // console.log("Unable to fetch UID using getUIDfromEmail. Manually setting it to b24.... now");
+      // setUID("b24e24f4-86b8-4b83-8947-b2472a43b436")
     }
   };
 
