@@ -161,7 +161,7 @@ const LogPage: FC = () => {
         //   searchQuery: query
         // }),
         body: JSON.stringify({
-          searchQuery: query,
+          searchQuery: userEmail,
         }),
       });
       console.log(response);
