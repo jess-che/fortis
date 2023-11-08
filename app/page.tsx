@@ -129,6 +129,16 @@ const Home: React.FC = () => {
   useEffect(() => {
     const handleAnalStreaks = async () => {
       try {
+        await AnalStreaks();
+        console.log('AnalStreaks called successfully');
+      } catch (error) {
+        console.error('Error calling AnalStreaks:', error);
+      }
+      // } else {
+      //   console.error('User email is not available.');
+      // }
+
+      try {
         await time();
         console.log('time Done');
       } catch (error) {
@@ -141,20 +151,10 @@ const Home: React.FC = () => {
       } catch (error) {
         console.error('Error calling Bob:', error);
       }
-
-      try {
-        await AnalStreaks();
-        console.log('AnalStreaks called successfully');
-      } catch (error) {
-        console.error('Error calling AnalStreaks:', error);
-      }
-      // } else {
-      //   console.error('User email is not available.');
-      // }
     };
 
     handleAnalStreaks();
-  }, [user, isLoading, error]);
+  }, [user, loading, error]);
 
   // work time this week
   const time = async () => {
