@@ -160,7 +160,7 @@ const Home: React.FC = () => {
     };
 
     handleAnalStreaks();
-  }, [user, loading, error]);
+  }, [user]);
 
   const time = async() => {
     try {
