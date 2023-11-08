@@ -72,6 +72,11 @@ Set up react-select:
 
 pnpm install react-select
 ```
+Set up cookie-next:
+``` bash
+
+pnpm add cookies-next
+```
 
 Finally, to run the development server:
 ```bash
