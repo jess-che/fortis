@@ -137,7 +137,7 @@ const Home: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436",
+          searchQuery: getCookie('uid'),
         }),
       });
 
@@ -159,7 +159,6 @@ const Home: React.FC = () => {
       const minutes = totalMinutes % 60;
 
       const formattedTime = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
-      const changeClass = percentageChange > 0 ? 'positive-change' : 'negative-change';
       setWorkoutTimeText(`${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`);
       setWorkoutChangeText(`${percentageChange.toFixed(1)}%`);
       setIsPositiveChange(percentageChange > 0);
@@ -181,7 +180,7 @@ const Home: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436",
+          searchQuery: getCookie('uid'),
         }),
       });
 
@@ -212,7 +211,7 @@ const Home: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436",
+          searchQuery: getCookie('uid'),
         }),
       });
 
@@ -387,14 +386,14 @@ const Home: React.FC = () => {
   // thus get the uid from email and set the cookies
   getUID(user.email);
   // ---- end of auth0 logic ----
+
   return (
     <DefLayout>
-
       <div>
         Welcome, {user.name}. This is home page.
         Your email is {user.email}.
 
-        <div className="w-[100vw] min-h-[50vh] mt-[50vh] flex flex-row items-center justify-center">
+        <div className="w-[100vw] min-h-[50vh] flex flex-row items-center justify-center">
           <div className="flex flex-col items-center justify-center">
             {!isLoading && parsedData.length > 0 ? (
               <StreakGraph parsedData={parsedData} />
