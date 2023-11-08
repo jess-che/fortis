@@ -6,9 +6,11 @@ import DefLayout from '@/components/def_layout';
 import LoginLayout from '@/components/login_layout';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useState, useEffect } from 'react';
+import { setCookie, getCookie} from 'cookies-next';
 import '@/public/styles/home.css';                              // style sheet for animations
 
-document.cookie = "uid=b24e24f4-86b8-4b83-8947-b2472a43b436"
+setCookie('uid', 'b24e24f4-86b8-4b83-8947-b2472a43b436');
+console.log(getCookie('uid'));
 
 const Home: React.FC = () => {
   const { user, error, isLoading } = useUser();                 // auth0 login status
@@ -35,9 +37,9 @@ const Home: React.FC = () => {
       }
 
       const data = await response.json();
-      document.cookie = data.data.rows[0].uid;
+      setCookie('uid', data.data.rows[0].uid);
       console.log("Got UID in History: ");
-      console.group(document.cookie);
+      console.log(getCookie('uid'));
       return data.data.rows[0].uid;
     }
     catch {
@@ -199,3 +201,4 @@ const Home: React.FC = () => {
 }
 
 export default Home;
+
