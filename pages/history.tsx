@@ -19,7 +19,7 @@ const HistoryPage: FC = () => {
   // !! FOR DEVELOPMENT ONLY !!
   let userEmail = "lalalanmao10@gmail.com";               // default email if no user
   if (user) {
-    userEmail = user.email || "lalalanmao10@gmail.com";   // if user
+    userEmail = user.email || "";   // if user
   }
   console.log("History: " + userEmail);
 
