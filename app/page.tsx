@@ -399,7 +399,7 @@ const Home: React.FC = () => {
         Your email is {user.email}.
 
         <div className="let me cook">
-          <button onClick={handleAnalStreaksButtonClick}>Get Streaks</button>
+          {/* <button onClick={handleAnalStreaksButtonClick}>Get Streaks</button> */}
           {!isLoading && parsedData.length > 0 ? (
             <StreakGraph parsedData={parsedData} />
           ) : (
