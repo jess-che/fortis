@@ -16,13 +16,6 @@ const HistoryPage: FC = () => {
   // ---- start of auth0 setup ----
   // set auth0 state
   const { user, error, isLoading } = useUser();
-  // !! FOR DEVELOPMENT ONLY !!
-  let userEmail = "lalalanmao10@gmail.com";               // default email if no user
-  if (user) {
-    userEmail = user.email || "";   // if user
-  }
-  console.log("History: " + userEmail);
-
   // ---- end of auth0 setup ---- 
 
   // ---- start of use state components ----
@@ -41,6 +34,17 @@ const HistoryPage: FC = () => {
   const [weeksBefore, setWeeksBefore] = useState(1);  // weeks -- used to query by week in sidebar
   const [loading, setLoading] = useState(true);       // if data is being fetched for sidebar
   // ---- end of use state components ----
+
+  // if (isLoading) {
+  //   // Handle loading state, e.g., show a loading spinner
+  //   return <div>Loading...</div>;
+  // }
+  // !! FOR DEVELOPMENT ONLY !!
+  let userEmail = "x@gmail.com";               // default email if no user
+  // if (user) {
+  //   userEmail = user.email || "";   // if user
+  // }
+  // console.log("History: " + userEmail);
 
   // ---- start of API fn calls ----
   // get UID from auth0 email
@@ -69,8 +73,9 @@ const HistoryPage: FC = () => {
     }
     catch {
       // !! FOR DEVELOPMENT ONLY !! 
-      // console.log("Unable to fetch UID using getUIDfromEmail. Manually setting it to b24.... now");
-      // setUID("b24e24f4-86b8-4b83-8947-b2472a43b436")
+      console.log("Unable to fetch UID using getUIDfromEmail. Manually setting it to b24.... now");
+      // setUID("71379e91-a26a-41fe-9901-4478133052e6");
+      setUID("b24e24f4-86b8-4b83-8947-b2472a43b436");
     }
   };
 
@@ -103,9 +108,9 @@ const HistoryPage: FC = () => {
   // ---- end of API fn calls ----
 
   // ---- start of API calls with useEffect ----
-  useEffect(() => {
-    getUID({ userEmail });
-  }, []);
+  // useEffect(() => {
+  //   getUID({ userEmail });
+  // }, []);
 
   // get activities per week
   useEffect(() => {
@@ -115,6 +120,7 @@ const HistoryPage: FC = () => {
       const uid = UID;
 
       try {
+        console.log("called history");
         const activityResponse = await fetch('/api/HistoryActivities', {
           method: 'POST',
           headers: {
@@ -131,7 +137,6 @@ const HistoryPage: FC = () => {
         }
 
         const activityData = await activityResponse.json();
-        console.log(activityData);
 
         const mapActivities = await Promise.all(activityData.data.rows.map(async (activity: any) => {
           return {

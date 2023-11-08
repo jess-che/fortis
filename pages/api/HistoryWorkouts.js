@@ -21,6 +21,7 @@ export default async (req, res) => {
         try {
             const values = [uid, aid];
             const results = await pool.query(History, values);
+            console.log(results);
            
             
             console.log('Success! HistoryWorkouts');
