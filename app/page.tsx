@@ -105,6 +105,23 @@ const Home: React.FC = () => {
       throw new Error('Failed to save user');
     }
   };
+
+  const saveNameToDatabase = async (user: any) => {
+    const response = await fetch('/api/insertAuthName', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        uid: getCookie('uid'), 
+        email: user.name
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to save name');
+    }
+  };
   // ---- end of API fn ----
 
   // ---- start of API calls ----
@@ -120,6 +137,20 @@ const Home: React.FC = () => {
       console.log('User saved successfully');
     } catch (error) {
       console.error('Error saving user:', error);
+    }
+  };
+
+  const handleNameSave = async () => {
+    if (!user) {
+      console.error('No user is logged in.');
+      return;
+    }
+
+    try {
+      await saveNameToDatabase(user);
+      console.log('User name saved successfully');
+    } catch (error) {
+      console.error('Error saving name:', error);
     }
   };
   // ---- end of API calls ----
@@ -385,6 +416,8 @@ const Home: React.FC = () => {
   // if first login, insert into database
   if (firstLogin) {
     handleUserSave();
+    getUID(user.email);
+    handleNameSave();
   }
 
   // since you got here, you are logged in 
