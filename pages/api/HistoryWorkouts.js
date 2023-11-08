@@ -20,12 +20,13 @@ export default async (req, res) => {
 
         try {
             const values = [uid, aid];
-            console.log('Querying database');
             const results = await pool.query(History, values);
+           
             
+            console.log('Success! HistoryWorkouts');
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('Error occurred');
+            console.log('error in HistoryWorkouts');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }

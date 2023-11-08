@@ -100,7 +100,7 @@ const Home: React.FC = () => {
     return (
         // login layout so we get the login effect
         <LoginLayout>
-          <div className="flex flex-col w-screen min-h-[90vh] justify-center items-center">
+          <div className="flex flex-col w-screen min-h-[90vh] mb-5 justify-center items-center">
             {/* default center */}
             <Image
               src="/animated/pulseLogo.svg"

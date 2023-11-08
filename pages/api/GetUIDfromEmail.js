@@ -44,14 +44,13 @@ export default async (req, res) => {
         console.log(searchQuery);
 
         try {
-            // Insert user
             const values = [`%${searchQuery}%`];
-            console.log('hi2');
             const results = await pool.query(searchUserEmail, values);
 
+            console.log('Success! GetUIDfromEmail');
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('hello2');
+            console.log('Error in GetUIDfromEmail');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }

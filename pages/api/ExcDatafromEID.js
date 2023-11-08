@@ -45,14 +45,13 @@ export default async (req, res) => {
         const searchQuery = req.body.searchQuery;
 
         try {
-            // Insert user
             const values = [`${searchQuery}`];
-            console.log('hi');
             const results = await pool.query(History, values);
             
+            console.log('Success! ExcDatafromEID');
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('hello');
+            console.log('error in ExcDatafromEID');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
