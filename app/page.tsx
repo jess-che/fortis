@@ -7,7 +7,7 @@ import LoginLayout from '@/components/login_layout';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useState, useEffect } from 'react';
 import { setCookie, getCookie} from 'cookies-next';
-import './StreakGraphs.css';
+import '@/pages/StreakGraphs.css';
 import StreakGraph from '@/pages/StreakGraph'; // Adjust the path as needed
 import MuscleModel from '@/pages/MuscleModel'; // Adjust the path as needed
 import '@/public/styles/home.css';                              // style sheet for animations
