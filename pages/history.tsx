@@ -1,10 +1,10 @@
 'use client'
 import React, { FC, useEffect, useState } from 'react';
-import DefLayout from '@/components/def_layout';
-import LoginLayout    from '@/components/login_layout';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useUser } from '@auth0/nextjs-auth0/client';
+import DefLayout                          from '@/components/def_layout';
+import LoginLayout                        from '@/components/login_layout';  // !! FOR DEVELOPMENT ONLY
+import Image                              from 'next/image';
+import Link                               from 'next/link';
+import { useUser }                        from '@auth0/nextjs-auth0/client';
 import '@/public/styles/history.css';     // style sheet for animations
 
 // define type
@@ -35,16 +35,7 @@ const HistoryPage: FC = () => {
   const [loading, setLoading] = useState(true);       // if data is being fetched for sidebar
   // ---- end of use state components ----
 
-  // if (isLoading) {
-  //   // Handle loading state, e.g., show a loading spinner
-  //   return <div>Loading...</div>;
-  // }
-  // !! FOR DEVELOPMENT ONLY !!
-  let userEmail = "x@gmail.com";               // default email if no user
-  // if (user) {
-  //   userEmail = user.email || "";   // if user
-  // }
-  // console.log("History: " + userEmail);
+  let userEmail = "";     // declare userEmail
 
   // ---- start of API fn calls ----
   // get UID from auth0 email
@@ -73,7 +64,6 @@ const HistoryPage: FC = () => {
     catch {
       // !! FOR DEVELOPMENT ONLY !! 
       console.log("Unable to fetch UID using getUIDfromEmail. Manually setting it to b24.... now");
-      // setUID("71379e91-a26a-41fe-9901-4478133052e6");
       setUID("b24e24f4-86b8-4b83-8947-b2472a43b436");
     }
   };
@@ -231,17 +221,6 @@ const HistoryPage: FC = () => {
   // ---- end of random functions ----
 
   // ---- start of reformating ----
-  // format date in MM/DD/YYYY for displaying activity date
-  const formatDate = (dateString: any) => {
-    console.log(dateString);
-    const date = new Date(dateString);
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0 indexed in JavaScript
-    const day = String(date.getDate()).padStart(2, '0');
-    const year = date.getFullYear();
-
-    return `${month}/${day}/${year}`;
-  }
-
   // format interval to something readable and printable for activity
   function intervalToString(interval: any) {
     let str = '';
