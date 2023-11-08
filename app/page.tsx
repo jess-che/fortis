@@ -154,7 +154,7 @@ const Home: React.FC = () => {
     };
 
     handleAnalStreaks();
-  }, [user, loading, error]);
+  }, [user, loading, isLoading, error]);
 
   // work time this week
   const time = async () => {
