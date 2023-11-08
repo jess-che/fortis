@@ -13,35 +13,33 @@ VALUES ($1, $2, DEFAULT, $3, $4, $5, $6);
 // ... rest of your imports and setup ...
 
 export default async (req, res) => {
-    if (req.method === 'POST') {
-        const exercises = req.body;
-        console.log(exercises);
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method Not Allowed' });
+    }
 
-        // Check if exercises is an array
-        if (!Array.isArray(exercises)) {
-            return res.status(400).json({ error: 'Exercises data must be an array' });
+    const exercises = req.body;
+
+    if (!Array.isArray(exercises)) {
+        return res.status(400).json({ error: 'Exercises data must be an array' });
+    }
+
+    const client = await pool.connect();
+
+    try {
+        await client.query('BEGIN');
+
+        for (let exercise of exercises) {
+            const { aid, eid, exerciseName, numberOfReps, numberOfSets, uid, weight } = exercise;
+            await client.query(insertQuery, [uid, aid, eid, weight, numberOfReps, numberOfSets]);
         }
 
-        try {
-            await pool.connect(); // Start a new connection to the database
-            await pool.query('BEGIN'); // Begin a transaction
-
-            for (let exercise of exercises) {
-                const { aid, eid, exerciseName, numberOfReps, numberOfSets, uid, weight } = exercise;
-                console.log(exercise);
-                await pool.query(insertQuery, [uid, aid, eid, weight, numberOfReps, numberOfSets]);
-            }
-
-            await pool.query('COMMIT'); // Commit the transaction
-            res.status(200).json({ message: 'Exercises saved successfully' });
-        } catch (err) {
-            await pool.query('ROLLBACK'); // Roll back the transaction on error
-            console.error(err);
-            res.status(500).json({ error: err.message });
-        } finally {
-            pool.end(); // Close the database connection
-        }
-    } else {
-        res.status(405).end(); // Method Not Allowed
+        await client.query('COMMIT');
+        res.status(200).json({ message: 'Exercises saved successfully' });
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.error('Error during the transaction', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+        client.release();
     }
 };
