@@ -53,13 +53,6 @@ const Home: React.FC = () => {
     // Add the scroll event listener
     window.addEventListener('scroll', handleScroll);
 
-    // Call AnalStreaks with the user's email if the user is logged in
-    // if (user && !loading && !error) {
-    //   AnalStreaks().catch(console.error);
-    //   Bob().catch(console.error);
-    //   time().catch(console.error);
-    // }
-
     // Cleanup function to remove the event listener when the component unmounts
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -132,6 +125,7 @@ const Home: React.FC = () => {
   // ---- end of API calls ----
 
   // ---- start of analytics API calls ----
+  // this calls analytics on mount and once user uid gets updated
   useEffect(() => {
     const handleAnalStreaks = async () => {
       try {
@@ -162,6 +156,7 @@ const Home: React.FC = () => {
     handleAnalStreaks();
   }, [user]);
 
+  // work time this week
   const time = async() => {
     try {
       const res = await fetch('api/TotalTime', {
@@ -205,6 +200,7 @@ const Home: React.FC = () => {
     }
   };
 
+  // Bob, just bob
   const Bob = async() => {
     try {
       const res = await fetch('api/Bob', {
@@ -234,7 +230,7 @@ const Home: React.FC = () => {
     }
   };
 
-  // The AnalStreaks function to fetch and process data
+  // the your workout streaks
   const AnalStreaks = async () => {
     setIsLoading(true); // Set loading to true before fetching data
     try {
@@ -279,6 +275,7 @@ const Home: React.FC = () => {
     }
     setIsLoading(false); // Set loading to false after fetching data
   };
+  // ---- end of analytics API calls ----
 
   // home if no one is logged in
   if (!user) {
