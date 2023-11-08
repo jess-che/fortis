@@ -59,7 +59,6 @@ const HistoryPage: FC = () => {
           searchQuery: userEmail,
         }),
       });
-      console.log(response);
 
       if (!response.ok) {
         throw new Error('Failed to get UID from email');
@@ -119,6 +118,11 @@ const HistoryPage: FC = () => {
       getUID({ userEmail });
       const uid = UID;
 
+      const today = new Date();
+      const today2 = new Date(); 
+      today2.setDate(today.getDate()+ 1); // add a day for edge case
+      const currentDateString = new Date(today2).toISOString().split('T')[0];   // make postgre able
+
       try {
         console.log("called history");
         const activityResponse = await fetch('/api/HistoryActivities', {
@@ -128,6 +132,7 @@ const HistoryPage: FC = () => {
           },
           body: JSON.stringify({
             searchQuery: uid,
+            currentDate: currentDateString,
             weeksBefore: weeksBefore
           }),
         });
@@ -228,6 +233,7 @@ const HistoryPage: FC = () => {
   // ---- start of reformating ----
   // format date in MM/DD/YYYY for displaying activity date
   const formatDate = (dateString: any) => {
+    console.log(dateString);
     const date = new Date(dateString);
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0 indexed in JavaScript
     const day = String(date.getDate()).padStart(2, '0');
@@ -240,7 +246,9 @@ const HistoryPage: FC = () => {
   function intervalToString(interval: any) {
     let str = '';
 
-    console.log(interval);
+    if (!interval) {
+      return str;
+    }
 
     if (interval.days) {
       str += interval.days + 'd ';
@@ -345,7 +353,7 @@ const HistoryPage: FC = () => {
                   <div className="flex flex-col relative z-10">
                     <div className="text-2xl">{activity.Activity_name}</div>
                     {/* <span>Aid: {activity.Aid}&emsp;</span> */}
-                    <span>Date: {formatDate(activity.Date)}</span>
+                    <span>Date: {activity.formatted_date}</span>
                     {/* <span>Start Time: {activity.Start_Time}</span> */}
                     <span>Duration: {intervalToString(activity.Duration)}</span>
                   </div>
@@ -378,9 +386,9 @@ const HistoryPage: FC = () => {
                         {activityData.find(activity => activity.Aid === specificAid).Activity_name}
                       </div>
                       <div className="text-xl opacity-70">
-                        Date: {" "} {formatDate(
-                          activityData.find(activity => activity.Aid === specificAid).Date
-                        )} {" "} || {" "}
+                        Date: {" "} {
+                          activityData.find(activity => activity.Aid === specificAid).formatted_date
+                        } {" "} || {" "}
                         Duration: {" "} {intervalToString(
                           activityData.find(activity => activity.Aid === specificAid).Duration
                         )}
@@ -548,7 +556,7 @@ const HistoryPage: FC = () => {
                   <div className="flex flex-col relative z-10">
                     <div className="text-2xl">{activity.Activity_name}</div>
                     {/* <span>Aid: {activity.Aid}&emsp;</span> */}
-                    <span>Date: {formatDate(activity.Date)}</span>
+                    <span>Date: {activity.formatted_date}</span>
                     {/* <span>Start Time: {activity.Start_Time}</span> */}
                     <span>Duration: {intervalToString(activity.Duration)}</span>
                   </div>
@@ -581,9 +589,9 @@ const HistoryPage: FC = () => {
                         {activityData.find(activity => activity.Aid === specificAid).Activity_name}
                       </div>
                       <div className="text-xl opacity-70">
-                        Date: {" "} {formatDate(
-                          activityData.find(activity => activity.Aid === specificAid).Date
-                        )} {" "} || {" "}
+                        Date: {" "} {
+                          activityData.find(activity => activity.Aid === specificAid).formatted_date
+                        } {" "} || {" "}
                         Duration: {" "} {intervalToString(
                           activityData.find(activity => activity.Aid === specificAid).Duration
                         )}
