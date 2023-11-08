@@ -55,7 +55,9 @@ const Home: React.FC = () => {
 
     // Call AnalStreaks with the user's email if the user is logged in
     if (user && !loading && !error) {
-      AnalStreaks({ email: user.email }).catch(console.error);
+      AnalStreaks().catch(console.error);
+      Bob().catch(console.error);
+      time().catch(console.error);
     }
 
     // Cleanup function to remove the event listener when the component unmounts
@@ -129,7 +131,38 @@ const Home: React.FC = () => {
   };
   // ---- end of API calls ----
 
-  const time = async (query: any) => {
+  // ---- start of analytics API calls ----
+  useEffect(() => {
+    const handleAnalStreaks = async () => {
+      try {
+        await time();
+        console.log('time Done');
+      } catch (error) {
+        console.error('Error calling time:', error);
+      }
+
+      try {
+        await Bob();
+        console.log('Bobby Done');
+      } catch (error) {
+        console.error('Error calling Bob:', error);
+      }
+
+      try {
+        await AnalStreaks();
+        console.log('AnalStreaks called successfully');
+      } catch (error) {
+        console.error('Error calling AnalStreaks:', error);
+      }
+      // } else {
+      //   console.error('User email is not available.');
+      // }
+    };
+
+    handleAnalStreaks();
+  }, []);
+
+  const time = async() => {
     try {
       const res = await fetch('api/TotalTime', {
         method: 'POST',
@@ -172,7 +205,7 @@ const Home: React.FC = () => {
     }
   };
 
-  const Bob = async (query: any) => {
+  const Bob = async() => {
     try {
       const res = await fetch('api/Bob', {
         method: 'POST',
@@ -202,7 +235,7 @@ const Home: React.FC = () => {
   };
 
   // The AnalStreaks function to fetch and process data
-  const AnalStreaks = async (query: any) => {
+  const AnalStreaks = async () => {
     setIsLoading(true); // Set loading to true before fetching data
     try {
       const response = await fetch('api/AnalStreaks', {
@@ -246,39 +279,6 @@ const Home: React.FC = () => {
     }
     setIsLoading(false); // Set loading to false after fetching data
   };
-
-
-  useEffect(() => {
-    const handleAnalStreaks = async () => {
-      // Uncomment the user check if necessary, assuming `user` is defined in your component's scope.
-      // if (user && user.email) {
-      try {
-        await time({ email: "lalanmao@gmail.com" });
-        console.log('time Done');
-      } catch (error) {
-        console.error('Error calling time:', error);
-      }
-
-      try {
-        await Bob({ email: "lalanmao@gmail.com" });
-        console.log('Bobby Done');
-      } catch (error) {
-        console.error('Error calling Bob:', error);
-      }
-
-      try {
-        await AnalStreaks({ email: "lalanmao10@gmail.com" });
-        console.log('AnalStreaks called successfully');
-      } catch (error) {
-        console.error('Error calling AnalStreaks:', error);
-      }
-      // } else {
-      //   console.error('User email is not available.');
-      // }
-    };
-
-    handleAnalStreaks();
-  }, []);
 
   // home if no one is logged in
   if (!user) {
