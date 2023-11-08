@@ -111,6 +111,7 @@ const HistoryPage: FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);   // set loading to true while data is being fetched
+      getUID({ userEmail });
       const uid = UID;
 
       try {
@@ -153,6 +154,7 @@ const HistoryPage: FC = () => {
   // get data for specific activity
   useEffect(() => {
     const fetchData = async () => {
+      getUID({ userEmail });
       const uid = UID;
 
       try {
