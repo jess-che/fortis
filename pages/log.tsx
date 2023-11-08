@@ -33,7 +33,7 @@ const LogPage: FC = () => {
   }
   let userEmail = "lalalanmao10@gmail.com";
   if (user) {
-   userEmail = user.email || "ello";
+    userEmail = user.email || "ello";
   }
 
   console.log(userEmail);
@@ -386,7 +386,91 @@ const LogPage: FC = () => {
   }
   return (
     <DefLayout>
-      no user
+      <div className={styles.container}>
+        {/* pls don't delete -- jessica will work on log here without ruining stuff */}
+        <div>
+          <Link href="/log2/activity">
+            <p className="px-3 opacity-75 text-l hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">JESSICA's TRYING TO FIGURE OUT LOG</p>
+          </Link>
+        </div>
+        {/* pls don't delete */}
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Exercise Name {userEmail} {UID} </th>
+              <th>Number of Reps</th>
+              <th>Number of Sets</th>
+              <th>Weight</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {exercises.map((exercise, index) => (
+              <tr key={index}>
+                {editingIndex === index ? (
+                  <>
+                    <td><input type="text" value={editingExercise.exerciseName} onChange={(event) => setEditingExercise({ ...editingExercise, exerciseName: event.target.value })} /></td>
+                    <td><input type="number" value={editingExercise.numberOfReps} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfReps: Number(event.target.value) })} /></td>
+                    <td><input type="number" value={editingExercise.numberOfSets} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfSets: Number(event.target.value) })} /></td>
+                    <td><input type="number" value={editingExercise.weight} onChange={(event) => setEditingExercise({ ...editingExercise, weight: Number(event.target.value) })} /></td>
+                    <td>
+                      <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
+                      <button onClick={() => handleUneditExercise(index)}> <img src="/images/unedit.png" alt="Unedit icon" width="24" height="30" /> </button>
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <td>{exercise.exerciseName}</td>
+                    <td>{exercise.numberOfReps}</td>
+                    <td>{exercise.numberOfSets}</td>
+                    <td>{exercise.weight}</td>
+                    <td>
+                      <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
+                      <button onClick={() => handleEditExercise(index)}> <img src="/images/edit1.png" alt="Edit icon" width="24" height="30" /> </button>
+                    </td>
+                  </>
+                )}
+              </tr>
+            ))}
+            <tr>
+              <td>
+                <Select
+                  className={styles.dropdown}
+                  options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
+                  name='exerciseName'
+                  value={exerciseOptions.find(option => option === currentExercise.exerciseName) ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName } : null}
+                  onChange={handleSelectChange}
+                  isSearchable
+                  loadingMessage={() => 'Loading...'}
+                  noOptionsMessage={() => 'No options found.'}
+                />
+                <button className={styles.button} onClick={toggleSidePanel} id={styles["sidepanel-toggle-button"]}>All exercises</button>
+
+              </td>
+              <td>
+                <input className={styles.input} type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} />
+              </td>
+              <td>
+                <input className={styles.input} type="number" name="numberOfSets" placeholder="Number of Sets" value={currentExercise.numberOfSets} onChange={handleInputChange} />
+              </td>
+              <td>
+                <input className={styles.input} type="number" name="weight" placeholder="Weight" value={currentExercise.weight} onChange={handleInputChange} />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <button className={styles.button} id={styles["add-exercise-button"]} onClick={handleAddExercise}>Add Exercise</button>
+        <button className={styles.button} id={styles["save-exercise-button"]} onClick={handleSaveExercises}>Finish Workout</button>
+      </div>
+
+      {isSidePanelOpen && (
+        <aside className={styles.sidePanel}>
+          <div className="search-bar-container" style={searchBarStyle}>
+            <SearchBar />
+          </div>
+        </aside>
+      )}
     </DefLayout>
   )
 }
