@@ -266,6 +266,7 @@ const HistoryPage: FC = () => {
   // ---- start of reformating ----
 
   if (user) {
+    userEmail = user.email || ""; 
     return (
       <DefLayout>
         {/* main container */}
