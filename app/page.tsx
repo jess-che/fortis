@@ -321,56 +321,6 @@ const Home: React.FC = () => {
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat rem quidem inventore consequatur quis doloribus perspiciatis illum nam dicta tempora facilis, corporis atque. Quos beatae, laudantium dicta cupiditate pariatur doloremque?
           </div>
           {/* scrolling effects */}
-
-
-          {/* !!! FOR TESTING ONLY !!! */}
-          <div className="w-[100vw] min-h-[50vh] mt-[50vh] flex flex-row items-center justify-center">
-            <div className="flex flex-col items-center justify-center">
-              <div className="text-center">
-                <span className='text-4xl font-bold'>Welcome {" "}{" "}</span>
-                <span className='text-5xl font-bold glow-text'>Name</span>
-                <span className='text-4xl font-bold'>!</span>
-              </div>
-
-              <div className="w-full h-[1px] bg-white mt-5 opacity-50"></div>
-
-              {!isLoading && parsedData.length > 0 ? (
-                <StreakGraph parsedData={parsedData} />
-              ) : (
-                isLoading ? <p>Loading...</p> : <p>No data to display</p>
-              )}
-
-              <div className="w-full h-[1px] bg-white mb-5 opacity-50"></div>
-
-              <div className="flex flex-col items-center">
-                <div className="ml-2 text-2xl"> <span className='text-3xl font-bold'>Workout Time This Week: {" "}{" "}</span>
-                  {` ${workoutTimeText}`}
-                </div>
-
-                <div className=" mr-3">
-                  {workoutChangeText && (
-                    <div
-                      style={{
-                        color: isPositiveChange ? '#55BBA4' : '#C32E67', // Replace with your desired colors
-                      }}
-                      className="text-xl"
-                    >
-                      ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div>
-              {muscleGroups.length > 0 ? (
-                <MuscleModel muscleGroups={muscleGroups} />
-              ) : (
-                <p>Loading muscle groups...</p> // or some placeholder text
-              )}
-            </div>
-          </div>
-          {/* !!! FOR TESTING ONLY !!! */}
         </div>
       </LoginLayout>
     );
@@ -437,7 +387,12 @@ const Home: React.FC = () => {
             {muscleGroups.length > 0 ? (
               <MuscleModel muscleGroups={muscleGroups} />
             ) : (
-              <p>Loading muscle groups...</p> // or some placeholder text
+              <Image
+                src="/images/front_bobby/Front.svg"
+                alt="Front View"
+                width={400}
+                height={700}
+              />
             )}
           </div>
         </div>
