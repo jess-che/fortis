@@ -21,7 +21,6 @@ const HistoryPage: FC = () => {
   // ---- start of use state components ----
   // save user uid (only have to query once per load)
   const [UID, setUID] = useState('');
-  const [userEmail, setUserEmail] = useState(''); 
 
   // activity and workout data
   const [activityData, setActivityData] = useState<any[]>([]);
@@ -41,7 +40,7 @@ const HistoryPage: FC = () => {
   //   return <div>Loading...</div>;
   // }
   // !! FOR DEVELOPMENT ONLY !!
-  // let userEmail = "x@gmail.com";               // default email if no user
+  let userEmail = "x@gmail.com";               // default email if no user
   // if (user) {
   //   userEmail = user.email || "";   // if user
   // }
@@ -110,7 +109,7 @@ const HistoryPage: FC = () => {
   // ---- start of API calls with useEffect ----
   useEffect(() => {
     getUID({ userEmail });
-  }, [userEmail]);
+  }, []);
 
   // get activities per week
   useEffect(() => {
@@ -280,7 +279,8 @@ const HistoryPage: FC = () => {
   // ---- start of reformating ----
 
   if (user) {
-    setUserEmail(user.email || "");
+    userEmail = user.email || ""; 
+    getUID({ userEmail });
     return (
       <DefLayout>
         {/* main container */}
