@@ -64,7 +64,7 @@ const Home: React.FC = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [user, loading, error]); // Dependencies for useEffect
+  }, []); // Dependencies for useEffect
   // ---- end of scroll effect ----
 
   // ---- start of API fn ----
@@ -160,7 +160,7 @@ const Home: React.FC = () => {
     };
 
     handleAnalStreaks();
-  }, []);
+  }, [user, loading, error]);
 
   const time = async() => {
     try {
