@@ -5,6 +5,7 @@ import LoginLayout                        from '@/components/login_layout';  // 
 import Image                              from 'next/image';
 import Link                               from 'next/link';
 import { useUser }                        from '@auth0/nextjs-auth0/client';
+import { setCookie, getCookie}            from 'cookies-next';
 import '@/public/styles/history.css';     // style sheet for animations
 
 // define type
@@ -13,6 +14,7 @@ type DataType = {
 };
 
 const HistoryPage: FC = () => {
+  console.log(getCookie('uid'));
   // ---- start of auth0 setup ----
   // set auth0 state
   const { user, error, isLoading } = useUser();
@@ -20,7 +22,7 @@ const HistoryPage: FC = () => {
 
   // ---- start of use state components ----
   // save user uid (only have to query once per load)
-  const [UID, setUID] = useState('');
+  // const [UID, setUID] = useState('');
 
   // activity and workout data
   const [activityData, setActivityData] = useState<any[]>([]);
@@ -39,34 +41,34 @@ const HistoryPage: FC = () => {
 
   // ---- start of API fn calls ----
   // get UID from auth0 email
-  const getUID = async (query: any) => {
-    try {
-      const response = await fetch('/api/GetUIDfromEmail', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          searchQuery: userEmail,
-        }),
-      });
+  // const getUID = async (query: any) => {
+  //   try {
+  //     const response = await fetch('/api/GetUIDfromEmail', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         searchQuery: userEmail,
+  //       }),
+  //     });
 
-      if (!response.ok) {
-        throw new Error('Failed to get UID from email');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('Failed to get UID from email');
+  //     }
 
-      const data = await response.json();
-      setUID(data.data.rows[0].uid);
-      console.log("Got UID in History: ");
-      console.group(UID);
-      return data.data.rows[0].uid;
-    }
-    catch {
-      // !! FOR DEVELOPMENT ONLY !! 
-      console.log("Unable to fetch UID using getUIDfromEmail. Manually setting it to b24.... now");
-      setUID("b24e24f4-86b8-4b83-8947-b2472a43b436");
-    }
-  };
+  //     const data = await response.json();
+  //     setUID(data.data.rows[0].uid);
+  //     console.log("Got UID in History: ");
+  //     console.group(UID);
+  //     return data.data.rows[0].uid;
+  //   }
+  //   catch {
+  //     // !! FOR DEVELOPMENT ONLY !! 
+  //     console.log("Unable to fetch UID using getUIDfromEmail. Manually setting it to b24.... now");
+  //     setUID("b24e24f4-86b8-4b83-8947-b2472a43b436");
+  //   }
+  // };
 
   // get exercise data from EID
   const ExcDatafromEID = async (query: any) => {
@@ -97,16 +99,16 @@ const HistoryPage: FC = () => {
   // ---- end of API fn calls ----
 
   // ---- start of API calls with useEffect ----
-  useEffect(() => {
-    getUID({ userEmail });
-  }, []);
+  // useEffect(() => {
+  //   getUID({ userEmail });
+  // }, []);
 
   // get activities per week
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);   // set loading to true while data is being fetched
-      getUID({ userEmail });
-      const uid = UID;
+      // getUID({ userEmail });
+      // const uid = UID;
 
       const today = new Date();
       const today2 = new Date(); 
@@ -121,7 +123,7 @@ const HistoryPage: FC = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            searchQuery: uid,
+            searchQuery: getCookie('uid'),
             currentDate: currentDateString,
             weeksBefore: weeksBefore
           }),
@@ -149,13 +151,13 @@ const HistoryPage: FC = () => {
     };
 
     fetchData();
-  }, [weeksBefore, UID]);   // need UID as dependency, because want to update when UID changes (is intially fetched)
+  }, [weeksBefore]);   // need UID as dependency, because want to update when UID changes (is intially fetched)
 
   // get data for specific activity
   useEffect(() => {
     const fetchData = async () => {
-      getUID({ userEmail });
-      const uid = UID;
+      // getUID({ userEmail });
+      // const uid = UID;
 
       try {
         const workoutResponse = await fetch('/api/HistoryWorkouts', {
@@ -164,7 +166,7 @@ const HistoryPage: FC = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            uid: uid,
+            uid: getCookie('uid'),
             aid: specificAid,
           }),
         });
@@ -194,7 +196,7 @@ const HistoryPage: FC = () => {
     };
 
     fetchData();
-  }, [specificAid, UID]);   // need UID as dependency, because want to update when UID changes (is intially fetched)
+  }, [specificAid]);   // need UID as dependency, because want to update when UID changes (is intially fetched)
   // ---- end of API calls with useEffect ----
 
   // ---- start of random functions ----
@@ -258,8 +260,8 @@ const HistoryPage: FC = () => {
   // ---- start of reformating ----
 
   if (user) {
-    userEmail = user.email || ""; 
-    getUID({ userEmail });
+    // userEmail = user.email || ""; 
+    // getUID({ userEmail });
     return (
       <DefLayout>
         {/* main container */}
