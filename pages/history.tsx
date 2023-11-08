@@ -119,7 +119,7 @@ const HistoryPage: FC = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            searchQuery: UID,
+            searchQuery: getUID({ userEmail }),
             weeksBefore: weeksBefore
           }),
         });
@@ -159,7 +159,7 @@ const HistoryPage: FC = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            uid: UID,
+            uid: getUID({ userEmail }),
             aid: specificAid,
           }),
         });
