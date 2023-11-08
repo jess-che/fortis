@@ -182,21 +182,20 @@ const Home: React.FC = () => {
     handleUserSave();
   }
 
-  if (user) {
-    getUID(user.email);
+  getUID(user.email);
 
-    // since you got here, you are logged in -- see this
-    return (
-      <DefLayout>
+  // since you got here, you are logged in -- see this
+  return (
+    <DefLayout>
 
-        <div>
-          Welcome, {user.name}. This is home page.
-          Your email is {user.email}.
-        </div>
+      <div>
+        Welcome, {user.name}. This is home page.
+        Your email is {user.email}.
+      </div>
 
-      </DefLayout>
-    );
-  }
+    </DefLayout>
+  );
+
 }
 
 export default Home;
