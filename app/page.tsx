@@ -107,6 +107,7 @@ const Home: React.FC = () => {
   };
 
   const saveNameToDatabase = async (user: any) => {
+    console.log(getCookie('uid'), user.name);
     const response = await fetch('/api/insertAuthName', {
       method: 'POST',
       headers: {
