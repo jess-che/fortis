@@ -253,26 +253,26 @@ const Home: React.FC = () => {
     const handleAnalStreaks = async () => {
       // Uncomment the user check if necessary, assuming `user` is defined in your component's scope.
       // if (user && user.email) {
-        try {
-          await time({ email: "lalanmao@gmail.com" });
-          console.log('time Done');
-        } catch (error) {
-          console.error('Error calling time:', error);
-        }
+      try {
+        await time({ email: "lalanmao@gmail.com" });
+        console.log('time Done');
+      } catch (error) {
+        console.error('Error calling time:', error);
+      }
 
-        try {
-          await Bob({ email: "lalanmao@gmail.com" });
-          console.log('Bobby Done');
-        } catch (error) {
-          console.error('Error calling Bob:', error);
-        }
+      try {
+        await Bob({ email: "lalanmao@gmail.com" });
+        console.log('Bobby Done');
+      } catch (error) {
+        console.error('Error calling Bob:', error);
+      }
 
-        try {
-          await AnalStreaks({ email: "lalanmao10@gmail.com" });
-          console.log('AnalStreaks called successfully');
-        } catch (error) {
-          console.error('Error calling AnalStreaks:', error);
-        }
+      try {
+        await AnalStreaks({ email: "lalanmao10@gmail.com" });
+        console.log('AnalStreaks called successfully');
+      } catch (error) {
+        console.error('Error calling AnalStreaks:', error);
+      }
       // } else {
       //   console.error('User email is not available.');
       // }
@@ -328,47 +328,43 @@ const Home: React.FC = () => {
 
 
           {/* !!! FOR TESTING ONLY !!! */}
-          <div className="w-[100vw] min-h-[50vh] bg-red-400 mt-[50vh]">
-            {/* <button onClick={handleAnalStreaksButtonClick}>Get Streaks</button> */}
-            {!isLoading && parsedData.length > 0 ? (
-              <StreakGraph parsedData={parsedData} />
-            ) : (
-              isLoading ? <p>Loading...</p> : <p>No data to display</p>
-            )}
-          </div>
-          <div className="workout-time-display">
-            <h2>Weekly Workout Summary</h2>
-            <p>Workout Time This Week:
-              <span className="workout-time"   >
-                {workoutTimeText}
-                {workoutChangeText && (
-                  <span className={isPositiveChange ? 'positive-change' : 'negative-change'}>
-                    ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
-                  </span>
-                )}
-              </span>
-            </p>
-          </div>
+          <div className="w-[100vw] min-h-[50vh] mt-[50vh] flex flex-row items-center justify-center">
+            <div className="flex flex-col items-center justify-center">
+              {!isLoading && parsedData.length > 0 ? (
+                <StreakGraph parsedData={parsedData} />
+              ) : (
+                isLoading ? <p>Loading...</p> : <p>No data to display</p>
+              )}
 
-          <style jsx>{`
-          .workout-time {
-              font-weight: bold;
-              font-size: 1.2em;
-              color: #007bff; /*Or any color that suits your design */
-          }
-          .positive-change {
-            color: #228B22;
-          }
-          .negative-change {
-            color: $990F02;
-          }
-        `}</style>
-          <div>
-            {muscleGroups.length > 0 ? (
-              <MuscleModel muscleGroups={muscleGroups} />
-            ) : (
-              <p>Loading muscle groups...</p> // or some placeholder text
-            )}
+              <div className="w-full h-[1px] bg-white mb-5"></div>
+
+              <div className="flex flex-col items-center">
+                <div className="ml-2 text-2xl"> <span className='text-3xl font-bold'>Workout Time This Week: {" "}{" "}</span>
+                  {` ${workoutTimeText}`}
+                </div>
+
+                <div className=" mr-3">
+                  {workoutChangeText && (
+                    <div
+                      style={{
+                        color: isPositiveChange ? '#55BBA4' : '#C32E67', // Replace with your desired colors
+                      }}
+                      className="text-xl"
+                    >
+                      ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              {muscleGroups.length > 0 ? (
+                <MuscleModel muscleGroups={muscleGroups} />
+              ) : (
+                <p>Loading muscle groups...</p> // or some placeholder text
+              )}
+            </div>
           </div>
           {/* !!! FOR TESTING ONLY !!! */}
         </div>
@@ -398,47 +394,43 @@ const Home: React.FC = () => {
         Welcome, {user.name}. This is home page.
         Your email is {user.email}.
 
-        <div className="let me cook">
-          {/* <button onClick={handleAnalStreaksButtonClick}>Get Streaks</button> */}
-          {!isLoading && parsedData.length > 0 ? (
-            <StreakGraph parsedData={parsedData} />
-          ) : (
-            isLoading ? <p>Loading...</p> : <p>No data to display</p>
-          )}
-        </div>
-        <div className="workout-time-display">
-          <h2>Weekly Workout Summary</h2>
-          <p>Workout Time This Week:
-            <span className="workout-time"   >
-              {workoutTimeText}
-              {workoutChangeText && (
-                <span className={isPositiveChange ? 'positive-change' : 'negative-change'}>
-                  ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
-                </span>
-              )}
-            </span>
-          </p>
-        </div>
+        <div className="w-[100vw] min-h-[50vh] mt-[50vh] flex flex-row items-center justify-center">
+          <div className="flex flex-col items-center justify-center">
+            {!isLoading && parsedData.length > 0 ? (
+              <StreakGraph parsedData={parsedData} />
+            ) : (
+              isLoading ? <p>Loading...</p> : <p>No data to display</p>
+            )}
 
-        <style jsx>{`
-        .workout-time {
-            font-weight: bold;
-            font-size: 1.2em;
-            color: #007bff; /*Or any color that suits your design */
-        }
-        .positive-change {
-          color: #228B22;
-        }
-        .negative-change {
-          color: $990F02;
-        }
-      `}</style>
-        <div>
-          {muscleGroups.length > 0 ? (
-            <MuscleModel muscleGroups={muscleGroups} />
-          ) : (
-            <p>Loading muscle groups...</p> // or some placeholder text
-          )}
+            <div className="w-full h-[1px] bg-white mb-5"></div>
+
+            <div className="flex flex-col items-center">
+              <div className="ml-2 text-2xl"> <span className='text-3xl font-bold'>Workout Time This Week: {" "}{" "}</span>
+                {` ${workoutTimeText}`}
+              </div>
+
+              <div className=" mr-3">
+                {workoutChangeText && (
+                  <div
+                    style={{
+                      color: isPositiveChange ? '#55BBA4' : '#C32E67', // Replace with your desired colors
+                    }}
+                    className="text-xl"
+                  >
+                    ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div>
+            {muscleGroups.length > 0 ? (
+              <MuscleModel muscleGroups={muscleGroups} />
+            ) : (
+              <p>Loading muscle groups...</p> // or some placeholder text
+            )}
+          </div>
         </div>
       </div>
 
@@ -448,4 +440,3 @@ const Home: React.FC = () => {
 }
 
 export default Home;
-

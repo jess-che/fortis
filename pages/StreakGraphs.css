@@ -1,92 +1,32 @@
-.streak-graph-container {
-    background-color: inherit; /* Dark background */
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 700px; /* Adjust as needed */
-    margin: auto;
-  }
-  
-  .title {
-    text-align: center;
-    color: #ffffff;
-    margin-bottom: 20px;
-    font-size: 2rem;
-  }
-  
-  .streak-graph {
-    display: grid;
-    grid-template-columns: repeat(7, 50px); /* Bigger boxes for each day */
-    grid-template-rows: repeat(4, 50px); /* Bigger boxes for each week */
-    gap: 5px;
-    justify-content: center;
-  }
-  
-  .day-box {
-    width: 50px; /* Bigger box width */
-    height: 50px; /* Bigger box height */
-    border-radius: 5px; /* Adjusted rounded corners */
-    border: 2px solid #303030; /* Adjusted border color for the boxes */
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .day-box:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-  }
-  
-  .day-label {
-    color: #ffffff;
-    font-size: 1.25rem; /* Bigger font size for day labels */
-  }
-  
-  .tooltip {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 150px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -60px;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  .tooltip .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
-  }
-  
-  .legend {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-    color: #fff;
-  }
-  
-  .legend span {
-    display: inline-block;
-    width: 30px;
-    height: 20px;
-    margin-right: 10px;
-    border: 1px solid #fff;
-  }
-  
+.day-box:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  min-width: 12vw;
+  background-color: #121212e6;
+  color: #fff;
+  text-align: center;
+  border-radius: 1rem;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #121212e6 transparent transparent transparent;
+}
