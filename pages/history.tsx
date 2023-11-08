@@ -21,9 +21,6 @@ const HistoryPage: FC = () => {
   // ---- end of auth0 setup ---- 
 
   // ---- start of use state components ----
-  // save user uid (only have to query once per load)
-  // const [UID, setUID] = useState('');
-
   // activity and workout data
   const [activityData, setActivityData] = useState<any[]>([]);
   const [data, setData] = useState<DataType | null>(null);
@@ -37,40 +34,8 @@ const HistoryPage: FC = () => {
   const [loading, setLoading] = useState(true);       // if data is being fetched for sidebar
   // ---- end of use state components ----
 
-  let userEmail = "";     // declare userEmail
-
   // ---- start of API fn calls ----
-  // get UID from auth0 email
-  // const getUID = async (query: any) => {
-  //   try {
-  //     const response = await fetch('/api/GetUIDfromEmail', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         searchQuery: userEmail,
-  //       }),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Failed to get UID from email');
-  //     }
-
-  //     const data = await response.json();
-  //     setUID(data.data.rows[0].uid);
-  //     console.log("Got UID in History: ");
-  //     console.group(UID);
-  //     return data.data.rows[0].uid;
-  //   }
-  //   catch {
-  //     // !! FOR DEVELOPMENT ONLY !! 
-  //     console.log("Unable to fetch UID using getUIDfromEmail. Manually setting it to b24.... now");
-  //     setUID("b24e24f4-86b8-4b83-8947-b2472a43b436");
-  //   }
-  // };
-
-  // get exercise data from EID
+    // get exercise data from EID
   const ExcDatafromEID = async (query: any) => {
     try {
       const response = await fetch('/api/ExcDatafromEID', {
@@ -97,22 +62,14 @@ const HistoryPage: FC = () => {
     }
   };
   // ---- end of API fn calls ----
-
-  // ---- start of API calls with useEffect ----
-  // useEffect(() => {
-  //   getUID({ userEmail });
-  // }, []);
-
   // get activities per week
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);   // set loading to true while data is being fetched
-      // getUID({ userEmail });
-      // const uid = UID;
 
       const today = new Date();
       const today2 = new Date(); 
-      today2.setDate(today.getDate()+ 1); // add a day for edge case
+      today2.setDate(today.getDate()+ 1);                                       // add a day for edge case
       const currentDateString = new Date(today2).toISOString().split('T')[0];   // make postgre able
 
       try {
@@ -151,14 +108,11 @@ const HistoryPage: FC = () => {
     };
 
     fetchData();
-  }, [weeksBefore]);   // need UID as dependency, because want to update when UID changes (is intially fetched)
+  }, [weeksBefore]);   
 
   // get data for specific activity
   useEffect(() => {
     const fetchData = async () => {
-      // getUID({ userEmail });
-      // const uid = UID;
-
       try {
         const workoutResponse = await fetch('/api/HistoryWorkouts', {
           method: 'POST',
@@ -196,7 +150,7 @@ const HistoryPage: FC = () => {
     };
 
     fetchData();
-  }, [specificAid]);   // need UID as dependency, because want to update when UID changes (is intially fetched)
+  }, [specificAid]);   
   // ---- end of API calls with useEffect ----
 
   // ---- start of random functions ----
@@ -260,8 +214,6 @@ const HistoryPage: FC = () => {
   // ---- start of reformating ----
 
   if (user) {
-    // userEmail = user.email || ""; 
-    // getUID({ userEmail });
     return (
       <DefLayout>
         {/* main container */}
