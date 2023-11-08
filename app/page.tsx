@@ -6,7 +6,7 @@ import DefLayout from '@/components/def_layout';
 import LoginLayout from '@/components/login_layout';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useState, useEffect } from 'react';
-import { setCookie, getCookie} from 'cookies-next';
+import { setCookie, getCookie } from 'cookies-next';
 import '@/pages/StreakGraphs.css';
 import StreakGraph from '@/pages/StreakGraph'; // Adjust the path as needed
 import MuscleModel from '@/pages/MuscleModel'; // Adjust the path as needed
@@ -140,30 +140,30 @@ const Home: React.FC = () => {
           searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436",
         }),
       });
-  
+
       if (!res.ok) {
         throw new Error('Failed to fetch data');
       }
-  
+
       const data = await res.json();
       const totalMinutes = Math.round(parseFloat(data.data.rows[0].total_workout_minutes));
       const previousWeekMinutes = Math.round(parseFloat(data.data.rows[0].previous_week_minutes));
-  
+
       // Calculate percentage change
       let percentageChange = 0;
       if (previousWeekMinutes > 0) {
         percentageChange = ((totalMinutes - previousWeekMinutes) / previousWeekMinutes) * 100;
       }
-  
+
       const hours = Math.floor(totalMinutes / 60);
       const minutes = totalMinutes % 60;
-  
+
       const formattedTime = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
       const changeClass = percentageChange > 0 ? 'positive-change' : 'negative-change';
       setWorkoutTimeText(`${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`);
       setWorkoutChangeText(`${percentageChange.toFixed(1)}%`);
       setIsPositiveChange(percentageChange > 0);
-  
+
       console.log(formattedTime);
 
       return formattedTime; // This line returns the formatted time, which can be used elsewhere
@@ -171,7 +171,7 @@ const Home: React.FC = () => {
       console.error('Error in time:', error);
       return ''; // Return an empty string or some default value in case of an error
     }
-  }; 
+  };
 
   const Bob = async (query: any) => {
     try {
@@ -184,17 +184,17 @@ const Home: React.FC = () => {
           searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436",
         }),
       });
-  
+
       if (!res.ok) {
         throw new Error('Failed to fetch data');
       }
-  
+
       const data = await res.json();
       const muscleGroups = data.data.rows.map((row: { muscle_group: any; total_sets: string; }) => ({
         muscle_group: row.muscle_group,
         sets: parseInt(row.total_sets)
       }));
-  
+
       setMuscleGroups(muscleGroups); // Update the state
       console.log(muscleGroups);
     } catch (error) {
@@ -202,8 +202,8 @@ const Home: React.FC = () => {
     }
   };
 
-   // The AnalStreaks function to fetch and process data
-   const AnalStreaks = async (query: any) => {
+  // The AnalStreaks function to fetch and process data
+  const AnalStreaks = async (query: any) => {
     setIsLoading(true); // Set loading to true before fetching data
     try {
       const response = await fetch('api/AnalStreaks', {
@@ -248,34 +248,38 @@ const Home: React.FC = () => {
     setIsLoading(false); // Set loading to false after fetching data
   };
 
-  
-  const handleAnalStreaksButtonClick = async () => {
-    //if (user && user.email) {
-      try {
-        await time({email: "lalanmao@gmail.com"});
-        console.log('time Done')
-      } catch (error) {
-        console.error('Error calling time:', error);
-      }
 
-      try {
-        await Bob({email: "lalanmao@gmail.com"});
-        console.log('Bobby Done')
-      } catch (error) {
-        console.error('Error calling Bob:', error);
-      }
+  useEffect(() => {
+    const handleAnalStreaks = async () => {
+      // Uncomment the user check if necessary, assuming `user` is defined in your component's scope.
+      // if (user && user.email) {
+        try {
+          await time({ email: "lalanmao@gmail.com" });
+          console.log('time Done');
+        } catch (error) {
+          console.error('Error calling time:', error);
+        }
 
-      try {
-        await AnalStreaks({ email: "lalanmao10@gmail.com" });
-        console.log('AnalStreaks called successfully');
-      } catch (error) {
-        console.error('Error calling AnalStreaks:', error);
-      }
+        try {
+          await Bob({ email: "lalanmao@gmail.com" });
+          console.log('Bobby Done');
+        } catch (error) {
+          console.error('Error calling Bob:', error);
+        }
 
-    //} else {
-    //  console.error('User email is not available.');
-    //}
-  };
+        try {
+          await AnalStreaks({ email: "lalanmao10@gmail.com" });
+          console.log('AnalStreaks called successfully');
+        } catch (error) {
+          console.error('Error calling AnalStreaks:', error);
+        }
+      // } else {
+      //   console.error('User email is not available.');
+      // }
+    };
+
+    handleAnalStreaks();
+  }, []);
 
   // home if no one is logged in
   if (!user) {
@@ -321,6 +325,52 @@ const Home: React.FC = () => {
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat rem quidem inventore consequatur quis doloribus perspiciatis illum nam dicta tempora facilis, corporis atque. Quos beatae, laudantium dicta cupiditate pariatur doloremque?
           </div>
           {/* scrolling effects */}
+
+
+          {/* !!! FOR TESTING ONLY !!! */}
+          <div className="w-[100vw] min-h-[50vh] bg-red-400 mt-[50vh]">
+            {/* <button onClick={handleAnalStreaksButtonClick}>Get Streaks</button> */}
+            {!isLoading && parsedData.length > 0 ? (
+              <StreakGraph parsedData={parsedData} />
+            ) : (
+              isLoading ? <p>Loading...</p> : <p>No data to display</p>
+            )}
+          </div>
+          <div className="workout-time-display">
+            <h2>Weekly Workout Summary</h2>
+            <p>Workout Time This Week:
+              <span className="workout-time"   >
+                {workoutTimeText}
+                {workoutChangeText && (
+                  <span className={isPositiveChange ? 'positive-change' : 'negative-change'}>
+                    ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
+                  </span>
+                )}
+              </span>
+            </p>
+          </div>
+
+          <style jsx>{`
+          .workout-time {
+              font-weight: bold;
+              font-size: 1.2em;
+              color: #007bff; /*Or any color that suits your design */
+          }
+          .positive-change {
+            color: #228B22;
+          }
+          .negative-change {
+            color: $990F02;
+          }
+        `}</style>
+          <div>
+            {muscleGroups.length > 0 ? (
+              <MuscleModel muscleGroups={muscleGroups} />
+            ) : (
+              <p>Loading muscle groups...</p> // or some placeholder text
+            )}
+          </div>
+          {/* !!! FOR TESTING ONLY !!! */}
         </div>
       </LoginLayout>
     );
@@ -349,102 +399,47 @@ const Home: React.FC = () => {
         Your email is {user.email}.
 
         <div className="let me cook">
-        <button onClick={handleAnalStreaksButtonClick}>Get Streaks</button>
-        {!isLoading && parsedData.length > 0 ? (
-          <StreakGraph parsedData={parsedData} />
-        ) : (
-          isLoading ? <p>Loading...</p> : <p>No data to display</p>
-        )}
-      </div>
-      <div className="workout-time-display">
-        <h2>Weekly Workout Summary</h2>
-        <p>Workout Time This Week:
-          <span className="workout-time"   >
-            {workoutTimeText}
-            {workoutChangeText && (
-              <span className={isPositiveChange ? 'positive-change' : 'negative-change'}>
-                ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
-              </span>
-            )}
-          </span>
-        </p>
-      </div>
+          <button onClick={handleAnalStreaksButtonClick}>Get Streaks</button>
+          {!isLoading && parsedData.length > 0 ? (
+            <StreakGraph parsedData={parsedData} />
+          ) : (
+            isLoading ? <p>Loading...</p> : <p>No data to display</p>
+          )}
+        </div>
+        <div className="workout-time-display">
+          <h2>Weekly Workout Summary</h2>
+          <p>Workout Time This Week:
+            <span className="workout-time"   >
+              {workoutTimeText}
+              {workoutChangeText && (
+                <span className={isPositiveChange ? 'positive-change' : 'negative-change'}>
+                  ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
+                </span>
+              )}
+            </span>
+          </p>
+        </div>
 
-      <style jsx>{`
-      .workout-time {
-          font-weight: bold;
-          font-size: 1.2em;
-          color: #007bff; /*Or any color that suits your design */
-      }
-      .positive-change {
-        color: #228B22;
-      }
-      .negative-change {
-        color: $990F02;
-      }
-    `}</style>
-      <div>
-        {muscleGroups.length > 0 ? (
-          <MuscleModel muscleGroups={muscleGroups} />
-        ) : (
-          <p>Loading muscle groups...</p> // or some placeholder text
-        )}
-      </div>
-
-
-      <style jsx>{`
-        .container {
-            display: flex;
-            flex-direction: row;
-
+        <style jsx>{`
+        .workout-time {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #007bff; /*Or any color that suits your design */
         }
-        .profile-container {
-          width: 30vw;
-          background-color: #f5f5f5;
-          padding: 20px;
-          border-radius: 8px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-          color: black;
-          margin-right: 10px;
+        .positive-change {
+          color: #228B22;
         }
-
-        .profile-info {
-          margin-top: 20px;
-        }
-
-        p {
-          margin: 8px 0;
-        }
-
-        .edit-button {
-            border: 2px solid black;
-            border-radius: 8px;
-            margin-left: 15px;
-        }
-
-        .preferences {
-            width: 30vw;
-            background-color: #f5f5f5;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            color: black;
-          }
-
-        .lightdarkmode {
-            border: 2px solid black;
-            border-radius: 8px;
-            padding: 3px;
-        }
-
-        .delete-account {
-            color: red;
-            border: 2px solid red;
-            border-radius: 8px;
-            padding: 3px;
+        .negative-change {
+          color: $990F02;
         }
       `}</style>
-
+        <div>
+          {muscleGroups.length > 0 ? (
+            <MuscleModel muscleGroups={muscleGroups} />
+          ) : (
+            <p>Loading muscle groups...</p> // or some placeholder text
+          )}
+        </div>
       </div>
 
     </DefLayout>
