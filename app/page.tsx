@@ -157,7 +157,7 @@ const Home: React.FC = () => {
   }, [user]);
 
   // work time this week
-  const time = async() => {
+  const time = async () => {
     try {
       const res = await fetch('api/TotalTime', {
         method: 'POST',
@@ -201,7 +201,7 @@ const Home: React.FC = () => {
   };
 
   // Bob, just bob
-  const Bob = async() => {
+  const Bob = async () => {
     try {
       const res = await fetch('api/Bob', {
         method: 'POST',
@@ -326,13 +326,21 @@ const Home: React.FC = () => {
           {/* !!! FOR TESTING ONLY !!! */}
           <div className="w-[100vw] min-h-[50vh] mt-[50vh] flex flex-row items-center justify-center">
             <div className="flex flex-col items-center justify-center">
+              <div className="text-center">
+                <span className='text-4xl font-bold'>Welcome {" "}{" "}</span>
+                <span className='text-5xl font-bold glow-text'>Name</span>
+                <span className='text-4xl font-bold'>!</span>
+              </div>
+
+              <div className="w-full h-[1px] bg-white mt-5 opacity-50"></div>
+
               {!isLoading && parsedData.length > 0 ? (
                 <StreakGraph parsedData={parsedData} />
               ) : (
                 isLoading ? <p>Loading...</p> : <p>No data to display</p>
               )}
 
-              <div className="w-full h-[1px] bg-white mb-5"></div>
+              <div className="w-full h-[1px] bg-white mb-5 opacity-50"></div>
 
               <div className="flex flex-col items-center">
                 <div className="ml-2 text-2xl"> <span className='text-3xl font-bold'>Workout Time This Week: {" "}{" "}</span>
@@ -387,11 +395,16 @@ const Home: React.FC = () => {
   return (
     <DefLayout>
       <div>
-        Welcome, {user.name}. This is home page.
-        Your email is {user.email}.
-
-        <div className="w-[100vw] min-h-[50vh] flex flex-row items-center justify-center">
+        <div className="w-[100vw] min-h-[90vh] flex flex-row items-center justify-center">
           <div className="flex flex-col items-center justify-center">
+            <div className="text-center">
+              <span className='text-4xl font-bold'>Welcome {" "}{" "}</span>
+              <span className='text-5xl font-bold glow-text'>{user.name}</span>
+              <span className='text-4xl font-bold'>!</span>
+            </div>
+
+            <div className="w-full h-[1px] bg-white mt-5 opacity-50"></div>
+
             {!isLoading && parsedData.length > 0 ? (
               <StreakGraph parsedData={parsedData} />
             ) : (
