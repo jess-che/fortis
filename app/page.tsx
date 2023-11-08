@@ -54,11 +54,11 @@ const Home: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
 
     // Call AnalStreaks with the user's email if the user is logged in
-    if (user && !loading && !error) {
-      AnalStreaks().catch(console.error);
-      Bob().catch(console.error);
-      time().catch(console.error);
-    }
+    // if (user && !loading && !error) {
+    //   AnalStreaks().catch(console.error);
+    //   Bob().catch(console.error);
+    //   time().catch(console.error);
+    // }
 
     // Cleanup function to remove the event listener when the component unmounts
     return () => {
