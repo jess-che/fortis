@@ -24,6 +24,11 @@ const StreakGraph = ({ parsedData }) => {
     return date;
   }).filter(date => date <= today);
 
+  // get last two digits of datekey
+  function getDayFromDateKey(dateKey) {
+    return dateKey.substring(dateKey.length - 2);
+  }
+
   return (
     <div className="p-5 rounded-xl max-w-[75vw]">
       <div className="text-center text-3xl font-bold mb-3">Your Workout Streaks</div>
@@ -48,7 +53,7 @@ const StreakGraph = ({ parsedData }) => {
             <div key={dateKey} className="day-box min-w-[6vw] min-h-[6vh] rounded-md relative flex flex-row items-center justify-center border border-white border-opacity-50" style={{ backgroundColor: color }}>
               <div className="relative inline-block">
                 <div className="tooltiptext">Date: {dateKey}, <br />  Duration: {duration} minutes</div>
-                <div className="text-xl">{date.getDate()}</div>
+                <div className="text-xl">{getDayFromDateKey(dateKey)}</div>
               </div>
             </div>
           );
