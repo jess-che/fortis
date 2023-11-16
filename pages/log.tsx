@@ -46,7 +46,6 @@ const LogPage: FC = () => {
   const toggleSidePanel = () => {
     setIsSidePanelOpen(!isSidePanelOpen);
   };
-
   const [currentExercise, setCurrentExercise] = useState<Exercise>({
     exerciseName: '',
     numberOfReps: 0,
@@ -59,7 +58,6 @@ const LogPage: FC = () => {
   const [exerciseOptions, setExerciseOptions] = useState<string[]>([]);
 
   useEffect(() => {
-
     // this is all for getting exercises and displaying
     // not related to saveExercises at all    
     const fetchExercises = async () => {
