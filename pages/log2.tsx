@@ -146,6 +146,11 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
 
   // Keep the original handleInputChange function for the input elements (inputting in sep/rep/weght)
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = parseInt(e.target.value, 10);
+    if (newValue < 0) {
+      e.target.value = '0';
+    }
+
     setCurrentExercise({ ...currentExercise, [e.target.name]: e.target.value });
   }
   // ---- end of code for user input ----
@@ -375,13 +380,13 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                       />
                     </td>
                     <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
-                      <input className="text-white text-md text-center text-opacity-75" type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} />
+                      <input className="text-white text-md text-center text-opacity-75" type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} min="0"/>
                     </td>
                     <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
-                      <input className="text-white text-md text-center text-opacity-75" type="number" name="numberOfSets" placeholder="Number of Sets" value={currentExercise.numberOfSets} onChange={handleInputChange} />
+                      <input className="text-white text-md text-center text-opacity-75" type="number" name="numberOfSets" placeholder="Number of Sets" value={currentExercise.numberOfSets} onChange={handleInputChange} min="0"/>
                     </td>
                     <td className="minw-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
-                      <input className="text-white text-md text-center text-opacity-75" type="number" name="weight" placeholder="Weight" value={currentExercise.weight} onChange={handleInputChange} />
+                      <input className="text-white text-md text-center text-opacity-75" type="number" name="weight" placeholder="Weight" value={currentExercise.weight} onChange={handleInputChange} min="0"/>
                     </td>
                     <td className="minw-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
                     <button className={styles.button} id={styles["add-exercise-button"]} onClick={handleAddExercise}>Add Exercise</button>
