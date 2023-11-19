@@ -290,6 +290,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     }),
     dropdownIndicator: (base: any, state: any) => ({
       ...base,
+      color: 'white',
       transition: 'all .2s ease',
       transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : null,
     }),
