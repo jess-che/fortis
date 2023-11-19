@@ -73,11 +73,16 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   const toggleLogging = () => {
     // Toggle the value of 'log' cookie
     setCookie('log', isLogging ? 'false' : 'true');
+
+    // also want to clear local storage
+    setExercises([]);
+
     // Cause the component to re-render
     window.location.reload();
   };
   // ---- end of api/cookie to change between log or not log ----
 
+  // ---- start of code to display exercises in the drop down menu ---- 
   useEffect(() => {
     // this is all for getting exercises and displaying
     // not related to saveExercises at all    
@@ -124,11 +129,14 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
 
     fetchExercises();
   }, []);
+  // ---- end of code to display exercises in the drop down menu ---- 
 
-  // Create a new handler for the Select component
+  // ---- start of code for user input ----
+  // Create a new handler for the Select component (chosing exercise from drop down menu)
   const handleSelectChange = (selectedOption: { value: string, label: string } | null, actionMeta: any) => {
     if (actionMeta.action === 'select-option') {
       const selectedExerciseName = selectedOption ? selectedOption.value : '';
+
       // Find the eid that matches the selected exercise name
       const eidIndex = exerciseOptions.findIndex(name => name === selectedExerciseName);
       const selectedEid = eidIndex !== -1 ? exerciseEids[eidIndex] : 0;
@@ -136,19 +144,20 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     }
   }
 
-  // Keep the original handleInputChange function for the input elements
+  // Keep the original handleInputChange function for the input elements (inputting in sep/rep/weght)
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentExercise({ ...currentExercise, [e.target.name]: e.target.value });
   }
+  // ---- end of code for user input ----
 
-  // WE GET THE AID FROM THE DATABASE
+  // ---- start of storing to database ----
+  // get the aid from database (largest aid from uid)
   const fetchAid = async (query: any) => {
     const response = await fetch('/api/getAID', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      // body: JSON.stringify({ eid })
       body: JSON.stringify({
         searchQuery: getCookie('uid'),
       }),
@@ -159,11 +168,10 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     }
 
     const data = await response.json();
-    // console.log(data.data.rows[0].Aid);
     return parseInt(data.data.rows[0].Aid);
   };
 
-  // THIS IS FOR SAVING EXERCISES TO THE DATABASE
+  // save the exercises to uid, aid
   const handleSaveExercises = async () => {
     try {
       console.log(exercises)
@@ -189,7 +197,9 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
       // alert('Failed to save exercises');
     }
   }
+  // ---- end of storing to database ----
 
+  // ---- start of local storage for data persistance ---- 
   // This useEffect loads the exercises from localStorage when this component first mounts
   // this is only caching and data persistence, not related to actual functionality 
   useEffect(() => {
@@ -202,7 +212,6 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   useEffect(() => {
     localStorage.setItem('exercises', JSON.stringify(exercises));
   }, [exercises]);  // This dependency array means this hook runs whenever `exercises` changes
-
 
   // THIS IS ONLY FOR MODIFYING EXERCISES TO THE LOCAL STORAGE, NOT CONNECTED TO DATABASE YET
   const handleAddExercise = async () => {
@@ -225,7 +234,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     }
   };
 
-  // LOCAL
+  // Locally remove one exercise from set
   const handleRemoveExercise = (index: number) => {
     const newExercises = [...exercises];
     newExercises.splice(index, 1);
@@ -238,15 +247,6 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     newExercises[index] = editingExercise;
     setExercises(newExercises);
     setEditingIndex(-1);
-  };
-
-  const searchBarStyle = {
-    margin: 'auto',
-    width: '90%',
-    display: 'flex',
-    flexDirection: 'column' as 'column',
-    alignItems: 'center',
-    minWidth: '200px',
   };
 
   const [editingIndex, setEditingIndex] = useState(-1);
@@ -264,102 +264,141 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     aid: 0,
     uid: '',
   });
+  // ---- end of local storage for data persistance ----
+
+
+  // ---- start of styling ----
+  const searchBarStyle = {
+    margin: 'auto',
+    width: '90%',
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+    alignItems: 'center',
+    minWidth: '200px',
+  };
+
+  const customSelect = {
+    control: (styles: any) => ({ ...styles, backgroundColor: 'rgba(255, 255, 255, 0.05)' }),
+    option: (provided: any, state: any) => ({
+      ...provided,
+      color: state.isSelected ? 'white' : 'black', // Text color for options
+      backgroundColor: state.isSelected ? 'blue' : 'rgba(255, 255, 255, 0.75)' // Background color for options
+    }),
+    singleValue: (provided: any, state: any) => ({
+      ...provided,
+      color: 'white' 
+    }),
+    dropdownIndicator: (base: any, state: any) => ({
+      ...base,
+      transition: 'all .2s ease',
+      transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : null,
+    }),
+  };
+  // ---- end of styling ----
 
   return (
     <DefLayout>
-      <div className="">
+      <div className="flex w-screen min-h-[90vh] justify-center items-center">
+        {/* if the user is in the middle of a log (or priorly was logging) */}
         {isLogging ? (
           <>
-          <div className={styles.container}>
-            <button onClick={toggleLogging}>
-              Stop Logging
-            </button>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>Exercise Name</th>
-                  <th>Number of Reps</th>
-                  <th>Number of Sets</th>
-                  <th>Weight</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {exercises.map((exercise, index) => (
-                  <tr key={index}>
-                    {editingIndex === index ? (
-                      <>
-                        <td><input type="text" value={editingExercise.exerciseName} onChange={(event) => setEditingExercise({ ...editingExercise, exerciseName: event.target.value })} /></td>
-                        <td><input type="number" value={editingExercise.numberOfReps} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfReps: Number(event.target.value) })} /></td>
-                        <td><input type="number" value={editingExercise.numberOfSets} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfSets: Number(event.target.value) })} /></td>
-                        <td><input type="number" value={editingExercise.weight} onChange={(event) => setEditingExercise({ ...editingExercise, weight: Number(event.target.value) })} /></td>
-                        <td>
-                          <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
-                          <button onClick={() => handleUneditExercise(index)}> <img src="/images/unedit.png" alt="Unedit icon" width="24" height="30" /> </button>
-                        </td>
-                      </>
-                    ) : (
-                      <>
-                        <td>{exercise.exerciseName}</td>
-                        <td>{exercise.numberOfReps}</td>
-                        <td>{exercise.numberOfSets}</td>
-                        <td>{exercise.weight}</td>
-                        <td>
-                          <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
-                          <button onClick={() => handleEditExercise(index)}> <img src="/images/edit1.png" alt="Edit icon" width="24" height="30" /> </button>
-                        </td>
-                      </>
-                    )}
+            <div className="flex flex-col overflow-hidden">
+              <button onClick={toggleLogging}>
+                Cancel Log
+              </button>
+
+              <table className="mx-auto my-8 max-w-lg border border-white border-opacity-50">
+                <thead>
+                  <tr>
+                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[20vw] text-center align-middle">Exercise Name</th>
+                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle ">Reps</th>
+                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Sets</th>
+                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Weight</th>
+                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Action</th>
                   </tr>
-                ))}
-                <tr>
-                  <td>
-                    <Select
-                      className={styles.dropdown}
-                      options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
-                      name='exerciseName'
-                      value={exerciseOptions.find(option => option === currentExercise.exerciseName) ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName } : null}
-                      onChange={handleSelectChange}
-                      isSearchable
-                      loadingMessage={() => 'Loading...'}
-                      noOptionsMessage={() => 'No options found.'}
-                    />
-                    <button className={styles.button} onClick={toggleSidePanel} id={styles["sidepanel-toggle-button"]}>All exercises</button>
+                </thead>
+                <tbody>
+                  {exercises.map((exercise, index) => (
+                    <tr key={index}>
+                      {editingIndex === index ? (
+                        <>
+                          {/* 
+                          I don't think this does anything
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="text" value={editingExercise.exerciseName} onChange={(event) => setEditingExercise({ ...editingExercise, exerciseName: event.target.value })} className="w-full text-center"/></td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="number" value={editingExercise.numberOfReps} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfReps: Number(event.target.value) })} className="w-full text-center"/></td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="number" value={editingExercise.numberOfSets} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfSets: Number(event.target.value) })} className="w-full text-center"/></td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="number" value={editingExercise.weight} onChange={(event) => setEditingExercise({ ...editingExercise, weight: Number(event.target.value) })} className="w-full text-center"/></td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                            <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
+                            <button onClick={() => handleUneditExercise(index)}> <img src="/images/unedit.png" alt="Unedit icon" width="24" height="30" /> </button>
+                          </td> 
+                          */}
+                        </>
+                      ) : (
+                        <>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.exerciseName}</td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.numberOfReps}</td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.numberOfSets}</td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.weight}</td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">
+                            <button className="px-1" onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
+                            <button className="px-1"  onClick={() => handleEditExercise(index)}> <img src="/images/edit1.png" alt="Edit icon" width="24" height="30" /> </button>
+                          </td>
+                        </>
+                      )}
+                    </tr>
+                  ))}
+                  <tr>
+                    <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                      <Select
+                        styles={customSelect}
+                        className="w-full rounded-md text-black"
+                        options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
+                        name='exerciseName'
+                        value={exerciseOptions.find(option => option === currentExercise.exerciseName) ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName } : null}
+                        onChange={handleSelectChange}
+                        isSearchable
+                        loadingMessage={() => 'Loading...'}
+                        noOptionsMessage={() => 'No options found.'}
+                      />
+                    </td>
+                    <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                      <input className="text-white text-md text-center text-opacity-75" type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} />
+                    </td>
+                    <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                      <input className="text-white text-md text-center text-opacity-75" type="number" name="numberOfSets" placeholder="Number of Sets" value={currentExercise.numberOfSets} onChange={handleInputChange} />
+                    </td>
+                    <td className="minw-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                      <input className="text-white text-md text-center text-opacity-75" type="number" name="weight" placeholder="Weight" value={currentExercise.weight} onChange={handleInputChange} />
+                    </td>
+                    <td className="minw-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                    <button className={styles.button} id={styles["add-exercise-button"]} onClick={handleAddExercise}>Add Exercise</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
 
-                  </td>
-                  <td>
-                    <input className={styles.input} type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} />
-                  </td>
-                  <td>
-                    <input className={styles.input} type="number" name="numberOfSets" placeholder="Number of Sets" value={currentExercise.numberOfSets} onChange={handleInputChange} />
-                  </td>
-                  <td>
-                    <input className={styles.input} type="number" name="weight" placeholder="Weight" value={currentExercise.weight} onChange={handleInputChange} />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <button className={styles.button} id={styles["add-exercise-button"]} onClick={handleAddExercise}>Add Exercise</button>
-            <button className={styles.button} id={styles["save-exercise-button"]} onClick={handleSaveExercises}>Finish Workout</button>
-          </div>
-
-          {isSidePanelOpen && (
-            <aside className={styles.sidePanel}>
-              <div className="search-bar-container" style={searchBarStyle}>
-                <SearchBar />
-              </div>
-            </aside>
-          )}
+              
+              <button className={styles.button} onClick={toggleSidePanel} id={styles["sidepanel-toggle-button"]}>All exercises</button>
+              <button className={styles.button} id={styles["save-exercise-button"]} onClick={handleSaveExercises}>Finish Workout</button>
+            </div>
+            <div>
+              {isSidePanelOpen && (
+                <aside className={styles.sidePanel}>
+                  <div className="search-bar-container" style={searchBarStyle}>
+                    <SearchBar />
+                  </div>
+                </aside>
+              )}
+            </div>
           </>
         ) : (
-        <button onClick={addActivity}>
-          Add Activity
-        </button>
+          <button onClick={addActivity}>
+            Add Activity
+          </button>
         )}
-
       </div>
-    </DefLayout>
+    </DefLayout >
   );
 }
 
