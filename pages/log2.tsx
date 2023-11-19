@@ -279,10 +279,16 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
 
   const customSelect = {
     control: (styles: any) => ({ ...styles, backgroundColor: 'rgba(255, 255, 255, 0.05)' }),
+    menu: (styles: any) => ({ ...styles, backgroundColor: 'rgba(18, 18, 18, 0.6)', backdropFilter: 'blur(2px)',  WebkitBackdropFilter: 'blur(2px)',}),
     option: (provided: any, state: any) => ({
       ...provided,
-      color: state.isSelected ? 'white' : 'black', // Text color for options
-      backgroundColor: state.isSelected ? 'blue' : 'rgba(255, 255, 255, 0.75)' // Background color for options
+      color: state.isSelected ? 'white' : 'white', // Text color for options
+      backgroundColor: state.isSelected ? 'rgba(85, 187, 164, .75)' : 'rgba(255, 255, 255, 0)', // Background color for options
+      ':active': {
+        backgroundColor: state.isSelected
+          ? 'rgba(255, 255, 255, 0)'
+          : 'rgba(85, 187, 164, .5)', 
+      },
     }),
     singleValue: (provided: any, state: any) => ({
       ...provided,
@@ -291,8 +297,13 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     dropdownIndicator: (base: any, state: any) => ({
       ...base,
       color: 'white',
+      opacity: .75,
       transition: 'all .2s ease',
       transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : null,
+      ':hover': {
+        color: 'white', // Color on hover
+        opacity: 0.6, // Adjust transparency on hover
+      },
     }),
   };
   // ---- end of styling ----
