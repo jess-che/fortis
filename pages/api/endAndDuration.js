@@ -9,7 +9,8 @@ const query = `
 UPDATE activity
 SET 
     "End_time" = NOW(),
-    "Duration" = NOW() - "Start_time"
+    "Duration" = NOW() - "Start_time",
+    "Activity_name" = $2
 WHERE 
     "Aid" = (SELECT "Aid" FROM activity
              WHERE "Uid" = $1
@@ -21,10 +22,10 @@ WHERE
 
 export default async (req, res) => {
     if (req.method === 'POST') {
-        const { uid } = req.body;
+        const { uid, name } = req.body;
 
         try {
-            const values = [uid];
+            const values = [uid, name];
             await pool.query(query, values);
 
             res.status(200).json({ message: 'EndTime and Duration Updated Successfully' });

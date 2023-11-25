@@ -47,6 +47,10 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   });
   // use state for exercise options
   const [exerciseOptions, setExerciseOptions] = useState<string[]>([]);
+
+  // State for the name title and whether the edit mode is enabled
+  const [title, setTitle] = useState('No Name');
+  const [isEditing, setIsEditing] = useState(false);
   // ---- end of use state declarations + other declarations ----
 
   // ---- start of api/cookie to change between log or not log ----
@@ -103,6 +107,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
         },
         body: JSON.stringify({
           uid: getCookie('uid'),
+          name: title,
         }),
       });
       if (!response.ok) throw new Error('Network response was not ok.');
@@ -149,6 +154,23 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   // ---- end of api/cookie to change between log or not log ----
 
   // ---- start of code to display exercises in the drop down menu ---- 
+  // Handles the change of the input field
+  const handleChange = (event: any) => {
+    setTitle(event.target.value);
+  };
+
+  // Toggles the edit mode
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+  };
+
+  // Toggle editing off when enter key hit
+  const handleKeyDown = (event: any) => {
+    if (event.key === 'Enter') {
+      setIsEditing(!isEditing);
+    }
+  };
+
   useEffect(() => {
     // this is all for getting exercises and displaying
     // not related to saveExercises at all    
@@ -387,6 +409,27 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
           <>
             <div className="w-screen flex flex-row items-center justify-center">
               <div className="flex flex-col overflow-hidden items-center">
+                <div>
+                  {isEditing ? (
+                    // Render an input field if edit mode is active
+                    <input
+                      type="text"
+                      className="font-bold text-3xl text-center text-white text-opacity-80"
+                      value={title}
+                      onChange={handleChange}
+                      onKeyDown={handleKeyDown}
+                      autoFocus
+                    />
+                  ) : (
+                    // Render the title text if not in edit mode
+                    <div onClick={toggleEdit} className="font-bold text-3xl text-center flex flex-row">{title}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 h-4 ml-2 opacity-70">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                      </svg>
+
+                    </div>
+                  )}
+                </div>
                 <table className="mx-auto my-8 max-w-lg border border-white border-opacity-50">
                   <thead>
                     <tr>
@@ -504,9 +547,21 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
             </div>
           </>
         ) : (
-          <button onClick={addActivity}>
-            Add Activity
-          </button>
+          <div className="flex flex-row w-screen min-h-[90vh] justify-center items-center">
+            {/* this side add ability to edit name */}
+            <div className="flex flex-col w-[60vw] bg-red-400">
+              <button onClick={addActivity}>
+                Add Activity
+              </button>
+            </div>
+
+            <div className="h-[80vh] w-[2px] mx-[1vw] bg-white bg-opacity-50"></div>
+
+            {/* this side show most popular templates */}
+            <div className="flex flex-col w-[30vw] bg-red-400">
+
+            </div>
+          </div>
         )}
       </div>
     </DefLayout >
