@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+/* change all font to Nunito */
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+/* animation to make add activity spin */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin-smooth {
+    transition: transform 0.5s ease;
+}
+
+.button-hover:hover svg {
+    animation: spin 2s linear infinite;
+}
+.button-hover:hover{
+    opacity: .75;
+}

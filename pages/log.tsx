@@ -1,13 +1,18 @@
-'use client'
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { FC, useState, useEffect, ChangeEvent } from 'react';
 import DefLayout from '@/components/def_layout';
 import styles from './LogPage.module.css';
 import Select from 'react-select';
 import SearchBar from "./SearchBarComponents/SearchBar";
 import { useUser } from '@auth0/nextjs-auth0/client';
+import { setCookie, getCookie } from 'cookies-next';
+import { GetServerSideProps } from 'next';
+import React, { FC, useState, useEffect, ChangeEvent } from 'react';
+import '@/public/styles/log.css';     // style sheet for animations
+import { useRouter } from 'next/router';
 
+
+// exercise type
 interface Exercise {
   exerciseName: string;
   numberOfReps: number;
@@ -18,34 +23,20 @@ interface Exercise {
   uid: string;
 }
 
-const LogPage: FC = () => {
-  // Auth0 here onwards
-  const { user, error, isLoading } = useUser();
-  if (isLoading) {
-    // Handle loading state, e.g., show a loading spinner
-    return <div>Loading...</div>;
-  }
-  if (error) {
-    // Handle the error state, e.g., display an error message
-    // return <div>Error: {error.message}</div>;
-    let userEmail = "dummy";
-  }
-  let userEmail = "lalalanmao10@gmail.com";
-  if (user) {
-    userEmail = user.email || "ello";
-  }
-
-  console.log(userEmail);
-  // END OF Auth0
-
+const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
+  // ---- start of use state declarations + other declarations ----
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [exerciseEids, setExerciseEids] = useState<number[]>([]);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
-  const [UID, setUID] = useState('');
 
+  const router = useRouter(); // use for redirecting to different pages
+
+  // is show all exercises open
   const toggleSidePanel = () => {
     setIsSidePanelOpen(!isSidePanelOpen);
   };
+
+  // use state for exercise
   const [currentExercise, setCurrentExercise] = useState<Exercise>({
     exerciseName: '',
     numberOfReps: 0,
@@ -55,8 +46,86 @@ const LogPage: FC = () => {
     aid: 0,
     uid: '',
   });
+  // use state for exercise options
   const [exerciseOptions, setExerciseOptions] = useState<string[]>([]);
+  // ---- end of use state declarations + other declarations ----
 
+  // ---- start of api/cookie to change between log or not log ----
+  // adds new activity to uid in cookie
+  const addActivity = async () => {
+    setCookie('log', 'true');       // sets cookie to show that user is logging workout
+
+    try {
+      const response = await fetch('/api/addActivity', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: getCookie('uid'),
+        }),
+      });
+      if (!response.ok) throw new Error('Network response was not ok.');
+      // Handle the response here
+    } catch (error) {
+      console.error('Failed to add activity:', error);
+      // Handle errors here
+    }
+    window.location.reload();
+  };
+
+  // delete newest activity of uid in cookie
+  const deleteActivity = async () => {
+    try {
+      const response = await fetch('/api/deleteActivity', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: getCookie('uid'),
+        }),
+      });
+      if (!response.ok) throw new Error('Network response was not ok.');
+      // Handle the response here
+    } catch (error) {
+      console.error('Failed to add activity:', error);
+      // Handle errors here
+    }
+  };
+
+  // signals that user is no longer logging workout
+  const toggleLogging = () => {
+    // Toggle the value of 'log' cookie
+    setCookie('log', isLogging ? 'false' : 'true');
+
+    // also want to clear local storage
+    setExercises([]);
+
+    // also delete the most recent activity
+    deleteActivity();
+
+    // Cause the component to re-render
+    window.location.reload();
+  };
+
+  // signals that user is done logging workout
+  const handleSave = async () => {
+    // Toggle the value of 'log' cookie
+    setCookie('log', isLogging ? 'false' : 'true');
+
+    // also want to clear local storage
+    setExercises([]);
+
+    // also delete the most recent activity
+    await handleSaveExercises();
+
+    // redirect to new page to edit things
+    router.push('/logfinish');
+  };
+  // ---- end of api/cookie to change between log or not log ----
+
+  // ---- start of code to display exercises in the drop down menu ---- 
   useEffect(() => {
     // this is all for getting exercises and displaying
     // not related to saveExercises at all    
@@ -103,15 +172,14 @@ const LogPage: FC = () => {
 
     fetchExercises();
   }, []);
+  // ---- end of code to display exercises in the drop down menu ---- 
 
-  useEffect(() => {
-    getUID({ userEmail });
-  }, []);
-
-  // Create a new handler for the Select component
+  // ---- start of code for user input ----
+  // Create a new handler for the Select component (chosing exercise from drop down menu)
   const handleSelectChange = (selectedOption: { value: string, label: string } | null, actionMeta: any) => {
     if (actionMeta.action === 'select-option') {
       const selectedExerciseName = selectedOption ? selectedOption.value : '';
+
       // Find the eid that matches the selected exercise name
       const eidIndex = exerciseOptions.findIndex(name => name === selectedExerciseName);
       const selectedEid = eidIndex !== -1 ? exerciseEids[eidIndex] : 0;
@@ -119,21 +187,27 @@ const LogPage: FC = () => {
     }
   }
 
-  // Keep the original handleInputChange function for the input elements
+  // Keep the original handleInputChange function for the input elements (inputting in sep/rep/weght)
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = parseInt(e.target.value, 10);
+    if (newValue < 0) {
+      e.target.value = '0';
+    }
+
     setCurrentExercise({ ...currentExercise, [e.target.name]: e.target.value });
   }
+  // ---- end of code for user input ----
 
-  // WE GET THE AID FROM THE DATABASE
+  // ---- start of storing to database ----
+  // get the aid from database (largest aid from uid)
   const fetchAid = async (query: any) => {
     const response = await fetch('/api/getAID', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      // body: JSON.stringify({ eid })
       body: JSON.stringify({
-        searchQuery: UID
+        searchQuery: getCookie('uid'),
       }),
     });
 
@@ -142,43 +216,10 @@ const LogPage: FC = () => {
     }
 
     const data = await response.json();
-    // console.log(data.data.rows[0].Aid);
     return parseInt(data.data.rows[0].Aid);
   };
 
-  // WE GET THE UID FROM THE DB USING THE EMAIL OF LOGGED IN USER 
-  const getUID = async (query: any) => {
-    try {
-      const response = await fetch('/api/GetUIDfromEmail', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // body: JSON.stringify({
-        //   searchQuery: query
-        // }),
-        body: JSON.stringify({
-          searchQuery: userEmail,
-        }),
-      });
-      console.log(response);
-      if (!response.ok) {
-        throw new Error('Failed to save query');
-      }
-
-      const data = await response.json();
-      setUID(data.data.rows[0].uid)
-      console.log(UID)
-      console.log("banana")
-      return data.data.rows[0].uid;
-    }
-    catch {
-      console.log("Unable to fetch UID using getUIDfromEmail. Manually setting it to b24.... now");
-      setUID("b24e24f4-86b8-4b83-8947-b2472a43b436")
-    }
-  };
-
-  // THIS IS FOR SAVING EXERCISES TO THE DATABASE
+  // save the exercises to uid, aid
   const handleSaveExercises = async () => {
     try {
       console.log(exercises)
@@ -204,7 +245,9 @@ const LogPage: FC = () => {
       // alert('Failed to save exercises');
     }
   }
+  // ---- end of storing to database ----
 
+  // ---- start of local storage for data persistance ---- 
   // This useEffect loads the exercises from localStorage when this component first mounts
   // this is only caching and data persistence, not related to actual functionality 
   useEffect(() => {
@@ -218,15 +261,12 @@ const LogPage: FC = () => {
     localStorage.setItem('exercises', JSON.stringify(exercises));
   }, [exercises]);  // This dependency array means this hook runs whenever `exercises` changes
 
-
   // THIS IS ONLY FOR MODIFYING EXERCISES TO THE LOCAL STORAGE, NOT CONNECTED TO DATABASE YET
   const handleAddExercise = async () => {
     if (currentExercise.exerciseName && currentExercise.eid) {
       const aid = await fetchAid(currentExercise.eid);
-      //const uid = await getUID(user?.email);
-      // getUID({ userEmail });
-      const uid = UID
-      console.log("monkey" + uid)
+      const uid = '' + getCookie('uid');
+
       if (aid !== null) {
         setExercises([...exercises, { ...currentExercise, aid, uid }]);
         setCurrentExercise({
@@ -236,13 +276,13 @@ const LogPage: FC = () => {
           numberOfSets: 0,
           weight: 0,
           aid: 0,
-          uid: UID,
+          uid: uid,
         });
       }
     }
   };
 
-  // LOCAL
+  // Locally remove one exercise from set
   const handleRemoveExercise = (index: number) => {
     const newExercises = [...exercises];
     newExercises.splice(index, 1);
@@ -255,21 +295,6 @@ const LogPage: FC = () => {
     newExercises[index] = editingExercise;
     setExercises(newExercises);
     setEditingIndex(-1);
-  };
-
-
-
-
-
-  // WHY THE FUCK IS THIS HERE -- ?
-  // search bar
-  const searchBarStyle = {
-    margin: 'auto',
-    width: '90%',
-    display: 'flex',
-    flexDirection: 'column' as 'column',
-    alignItems: 'center',
-    minWidth: '200px',
   };
 
   const [editingIndex, setEditingIndex] = useState(-1);
@@ -287,189 +312,193 @@ const LogPage: FC = () => {
     aid: 0,
     uid: '',
   });
+  // ---- end of local storage for data persistance ----
 
 
+  // ---- start of styling ----
+  const searchBarStyle = {
+    margin: 'auto',
+    width: '90%',
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+    alignItems: 'center',
+    minWidth: '200px',
+  };
 
-  if (user) {
-    return (
-      <DefLayout>
-        <div className={styles.container}>
-          {/* pls don't delete -- jessica will work on log here without ruining stuff */}
-          <div>
-            <Link href="/log2">
-              <p className="px-3 opacity-75 text-l hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">JESSICA's TRYING TO FIGURE OUT LOG</p>
-            </Link>
-          </div>
-          {/* pls don't delete */}
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Exercise Name {userEmail} {UID} </th>
-                <th>Number of Reps</th>
-                <th>Number of Sets</th>
-                <th>Weight</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {exercises.map((exercise, index) => (
-                <tr key={index}>
-                  {editingIndex === index ? (
-                    <>
-                      <td><input type="text" value={editingExercise.exerciseName} onChange={(event) => setEditingExercise({ ...editingExercise, exerciseName: event.target.value })} /></td>
-                      <td><input type="number" value={editingExercise.numberOfReps} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfReps: Number(event.target.value) })} /></td>
-                      <td><input type="number" value={editingExercise.numberOfSets} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfSets: Number(event.target.value) })} /></td>
-                      <td><input type="number" value={editingExercise.weight} onChange={(event) => setEditingExercise({ ...editingExercise, weight: Number(event.target.value) })} /></td>
-                      <td>
-                        <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
-                        <button onClick={() => handleUneditExercise(index)}> <img src="/images/unedit.png" alt="Unedit icon" width="24" height="30" /> </button>
-                      </td>
-                    </>
-                  ) : (
-                    <>
-                      <td>{exercise.exerciseName}</td>
-                      <td>{exercise.numberOfReps}</td>
-                      <td>{exercise.numberOfSets}</td>
-                      <td>{exercise.weight}</td>
-                      <td>
-                        <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
-                        <button onClick={() => handleEditExercise(index)}> <img src="/images/edit1.png" alt="Edit icon" width="24" height="30" /> </button>
-                      </td>
-                    </>
-                  )}
-                </tr>
-              ))}
-              <tr>
-                <td>
-                  <Select
-                    className={styles.dropdown}
-                    options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
-                    name='exerciseName'
-                    value={exerciseOptions.find(option => option === currentExercise.exerciseName) ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName } : null}
-                    onChange={handleSelectChange}
-                    isSearchable
-                    loadingMessage={() => 'Loading...'}
-                    noOptionsMessage={() => 'No options found.'}
-                  />
-                  <button className={styles.button} onClick={toggleSidePanel} id={styles["sidepanel-toggle-button"]}>All exercises</button>
+  const customSelect = {
+    control: (styles: any) => ({ ...styles, backgroundColor: 'rgba(255, 255, 255, 0.05)' }),
+    menu: (styles: any) => ({ ...styles, backgroundColor: 'rgba(18, 18, 18, 0.6)', backdropFilter: 'blur(2px)',  WebkitBackdropFilter: 'blur(2px)',}),
+    option: (provided: any, state: any) => ({
+      ...provided,
+      color: state.isSelected ? 'white' : 'white', // Text color for options
+      backgroundColor: state.isSelected ? 'rgba(85, 187, 164, .75)' : 'rgba(255, 255, 255, 0)', // Background color for options
+      ':active': {
+        backgroundColor: state.isSelected
+          ? 'rgba(255, 255, 255, 0)'
+          : 'rgba(85, 187, 164, .5)', 
+      },
+    }),
+    singleValue: (provided: any, state: any) => ({
+      ...provided,
+      color: 'white' 
+    }),
+    dropdownIndicator: (base: any, state: any) => ({
+      ...base,
+      color: 'white',
+      opacity: .75,
+      transition: 'all .2s ease',
+      transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : null,
+      ':hover': {
+        color: 'white', // Color on hover
+        opacity: 0.6, // Adjust transparency on hover
+      },
+    }),
+  };
+  // ---- end of styling ----
 
-                </td>
-                <td>
-                  <input className={styles.input} type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} />
-                </td>
-                <td>
-                  <input className={styles.input} type="number" name="numberOfSets" placeholder="Number of Sets" value={currentExercise.numberOfSets} onChange={handleInputChange} />
-                </td>
-                <td>
-                  <input className={styles.input} type="number" name="weight" placeholder="Weight" value={currentExercise.weight} onChange={handleInputChange} />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <button className={styles.button} id={styles["add-exercise-button"]} onClick={handleAddExercise}>Add Exercise</button>
-          <button className={styles.button} id={styles["save-exercise-button"]} onClick={handleSaveExercises}>Finish Workout</button>
-        </div>
-
-        {isSidePanelOpen && (
-          <aside className={styles.sidePanel}>
-            <div className="search-bar-container" style={searchBarStyle}>
-              <SearchBar />
-            </div>
-          </aside>
-        )}
-      </DefLayout>
-    )
-  }
   return (
     <DefLayout>
-      <div className={styles.container}>
-        {/* pls don't delete -- jessica will work on log here without ruining stuff */}
-        <div>
-          <Link href="/log2">
-            <p className="px-3 opacity-75 text-l hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">JESSICA's TRYING TO FIGURE OUT LOG</p>
-          </Link>
-        </div>
-        {/* pls don't delete */}
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Exercise Name {userEmail} {UID} </th>
-              <th>Number of Reps</th>
-              <th>Number of Sets</th>
-              <th>Weight</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {exercises.map((exercise, index) => (
-              <tr key={index}>
-                {editingIndex === index ? (
-                  <>
-                    <td><input type="text" value={editingExercise.exerciseName} onChange={(event) => setEditingExercise({ ...editingExercise, exerciseName: event.target.value })} /></td>
-                    <td><input type="number" value={editingExercise.numberOfReps} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfReps: Number(event.target.value) })} /></td>
-                    <td><input type="number" value={editingExercise.numberOfSets} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfSets: Number(event.target.value) })} /></td>
-                    <td><input type="number" value={editingExercise.weight} onChange={(event) => setEditingExercise({ ...editingExercise, weight: Number(event.target.value) })} /></td>
-                    <td>
-                      <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
-                      <button onClick={() => handleUneditExercise(index)}> <img src="/images/unedit.png" alt="Unedit icon" width="24" height="30" /> </button>
+      <div className="flex w-screen min-h-[90vh] justify-center items-center">
+        {/* if the user is in the middle of a log (or priorly was logging) */}
+        {isLogging ? (
+          <>
+            <div className="flex flex-col overflow-hidden items-center">
+              <table className="mx-auto my-8 max-w-lg border border-white border-opacity-50">
+                <thead>
+                  <tr>
+                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[20vw] text-center align-middle">Exercise Name</th>
+                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle ">Reps</th>
+                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Sets</th>
+                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Weight</th>
+                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {exercises.map((exercise, index) => (
+                    <tr key={index}>
+                      {editingIndex === index ? (
+                        <>
+                          {/* 
+                          I don't think this does anything
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="text" value={editingExercise.exerciseName} onChange={(event) => setEditingExercise({ ...editingExercise, exerciseName: event.target.value })} className="w-full text-center"/></td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="number" value={editingExercise.numberOfReps} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfReps: Number(event.target.value) })} className="w-full text-center"/></td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="number" value={editingExercise.numberOfSets} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfSets: Number(event.target.value) })} className="w-full text-center"/></td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="number" value={editingExercise.weight} onChange={(event) => setEditingExercise({ ...editingExercise, weight: Number(event.target.value) })} className="w-full text-center"/></td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                            <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
+                            <button onClick={() => handleUneditExercise(index)}> <img src="/images/unedit.png" alt="Unedit icon" width="24" height="30" /> </button>
+                          </td> 
+                          */}
+                        </>
+                      ) : (
+                        <>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.exerciseName}</td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.numberOfReps}</td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.numberOfSets}</td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.weight}</td>
+                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">
+                            <div className="button-hover relative group">
+                              <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                                Delete
+                              </span>
+                              <button className="px-1" onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
+                            </div>
+                            <div className="button-hover relative group">
+                              <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                                Edit
+                              </span>
+                              <button className="px-1"  onClick={() => handleEditExercise(index)}> <img src="/images/edit1.png" alt="Edit icon" width="24" height="30" /> </button>
+                            </div> 
+                          </td>
+                        </>
+                      )}
+                    </tr>
+                  ))}
+                  <tr>
+                    <td className="flex flex-row min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle items-center">
+                      <Select
+                        styles={customSelect}
+                        className="w-[15vw] rounded-md text-black"
+                        options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
+                        name='exerciseName'
+                        value={exerciseOptions.find(option => option === currentExercise.exerciseName) ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName } : null}
+                        onChange={handleSelectChange}
+                        isSearchable
+                        loadingMessage={() => 'Loading...'}
+                        noOptionsMessage={() => 'No options found.'}
+                      />
+                      <button className="ml-3 button-hover relative group" onClick={toggleSidePanel}>
+                        <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                          Show All
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </button>
                     </td>
-                  </>
-                ) : (
-                  <>
-                    <td>{exercise.exerciseName}</td>
-                    <td>{exercise.numberOfReps}</td>
-                    <td>{exercise.numberOfSets}</td>
-                    <td>{exercise.weight}</td>
-                    <td>
-                      <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
-                      <button onClick={() => handleEditExercise(index)}> <img src="/images/edit1.png" alt="Edit icon" width="24" height="30" /> </button>
+                    <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                      <input className="text-white text-md text-center text-opacity-75" type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} min="0"/>
                     </td>
-                  </>
-                )}
-              </tr>
-            ))}
-            <tr>
-              <td>
-                <Select
-                  className={styles.dropdown}
-                  options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
-                  name='exerciseName'
-                  value={exerciseOptions.find(option => option === currentExercise.exerciseName) ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName } : null}
-                  onChange={handleSelectChange}
-                  isSearchable
-                  loadingMessage={() => 'Loading...'}
-                  noOptionsMessage={() => 'No options found.'}
-                />
-                <button className={styles.button} onClick={toggleSidePanel} id={styles["sidepanel-toggle-button"]}>All exercises</button>
+                    <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                      <input className="text-white text-md text-center text-opacity-75" type="number" name="numberOfSets" placeholder="Number of Sets" value={currentExercise.numberOfSets} onChange={handleInputChange} min="0"/>
+                    </td>
+                    <td className="minw-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                      <input className="text-white text-md text-center text-opacity-75" type="number" name="weight" placeholder="Weight" value={currentExercise.weight} onChange={handleInputChange} min="0"/>
+                    </td>
+                    <td className="minw-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                    <button className="button-hover relative group"  onClick={handleAddExercise}>
+                      <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                        Add Exercise
+                      </span>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
 
-              </td>
-              <td>
-                <input className={styles.input} type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} />
-              </td>
-              <td>
-                <input className={styles.input} type="number" name="numberOfSets" placeholder="Number of Sets" value={currentExercise.numberOfSets} onChange={handleInputChange} />
-              </td>
-              <td>
-                <input className={styles.input} type="number" name="weight" placeholder="Weight" value={currentExercise.weight} onChange={handleInputChange} />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <button className={styles.button} id={styles["add-exercise-button"]} onClick={handleAddExercise}>Add Exercise</button>
-        <button className={styles.button} id={styles["save-exercise-button"]} onClick={handleSaveExercises}>Finish Workout</button>
+              <div>
+                <button onClick={toggleLogging}>
+                  <p className="pl-2 pr-3 border-r text-white text-opacity-75 text-lg hover:gradient-text-bp duration-300 text-center">CANCEL</p>
+                </button>
+                <button onClick={handleSave}>
+                <p className="pl-3 text-white text-opacity-75 text-lg hover:gradient-text-pg duration-300 text-center">FINISH</p>
+                </button>
+              </div>
+            </div>
+            <div>
+              {isSidePanelOpen && (
+                <aside className={styles.sidePanel}>
+                  <div className="search-bar-container" style={searchBarStyle}>
+                    <SearchBar />
+                  </div>
+                </aside>
+              )}
+            </div>
+          </>
+        ) : (
+          <button onClick={addActivity}>
+            Add Activity
+          </button>
+        )}
       </div>
-
-      {isSidePanelOpen && (
-        <aside className={styles.sidePanel}>
-          <div className="search-bar-container" style={searchBarStyle}>
-            <SearchBar />
-          </div>
-        </aside>
-      )}
-    </DefLayout>
-  )
+    </DefLayout >
+  );
 }
 
-export default LogPage;
+// Makes sure serverside matches client
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // Check the 'log' cookie on the server-side
+  const isLogging = getCookie('log', context) === 'true';
+
+  // Pass the value to the component as a prop
+  return {
+    props: {
+      isLogging,
+    },
+  };
+};
+
+export default Log2Page;
