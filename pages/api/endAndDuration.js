@@ -5,15 +5,18 @@ const pool = new Pool({
     connectionString: "postgres://default:Azy2srgWb9aU@ep-polished-cherry-55480419-pooler.us-east-1.postgres.vercel-storage.com/verceldb?sslmode=require"
 });
 
-const deleteActivity = `
-    DELETE FROM activity
-    WHERE "Aid" = (
-        SELECT "Aid" FROM activity
-        WHERE "Uid" = $1
-        ORDER BY "Aid" DESC
-        LIMIT 1
-    ) AND
-    "Uid" = $1
+const query = `
+UPDATE activity
+SET 
+    "End_time" = NOW(),
+    "Duration" = NOW() - "Start_time"
+WHERE 
+    "Aid" = (SELECT "Aid" FROM activity
+             WHERE "Uid" = $1
+             ORDER BY "Aid" DESC
+             LIMIT 1)
+    AND "Uid" = $1;
+
 `;
 
 export default async (req, res) => {
@@ -22,9 +25,9 @@ export default async (req, res) => {
 
         try {
             const values = [uid];
-            await pool.query(deleteActivity, values);
+            await pool.query(query, values);
 
-            res.status(200).json({ message: 'Activity deleted successfully' });
+            res.status(200).json({ message: 'EndTime and Duration Updated Successfully' });
         } catch (err) {
             console.error(err);
             res.status(500).json({ error: 'Internal Server Error' });

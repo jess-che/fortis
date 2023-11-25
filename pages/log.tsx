@@ -93,6 +93,27 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     }
   };
 
+  // update end time and duration
+  const endAndDuration = async () => {
+    try {
+      const response = await fetch('/api/endAndDuration', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: getCookie('uid'),
+        }),
+      });
+      if (!response.ok) throw new Error('Network response was not ok.');
+      // Handle the response here
+    } catch (error) {
+      console.error('Failed to add activity:', error);
+      // Handle errors here
+    }
+  };
+
+
   // signals that user is no longer logging workout
   const toggleLogging = () => {
     // Toggle the value of 'log' cookie
@@ -115,6 +136,9 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
 
     // also want to clear local storage
     setExercises([]);
+
+    // update end time and duration
+    await endAndDuration();
 
     // also delete the most recent activity
     await handleSaveExercises();
