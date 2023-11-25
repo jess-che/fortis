@@ -11,7 +11,7 @@
   animation: glowing 2s infinite alternate;
 }
 /* end of glowing animation */
-
+ 
 /* button effect for start now */
 @keyframes fillBox {
   from {

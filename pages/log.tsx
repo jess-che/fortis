@@ -548,11 +548,13 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
           </>
         ) : (
           <div className="flex flex-row w-screen min-h-[90vh] justify-center items-center">
-            {/* this side add ability to edit name */}
-            <div className="flex flex-col w-[60vw] bg-red-400">
-              <button onClick={addActivity}>
-                Add Activity
-              </button>
+            {/* this side is add Activity button, but also make it cooler */}
+            <div className="flex flex-col w-[60vw] justify-center items-center">
+              <div className="relative">
+                <button onClick={addActivity} className="startActivity rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#55BBA4]">
+                  Add Activity
+                </button>
+              </div>
             </div>
 
             <div className="h-[80vh] w-[2px] mx-[1vw] bg-white bg-opacity-50"></div>

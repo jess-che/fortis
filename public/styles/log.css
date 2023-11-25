@@ -23,6 +23,38 @@ body {
 .button-hover:hover svg {
     animation: spin 2s linear infinite;
 }
-.button-hover:hover{
+
+.button-hover:hover {
     opacity: .75;
 }
+
+/* end animation to make add activity spin */
+
+/* button effect for start activity */
+@keyframes fillBox {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+.startActivity:hover::before {
+    animation: fillBox 1.5s ease-in forwards;
+}
+
+.startActivity::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: #55bba36a;
+    z-index: -1;
+    transition: width 0.3s;
+    border-radius: 0.375rem;
+}
+/* end of button effect for start activity */
