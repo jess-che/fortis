@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import DefLayout from '@/components/def_layout';
-import styles from './LogPage.module.css';
 import Select from 'react-select';
 import SearchBar from "./SearchBarComponents/SearchBar";
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -327,7 +326,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
 
   const customSelect = {
     control: (styles: any) => ({ ...styles, backgroundColor: 'rgba(255, 255, 255, 0.05)' }),
-    menu: (styles: any) => ({ ...styles, backgroundColor: 'rgba(18, 18, 18, 0.6)', backdropFilter: 'blur(2px)',  WebkitBackdropFilter: 'blur(2px)',}),
+    menu: (styles: any) => ({ ...styles, backgroundColor: 'rgba(18, 18, 18, 0.6)', backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)', }),
     option: (provided: any, state: any) => ({
       ...provided,
       color: state.isSelected ? 'white' : 'white', // Text color for options
@@ -335,12 +334,12 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
       ':active': {
         backgroundColor: state.isSelected
           ? 'rgba(255, 255, 255, 0)'
-          : 'rgba(85, 187, 164, .5)', 
+          : 'rgba(85, 187, 164, .5)',
       },
     }),
     singleValue: (provided: any, state: any) => ({
       ...provided,
-      color: 'white' 
+      color: 'white'
     }),
     dropdownIndicator: (base: any, state: any) => ({
       ...base,
@@ -362,23 +361,24 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
         {/* if the user is in the middle of a log (or priorly was logging) */}
         {isLogging ? (
           <>
-            <div className="flex flex-col overflow-hidden items-center">
-              <table className="mx-auto my-8 max-w-lg border border-white border-opacity-50">
-                <thead>
-                  <tr>
-                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[20vw] text-center align-middle">Exercise Name</th>
-                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle ">Reps</th>
-                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Sets</th>
-                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Weight</th>
-                    <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {exercises.map((exercise, index) => (
-                    <tr key={index}>
-                      {editingIndex === index ? (
-                        <>
-                          {/* 
+            <div className="w-screen flex flex-row items-center justify-center">
+              <div className="flex flex-col overflow-hidden items-center">
+                <table className="mx-auto my-8 max-w-lg border border-white border-opacity-50">
+                  <thead>
+                    <tr>
+                      <th className="border border-white border-opacity-50 px-5 py-2 min-w-[20vw] text-center align-middle">Exercise Name</th>
+                      <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle ">Reps</th>
+                      <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Sets</th>
+                      <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Weight</th>
+                      <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {exercises.map((exercise, index) => (
+                      <tr key={index}>
+                        {editingIndex === index ? (
+                          <>
+                            {/* 
                           I don't think this does anything
                           <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="text" value={editingExercise.exerciseName} onChange={(event) => setEditingExercise({ ...editingExercise, exerciseName: event.target.value })} className="w-full text-center"/></td>
                           <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="number" value={editingExercise.numberOfReps} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfReps: Number(event.target.value) })} className="w-full text-center"/></td>
@@ -389,93 +389,94 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                             <button onClick={() => handleUneditExercise(index)}> <img src="/images/unedit.png" alt="Unedit icon" width="24" height="30" /> </button>
                           </td> 
                           */}
-                        </>
-                      ) : (
-                        <>
-                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.exerciseName}</td>
-                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.numberOfReps}</td>
-                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.numberOfSets}</td>
-                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.weight}</td>
-                          <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">
-                            <div className="button-hover relative group">
-                              <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
-                                Delete
-                              </span>
-                              <button className="px-1" onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
-                            </div>
-                            <div className="button-hover relative group">
-                              <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
-                                Edit
-                              </span>
-                              <button className="px-1"  onClick={() => handleEditExercise(index)}> <img src="/images/edit1.png" alt="Edit icon" width="24" height="30" /> </button>
-                            </div> 
-                          </td>
-                        </>
-                      )}
+                          </>
+                        ) : (
+                          <>
+                            <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.exerciseName}</td>
+                            <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.numberOfReps}</td>
+                            <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.numberOfSets}</td>
+                            <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.weight}</td>
+                            <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">
+                              <div className="button-hover relative group">
+                                <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                                  Delete
+                                </span>
+                                <button className="px-1" onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
+                              </div>
+                              <div className="button-hover relative group">
+                                <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                                  Edit
+                                </span>
+                                <button className="px-1" onClick={() => handleEditExercise(index)}> <img src="/images/edit1.png" alt="Edit icon" width="24" height="30" /> </button>
+                              </div>
+                            </td>
+                          </>
+                        )}
+                      </tr>
+                    ))}
+                    <tr>
+                      <td className="flex flex-row min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle items-center">
+                        <Select
+                          styles={customSelect}
+                          className="w-[15vw] rounded-md text-black"
+                          options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
+                          name='exerciseName'
+                          value={exerciseOptions.find(option => option === currentExercise.exerciseName) ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName } : null}
+                          onChange={handleSelectChange}
+                          isSearchable
+                          loadingMessage={() => 'Loading...'}
+                          noOptionsMessage={() => 'No options found.'}
+                        />
+                        <button className="ml-3 button-hover relative group" onClick={toggleSidePanel}>
+                          <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                            Show All
+                          </span>
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </button>
+                      </td>
+                      <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                        <input className="text-white text-md text-center text-opacity-75" type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} min="0" />
+                      </td>
+                      <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                        <input className="text-white text-md text-center text-opacity-75" type="number" name="numberOfSets" placeholder="Number of Sets" value={currentExercise.numberOfSets} onChange={handleInputChange} min="0" />
+                      </td>
+                      <td className="minw-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                        <input className="text-white text-md text-center text-opacity-75" type="number" name="weight" placeholder="Weight" value={currentExercise.weight} onChange={handleInputChange} min="0" />
+                      </td>
+                      <td className="minw-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                        <button className="button-hover relative group" onClick={handleAddExercise}>
+                          <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                            Add Exercise
+                          </span>
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </button>
+                      </td>
                     </tr>
-                  ))}
-                  <tr>
-                    <td className="flex flex-row min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle items-center">
-                      <Select
-                        styles={customSelect}
-                        className="w-[15vw] rounded-md text-black"
-                        options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
-                        name='exerciseName'
-                        value={exerciseOptions.find(option => option === currentExercise.exerciseName) ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName } : null}
-                        onChange={handleSelectChange}
-                        isSearchable
-                        loadingMessage={() => 'Loading...'}
-                        noOptionsMessage={() => 'No options found.'}
-                      />
-                      <button className="ml-3 button-hover relative group" onClick={toggleSidePanel}>
-                        <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
-                          Show All
-                        </span>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </button>
-                    </td>
-                    <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
-                      <input className="text-white text-md text-center text-opacity-75" type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} min="0"/>
-                    </td>
-                    <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
-                      <input className="text-white text-md text-center text-opacity-75" type="number" name="numberOfSets" placeholder="Number of Sets" value={currentExercise.numberOfSets} onChange={handleInputChange} min="0"/>
-                    </td>
-                    <td className="minw-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
-                      <input className="text-white text-md text-center text-opacity-75" type="number" name="weight" placeholder="Weight" value={currentExercise.weight} onChange={handleInputChange} min="0"/>
-                    </td>
-                    <td className="minw-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
-                    <button className="button-hover relative group"  onClick={handleAddExercise}>
-                      <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
-                        Add Exercise
-                      </span>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
 
-              <div>
-                <button onClick={toggleLogging}>
-                  <p className="pl-2 pr-3 border-r text-white text-opacity-75 text-lg hover:gradient-text-bp duration-300 text-center">CANCEL</p>
-                </button>
-                <button onClick={handleSave}>
-                <p className="pl-3 text-white text-opacity-75 text-lg hover:gradient-text-pg duration-300 text-center">FINISH</p>
-                </button>
+                <div>
+                  <button onClick={toggleLogging}>
+                    <p className="pl-2 pr-3 border-r text-white text-opacity-75 text-lg hover:gradient-text-bp duration-300 text-center">CANCEL</p>
+                  </button>
+                  <button onClick={handleSave}>
+                    <p className="pl-3 text-white text-opacity-75 text-lg hover:gradient-text-pg duration-300 text-center">FINISH</p>
+                  </button>
+                </div>
               </div>
-            </div>
-            <div>
-              {isSidePanelOpen && (
-                <aside className={styles.sidePanel}>
-                  <div className="search-bar-container" style={searchBarStyle}>
-                    <SearchBar />
-                  </div>
-                </aside>
-              )}
+              <div>
+                {isSidePanelOpen && (
+                  <aside className="w-[25vw] pl-[5vw] ml-[5vw] border-l border-white border-opacity-50">
+                    <div className="search-bar-container" style={searchBarStyle}>
+                      <SearchBar />
+                    </div>
+                  </aside>
+                )}
+              </div>
             </div>
           </>
         ) : (
