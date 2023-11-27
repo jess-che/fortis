@@ -36,19 +36,33 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   };
 
   useEffect(() => {
-    const savedWorkoutData = localStorage.getItem('workoutData');
-    if (savedWorkoutData) {
-      const workoutExercises = JSON.parse(savedWorkoutData);
-      setExercises(workoutExercises.map((exercise: { exerciseData: { name: any; }; Rep: any; Set: any; Weight: any; Eid: any; }) => ({
-        ...exercise,
-        exerciseName: exercise.exerciseData?.name,
-        numberOfReps: exercise.Rep,
-        numberOfSets: exercise.Set,
-        weight: exercise.Weight,
-        eid: exercise.Eid,
-        // other fields if needed
-      })));
-      localStorage.removeItem('workoutData'); // Clear the storage after loading the data
+    try {
+      const savedWorkoutData = localStorage.getItem('workoutData');
+      if (savedWorkoutData) {
+        const workoutExercises = JSON.parse(savedWorkoutData);
+  
+        // Log the data to the console for inspection
+        console.log("Workout Data from HistoryPage:", workoutExercises);
+  
+        // Set the exercises if the data is valid
+        if (Array.isArray(workoutExercises)) {
+          setExercises(workoutExercises.map(exercise => ({
+            ...exercise,
+            exerciseName: exercise.exerciseData?.name,
+            numberOfReps: exercise.Rep,
+            numberOfSets: exercise.Set,
+            weight: exercise.Weight,
+            eid: exercise.Eid,
+            // other fields if needed
+          })));
+        }
+  
+        // Clear the storage after loading the data
+        localStorage.removeItem('workoutData');
+      }
+    } catch (error) {
+      console.error("Error retrieving workout data from local storage:", error);
+      // Handle the error appropriately, maybe set a state to show error message in UI
     }
   }, []);
 
