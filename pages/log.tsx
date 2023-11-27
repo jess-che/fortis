@@ -35,6 +35,23 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     setIsSidePanelOpen(!isSidePanelOpen);
   };
 
+  useEffect(() => {
+    const savedWorkoutData = localStorage.getItem('workoutData');
+    if (savedWorkoutData) {
+      const workoutExercises = JSON.parse(savedWorkoutData);
+      setExercises(workoutExercises.map((exercise: { exerciseData: { name: any; }; Rep: any; Set: any; Weight: any; Eid: any; }) => ({
+        ...exercise,
+        exerciseName: exercise.exerciseData?.name,
+        numberOfReps: exercise.Rep,
+        numberOfSets: exercise.Set,
+        weight: exercise.Weight,
+        eid: exercise.Eid,
+        // other fields if needed
+      })));
+      localStorage.removeItem('workoutData'); // Clear the storage after loading the data
+    }
+  }, []);
+
   // use state for exercise
   const [currentExercise, setCurrentExercise] = useState<Exercise>({
     exerciseName: '',
