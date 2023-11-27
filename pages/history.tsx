@@ -14,10 +14,10 @@ type DataType = {
   workouts: any[];
 };
 
-const router = useRouter();
-
 
 const HistoryPage: FC = () => {
+  const router = useRouter();
+
   console.log(getCookie('uid'));
   // ---- start of auth0 setup ----
   // set auth0 state
@@ -356,6 +356,7 @@ const HistoryPage: FC = () => {
                       <button
                         onClick={() => {
                           if (data && data.workouts) {
+                            console.log("suck")
                             handleSaveClick(data.workouts);
                           } else {
                             console.log("No workout data to save");
@@ -565,13 +566,22 @@ const HistoryPage: FC = () => {
                     </div>
 
                     <div className="pl-3 flex flex-row">
-                      <Link href="/" className="inline-flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+                      <button
+                        onClick={() => {
+                          if (data && data.workouts) {
+                            handleSaveClick(data.workouts);
+                          } else {
+                            console.log("No workout data to save");
+                            // Optionally, you could display a notification or alert to the user here.
+                          }
+                        }}
+                        className="inline-flex items-center"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
                         </svg>
-
                         <p className="pl-2 text-white text-opacity-75 text-lg hover:gradient-text-pg duration-300 text-center">SAVE</p>
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </div>

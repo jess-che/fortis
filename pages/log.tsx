@@ -41,31 +41,34 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
       if (savedWorkoutData) {
         const workoutExercises = JSON.parse(savedWorkoutData);
   
-        // Log the data to the console for inspection
         console.log("Workout Data from HistoryPage:", workoutExercises);
   
-        // Set the exercises if the data is valid
+        // TODO: PARSING THIS IS REALLY ANNOYING
+        // REFRESH THE TABLE AS NEEDED ANIRUDH
         if (Array.isArray(workoutExercises)) {
           setExercises(workoutExercises.map(exercise => ({
-            ...exercise,
             exerciseName: exercise.exerciseData?.name,
             numberOfReps: exercise.Rep,
             numberOfSets: exercise.Set,
             weight: exercise.Weight,
             eid: exercise.Eid,
+            aid: exercise.Aid,
+            uid: exercise.Uid
             // other fields if needed
           })));
         }
-  
         // Clear the storage after loading the data
         localStorage.removeItem('workoutData');
       }
     } catch (error) {
       console.error("Error retrieving workout data from local storage:", error);
-      // Handle the error appropriately, maybe set a state to show error message in UI
     }
   }, []);
 
+  useEffect(() => {
+    console.log("Updated exercises:", exercises);
+  }, [exercises]);
+  
   // use state for exercise
   const [currentExercise, setCurrentExercise] = useState<Exercise>({
     exerciseName: '',
@@ -434,6 +437,13 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
 
   return (
     <DefLayout>
+      <div>
+        {exercises.map((exercise, index) => (
+          <div key={index}>
+            {/* Render your exercise data here */}
+          </div>
+        ))}
+      </div>
       <div className="flex w-screen min-h-[90vh] justify-center items-center">
         {/* if the user is in the middle of a log (or priorly was logging) */}
         {isLogging ? (
