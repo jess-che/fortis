@@ -1,5 +1,30 @@
 /* WorkoutBuddyMatcher.module.css */
+.select[multiple]:focus {
+    border: 2px solid #007bff; /* Highlight color when the element is focused */
+  }
 
+.daysGrid {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+.dayButton {
+    padding: 5px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #000;
+    margin-right: 5px; /* Adjust as necessary */
+    flex-grow: 1;
+  }
+  
+.dayButton:last-child {
+    margin-right: 0;
+  }
+  
+.selected {
+    background: #007bff;
+    color: #fff;
+  }
 
 .timeGrid {
     display: grid;
@@ -7,18 +32,18 @@
     gap: 5px;
   }
   
-  .timeSlot {
+.timeSlot {
     padding: 5px;
     border: 1px solid #ddd;
     background: #fff;
     color: #000;
   }
   
-  .selected {
+.selected {
     background: #007bff;
     color: #fff;
   }
-  
+
 .formContainer {
     max-width: 600px;
     margin: auto;
@@ -30,18 +55,18 @@
     color: #000; /* Default text color for the container */
   }
   
-  .formGroup {
+.formGroup {
     margin-bottom: 15px; /* Adjust spacing between form groups */
   }
   
-  .label {
+.label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
   }
   
-  .input,
-  .select {
+.input,
+.select {
     width: 100%;
     padding: 8px;
     margin-bottom: 20px;
@@ -50,7 +75,7 @@
     color: #000; /* Make text color black */
   }
   
-  .button {
+.button {
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -60,7 +85,7 @@
     cursor: pointer;
   }
   
-  .button:hover {
+.button:hover {
     background-color: #0056b3;
   }
   

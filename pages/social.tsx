@@ -20,15 +20,16 @@ import styles from './WorkoutBuddyMatcher.module.css';
 //   minWidth: '200px',
 // };
 
-const timeSlots = Array.from({ length: 32 }, (_, index) => `${Math.floor(index / 2) + 6}:${index % 2 === 0 ? '00' : '30'}`);
+const timeSlots = Array.from({ length: 17 }, (_, index) => `${index + 6}:00`); // 6:00 to 22:00
+const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 interface FormData {
   gymTime: string;
   workoutTypes: string[]; // Specify as string array
   location: string;
-  frequency: string;
+  frequency: string[];
   genderPreference: string;
-  gymAvailability: any[];
+  gymAvailability: boolean[];
 }
 
 const WorkoutBuddyMatcher = () => {
@@ -36,11 +37,19 @@ const WorkoutBuddyMatcher = () => {
     gymTime: '',
     workoutTypes: [],
     location: '',
-    frequency: '',
+    frequency: [],
     genderPreference: '',
-    gymAvailability: Array(timeSlots.length).fill(false) // Initialize all times as unavailable
-
+    gymAvailability: Array(timeSlots.length).fill(false)
   });
+
+  const handleDayToggle = (day: string) => {
+    setFormData(prevState => ({
+      ...prevState,
+      frequency: prevState.frequency.includes(day) 
+        ? prevState.frequency.filter(d => d !== day) 
+        : [...prevState.frequency, day],
+    }));
+  };
 
   const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
@@ -79,8 +88,35 @@ const WorkoutBuddyMatcher = () => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.formContainer}>
-            <div className={styles.formGroup}>
-        <label className={styles.label}>Gym Time:</label>
+      <div className={styles.formGroup}>
+        <label className={styles.label}>Location (Gym):</label>
+        <select
+          name="location"
+          onChange={handleInputChange}
+          className={styles.select}
+        >
+          <option value="">Select a gym</option>
+          <option value="Brodie">Brodie</option>
+          <option value="Wilson">Wilson</option>
+        </select>
+      </div>
+      <div className={styles.formGroup}>
+        <label className={styles.label}>Frequency:</label>
+        <div className={styles.daysGrid}>
+          {daysOfWeek.map(day => (
+            <button
+              type="button"
+              key={day}
+              className={`${styles.dayButton} ${formData.frequency.includes(day) ? styles.selected : ''}`}
+              onClick={() => handleDayToggle(day)}
+            >
+              {day.substring(0, 3)} {/* Display only the first three letters of the day */}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className={styles.formGroup}>
+        <label className={styles.label}>Usual times:</label>
         <div className={styles.timeGrid}>
           {timeSlots.map((time, index) => (
             <button
@@ -95,12 +131,13 @@ const WorkoutBuddyMatcher = () => {
         </div>
       </div>
       <div className={styles.formGroup}>
-        <label className={styles.label}>Workout Types:</label>
+        <label className={styles.label}>Workout Types (select multiple):</label>
         <select
           multiple
           name="workoutTypes"
           onChange={handleMultiSelectChange}
           className={styles.select}
+          size={6} // Optional: Sets the visible number of options in a drop-down list
         >
           <option value="climbing">Climbing</option>
           <option value="push">Push</option>
@@ -109,24 +146,6 @@ const WorkoutBuddyMatcher = () => {
           <option value="swimming">Swimming</option>
           <option value="hiking">Hiking</option>
         </select>
-      </div>
-      <div className={styles.formGroup}>
-        <label className={styles.label}>Location (Gym):</label>
-        <input
-          type="text"
-          name="location"
-          onChange={handleInputChange}
-          className={styles.input}
-        />
-      </div>
-      <div className={styles.formGroup}>
-        <label className={styles.label}>Frequency:</label>
-        <input
-          type="text"
-          name="frequency"
-          onChange={handleInputChange}
-          className={styles.input}
-        />
       </div>
       <div className={styles.formGroup}>
         <label className={styles.label}>Gender Preference:</label>
