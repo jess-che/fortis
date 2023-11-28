@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Modal.module.css'; // Make sure this path is correct
+import styles from './modal.module.css'; // Make sure this path is correct
 import ReactDOM from 'react-dom';
 
 
