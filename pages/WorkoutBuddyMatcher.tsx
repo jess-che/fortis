@@ -66,11 +66,34 @@ const WorkoutBuddyMatcher = () => {
       workoutTypes: value
     }));
   };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    // Process the form data
-    console.log(formData);
+    try {
+      console.log(formData);
+      const response = await fetch('/api/insertMatcher', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      console.log(response);
+      const responseBody = await response.text();
+      console.log('Response body:', responseBody);
+
+      if (!response.ok) {
+        throw new Error('Failed to insert matcher data');
+      }
+
+      // Handle success
+      alert('Matcher data saved successfully!');
+    } catch (err) {
+      console.error(err);
+      // Handle error
+      alert('Failed to save matcher data');
+    }
   };
 
   return (
