@@ -11,7 +11,6 @@ const timeSlots = Array.from({ length: 17 }, (_, index) => `${index + 6}:00`); /
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 interface FormData {
-  gymTime: string;
   workoutTypes: string[]; // Specify as string array
   location: string;
   frequency: string[];
@@ -22,7 +21,6 @@ interface FormData {
 
 const WorkoutBuddyMatcher = () => {
   const [formData, setFormData] = useState<FormData>({
-    gymTime: '',
     workoutTypes: [],
     location: '',
     frequency: [],
