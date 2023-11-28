@@ -1,0 +1,66 @@
+/* WorkoutBuddyMatcher.module.css */
+
+
+.timeGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); /* Adjust size as needed */
+    gap: 5px;
+  }
+  
+  .timeSlot {
+    padding: 5px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #000;
+  }
+  
+  .selected {
+    background: #007bff;
+    color: #fff;
+  }
+  
+.formContainer {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: #fff; /* Assuming you want a white background */
+    color: #000; /* Default text color for the container */
+  }
+  
+  .formGroup {
+    margin-bottom: 15px; /* Adjust spacing between form groups */
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .input,
+  .select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #000; /* Make text color black */
+  }
+  
+  .button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
