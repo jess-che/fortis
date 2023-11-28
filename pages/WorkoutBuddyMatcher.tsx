@@ -97,7 +97,7 @@ const WorkoutBuddyMatcher = () => {
     } catch (err) {
       console.error(err);
       // Handle error
-      alert('Failed to save matcher data');
+      alert('Please provide an answer for all sections.');
     }
   };
 
