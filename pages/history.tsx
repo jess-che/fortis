@@ -31,7 +31,7 @@ const HistoryPage: FC = () => {
 
   // store current activity
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);  // set if workout is clicked
-  const [specificAid, setSpecificAid] = useState(null);                   // specificAid of clicked workout   
+  const [specificAid, setSpecificAid] = useState<number | null>(null);                   // specificAid of clicked workout   
 
   // side bar
   const [weeksBefore, setWeeksBefore] = useState(1);  // weeks -- used to query by week in sidebar
@@ -39,7 +39,7 @@ const HistoryPage: FC = () => {
   // ---- end of use state components ----
 
   // ---- start of API fn calls ----
-    // get exercise data from EID
+  // get exercise data from EID
   const ExcDatafromEID = async (query: any) => {
     try {
       const response = await fetch('/api/ExcDatafromEID', {
@@ -66,6 +66,7 @@ const HistoryPage: FC = () => {
     }
   };
   // ---- end of API fn calls ----
+
   // get activities per week
   useEffect(() => {
     const fetchData = async () => {
@@ -154,6 +155,10 @@ const HistoryPage: FC = () => {
     };
 
     fetchData();
+    if (specificAid != null){
+      let transfAID: string | null = specificAid.toString();
+      localStorage.setItem('aidTransfer', transfAID);
+    }
   }, [specificAid]);   
   // ---- end of API calls with useEffect ----
 
@@ -556,7 +561,7 @@ const HistoryPage: FC = () => {
                   {/* link to save or edit */}
                   <div className="flex flex-row">
                     <div className="flex flex-row">
-                      <Link href="/" className="inline-flex items-center border-r">
+                      <Link href="/logfinish" className="inline-flex items-center border-r">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                         </svg>
