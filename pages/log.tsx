@@ -9,7 +9,7 @@ import { GetServerSideProps } from 'next';
 import React, { FC, useState, useEffect, ChangeEvent, useContext } from 'react';
 import '@/public/styles/log.css';     // style sheet for animations
 import { useRouter } from 'next/router';
-import ExerciseContext from './ExerciseContext';
+import { useExerciseContext } from './ExerciseContext';
 
 
 
@@ -26,7 +26,7 @@ interface Exercise {
 
 const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   // ---- start of use state declarations + other declarations ----
-  const { selectedExercise } = useContext(ExerciseContext);
+  const { selectedExercise } = useExerciseContext();
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [exerciseEids, setExerciseEids] = useState<number[]>([]);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
@@ -91,11 +91,9 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   // use state for getting selected exercise from exercisecontext.js
   useEffect(() => {
     if (selectedExercise) {
-      // Update the currentExercise state to reflect the selected exercise from the sidebar
       setCurrentExercise({
         ...currentExercise,
         exerciseName: selectedExercise.name,
-        // any other fields you need to update
       });
     }
   }, [selectedExercise]); // Dependency array includes selectedExercise
