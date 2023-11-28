@@ -40,31 +40,46 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
       const savedWorkoutData = localStorage.getItem('workoutData');
       if (savedWorkoutData) {
         const workoutExercises = JSON.parse(savedWorkoutData);
-  
         console.log("Workout Data from HistoryPage:", workoutExercises);
   
-        // TODO: PARSING THIS IS REALLY ANNOYING
-        // REFRESH THE TABLE AS NEEDED ANIRUDH
-        if (Array.isArray(workoutExercises)) {
-          setExercises(workoutExercises.map(exercise => ({
-            exerciseName: exercise.exerciseData?.name,
+      //   if (Array.isArray(workoutExercises)) {
+      //     const newExercises = workoutExercises.map(exercise => ({
+      //       exerciseName: exercise.exerciseData.name, 
+      //       numberOfReps: exercise.Rep,
+      //       numberOfSets: exercise.Set,
+      //       weight: exercise.Weight,
+      //       eid: exercise.Eid,
+      //       aid: exercise.Aid,
+      //       uid: exercise.Uid
+      //     }));
+      //     console.log("New exercises to set:", newExercises);  
+      //     // add to existing exercises
+      //     setExercises(prevExercises => [...prevExercises, ...newExercises]);
+      //   }
+      //   // console.log("Exercises after update:", exercises);  
+      //   // localStorage.removeItem('workoutData');
+      // }
+      if (Array.isArray(workoutExercises)) {
+        workoutExercises.forEach(exercise => {
+          const newExercise = {
+            exerciseName: exercise.exerciseData.name, 
             numberOfReps: exercise.Rep,
             numberOfSets: exercise.Set,
             weight: exercise.Weight,
             eid: exercise.Eid,
             aid: exercise.Aid,
             uid: exercise.Uid
-            // other fields if needed
-          })));
-        }
-        // Clear the storage after loading the data
-        localStorage.removeItem('workoutData');
-      }
-    } catch (error) {
-      console.error("Error retrieving workout data from local storage:", error);
-    }
-  }, []);
+          };
 
+          setExercises(prevExercises => [...prevExercises, newExercise]);
+        });
+      }
+    }
+    } catch (error) {
+        console.error("Error retrieving workout data from local storage:", error);
+      }
+  }, []);
+  
   useEffect(() => {
     console.log("Updated exercises:", exercises);
   }, [exercises]);
@@ -486,8 +501,10 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                       <tr key={index}>
                         {editingIndex === index ? (
                           <>
-                            {/* 
-                          I don't think this does anything
+                            
+                            
+                          {/* This ensures Edit and Delete work as intended. */}
+
                           <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="text" value={editingExercise.exerciseName} onChange={(event) => setEditingExercise({ ...editingExercise, exerciseName: event.target.value })} className="w-full text-center"/></td>
                           <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="number" value={editingExercise.numberOfReps} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfReps: Number(event.target.value) })} className="w-full text-center"/></td>
                           <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="number" value={editingExercise.numberOfSets} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfSets: Number(event.target.value) })} className="w-full text-center"/></td>
@@ -496,7 +513,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                             <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
                             <button onClick={() => handleUneditExercise(index)}> <img src="/images/unedit.png" alt="Unedit icon" width="24" height="30" /> </button>
                           </td> 
-                          */}
+                         
                           </>
                         ) : (
                           <>
