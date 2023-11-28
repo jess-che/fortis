@@ -1,8 +1,10 @@
 // SearchResultsList.tsx
 
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import SharedResultsDiv from "./SharedResultsDiv";
+import ExerciseContext from '../ExerciseContext'; // Corrected import path
+
 import "./SearchResultsList.css";
 
 interface Exercise {
@@ -16,10 +18,12 @@ interface SearchResultsListProps {
 }
 
 const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
+  const { setSelectedExercise } = useContext(ExerciseContext);
   const [activeExercise, setActiveExercise] = useState<Exercise | null>(null);
 
   const handleRowClick = (exercise: Exercise) => {
     setActiveExercise(exercise);
+    setSelectedExercise(exercise); // Update the selected exercise in context
   };
 
   return (
@@ -46,6 +50,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
 };
 
 export default SearchResultsList;
+
 
 
 

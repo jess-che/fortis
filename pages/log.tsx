@@ -6,9 +6,11 @@ import SearchBar from "./SearchBarComponents/SearchBar";
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { setCookie, getCookie } from 'cookies-next';
 import { GetServerSideProps } from 'next';
-import React, { FC, useState, useEffect, ChangeEvent } from 'react';
+import React, { FC, useState, useEffect, ChangeEvent, useContext } from 'react';
 import '@/public/styles/log.css';     // style sheet for animations
 import { useRouter } from 'next/router';
+import ExerciseContext from './ExerciseContext';
+
 
 
 // exercise type
@@ -24,6 +26,7 @@ interface Exercise {
 
 const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   // ---- start of use state declarations + other declarations ----
+  const { selectedExercise } = useContext(ExerciseContext);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [exerciseEids, setExerciseEids] = useState<number[]>([]);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
@@ -83,6 +86,20 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   useEffect(() => {
     console.log("Updated exercises:", exercises);
   }, [exercises]);
+
+
+  // use state for getting selected exercise from exercisecontext.js
+  useEffect(() => {
+    if (selectedExercise) {
+      // Update the currentExercise state to reflect the selected exercise from the sidebar
+      setCurrentExercise({
+        ...currentExercise,
+        exerciseName: selectedExercise.name,
+        // any other fields you need to update
+      });
+    }
+  }, [selectedExercise]); // Dependency array includes selectedExercise
+  
   
   // use state for exercise
   const [currentExercise, setCurrentExercise] = useState<Exercise>({
@@ -501,8 +518,8 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                       <tr key={index}>
                         {editingIndex === index ? (
                           <>
-                            
-                            
+                          
+                          
                           {/* This ensures Edit and Delete work as intended. */}
 
                           <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="text" value={editingExercise.exerciseName} onChange={(event) => setEditingExercise({ ...editingExercise, exerciseName: event.target.value })} className="w-full text-center"/></td>
@@ -546,7 +563,9 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                           className="w-[15vw] rounded-md text-black"
                           options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
                           name='exerciseName'
-                          value={exerciseOptions.find(option => option === currentExercise.exerciseName) ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName } : null}
+                          value={exerciseOptions.find(option => option === currentExercise.exerciseName)
+                            ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName }
+                            : null}
                           onChange={handleSelectChange}
                           isSearchable
                           loadingMessage={() => 'Loading...'}
