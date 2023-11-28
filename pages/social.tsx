@@ -14,15 +14,15 @@ import styles from './App.module.css'; // Your main styles
 
 
 
-// const searchBarStyle = {
-//   // backgroundColor: '#aaa',
-//   margin: 'auto',
-//   width: '40%',
-//   display: 'flex',
-//   flexDirection: 'column' as 'column',
-//   alignItems: 'center',
-//   minWidth: '200px',
-// };
+const searchBarStyle = {
+  // backgroundColor: '#aaa',
+  margin: 'auto',
+  width: '40%',
+  display: 'flex',
+  flexDirection: 'column' as 'column',
+  alignItems: 'center',
+  minWidth: '200px',
+};
 
 
 const SocialPage: React.FC = () => {
@@ -33,6 +33,10 @@ const SocialPage: React.FC = () => {
   return (
     <DefLayout>
       <div className="social-page">
+      <div className="search-bar-container" style={searchBarStyle}>
+          <SearchBar />
+        </div>
+
         <button onClick={toggleMatcherForm} className={styleform.matcherButton}>
           Matcher Form
         </button>

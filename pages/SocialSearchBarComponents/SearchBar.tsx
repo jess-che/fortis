@@ -29,27 +29,27 @@ const SearchBar = () => {
         console.log(dataName);
     };
 
-    const populatelist2 = async (query: any) => {
-        const response = await fetch('/api/searchUserEmail', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                searchQuery: query
-            }),
-        });
+    // const populatelist2 = async (query: any) => {
+    //     const response = await fetch('/api/searchUserEmail', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //             searchQuery: query
+    //         }),
+    //     });
 
-        if (!response.ok) {
-            throw new Error('Failed to save query');
-        }
+    //     if (!response.ok) {
+    //         throw new Error('Failed to save query');
+    //     }
 
-        const data = await response.json();
-        const dataName = data.data.rows.map((row: { email: any; }) => row.email);
-        setResults((prevResults: string[]) => [...prevResults, ...dataName]);
-        // setResults(dataName);
-        console.log(dataName);
-    };
+    //     const data = await response.json();
+    //     const dataName = data.data.rows.map((row: { email: any; }) => row.email);
+    //     setResults((prevResults: string[]) => [...prevResults, ...dataName]);
+    //     // setResults(dataName);
+    //     console.log(dataName);
+    // };
 
 
     // so names load on start
@@ -62,7 +62,7 @@ const SearchBar = () => {
         setResults([]);
 
         populatelist(value);
-        populatelist2(value);
+        // populatelist2(value);
     };
 
     return (

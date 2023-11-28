@@ -1,11 +1,43 @@
 .results-list {
-    width: 100%;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0px 0px 8px #ddd;
-    border-radius: 10px;
-    margin-top: 1rem;
-    max-height: 200px;
-    overflow-y: auto;
-  }
+  width: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 0px 8px #ddd;
+  border-radius: 10px;
+  margin-top: 1rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.result-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.result-item-name {
+  flex-grow: 1;
+  /* This will allow the name to take up the available space */
+}
+
+.friend-button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-friend {
+  background-color: #4CAF50;
+  /* Green */
+  color: white;
+}
+
+.remove-friend {
+  background-color: #f44336;
+  /* Red */
+  color: white;
+}
