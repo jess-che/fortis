@@ -6,15 +6,15 @@ const pool = new Pool({
 
 export default async (req, res) => {
   if (req.method === 'POST') {
-    const { workoutTypes, location, frequency, genderPreference, gymAvailability, softPreferences } = req.body;
+    const { uid, workoutTypes, location, frequency, genderPreference, gymAvailability, softPreferences } = req.body;
 
     const insertMatcherData = `
-      INSERT INTO public.matcher (frequency, "genderPreference", "workoutTypes", location, "gymAvailability", "softPreferences")
-      VALUES ($1, $2, $3, $4, $5, $6)
+      INSERT INTO public.matcher ("Uid", frequency, "genderPreference", "workoutTypes", location, "gymAvailability", "softPreferences")
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
     `;
 
     try {
-      await pool.query(insertMatcherData, [frequency, genderPreference, workoutTypes, location, gymAvailability, softPreferences]);
+      await pool.query(insertMatcherData, [uid, frequency, genderPreference, workoutTypes, location, gymAvailability, softPreferences]);
       res.status(200).send('Matcher data inserted successfully');
     } catch (error) {
       console.error('Error in inserting matcher data:', error);

@@ -6,11 +6,14 @@ import DefLayout      from '@/components/def_layout';
 import SearchBar from "./SocialSearchBarComponents/SearchBar";
 import SearchResultsList from "./SocialSearchBarComponents/SearchResultsList";
 import styles from './WorkoutBuddyMatcher.module.css';
+import { setCookie, getCookie}            from 'cookies-next';
+
 
 const timeSlots = Array.from({ length: 17 }, (_, index) => `${index + 6}:00`); // 6:00 to 22:00
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 interface FormData {
+  uid: string;
   workoutTypes: string[]; // Specify as string array
   location: string;
   frequency: string[];
@@ -21,6 +24,7 @@ interface FormData {
 
 const WorkoutBuddyMatcher = () => {
   const [formData, setFormData] = useState<FormData>({
+    uid: '',
     workoutTypes: [],
     location: '',
     frequency: [],
@@ -68,6 +72,7 @@ const WorkoutBuddyMatcher = () => {
   };
   
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    formData.uid = String(getCookie('uid'));
     e.preventDefault();
     try {
       console.log(formData);
