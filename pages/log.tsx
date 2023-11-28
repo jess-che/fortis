@@ -9,7 +9,7 @@ import { GetServerSideProps } from 'next';
 import React, { FC, useState, useEffect, ChangeEvent, useContext } from 'react';
 import '@/public/styles/log.css';     // style sheet for animations
 import { useRouter } from 'next/router';
-import { useExerciseContext } from './ExerciseContext';
+import ExerciseContext, { useExerciseContext } from './ExerciseContext';
 
 
 
@@ -26,7 +26,8 @@ interface Exercise {
 
 const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   // ---- start of use state declarations + other declarations ----
-  const { selectedExercise } = useExerciseContext();
+  // const { selectedExercise } = useExerciseContext();
+  const { selectedExercise } = useContext(ExerciseContext);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [exerciseEids, setExerciseEids] = useState<number[]>([]);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
