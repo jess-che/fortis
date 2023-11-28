@@ -3,6 +3,20 @@
     border: 2px solid #007bff; /* Highlight color when the element is focused */
   }
 
+.selectMultiple {
+    /* You can adjust the max-height as needed */
+    max-height: 50px;
+    overflow-y: auto;
+  }
+
+  .textarea {
+    width: 100%; /* Set width to 100% */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    min-height: 100px; /* Adjust the height as needed */
+  }
+
 .daysGrid {
     display: flex;
     justify-content: space-between;
@@ -21,6 +35,7 @@
     margin-right: 0;
   }
   
+
 .selected {
     background: #007bff;
     color: #fff;
@@ -56,7 +71,7 @@
   }
   
 .formGroup {
-    margin-bottom: 15px; /* Adjust spacing between form groups */
+    margin-bottom: 5px; /* Adjust spacing between form groups */
   }
   
 .label {

@@ -17,6 +17,7 @@ interface FormData {
   frequency: string[];
   genderPreference: string;
   gymAvailability: boolean[];
+  softPreferences: string;
 }
 
 const WorkoutBuddyMatcher = () => {
@@ -26,7 +27,8 @@ const WorkoutBuddyMatcher = () => {
     location: '',
     frequency: [],
     genderPreference: '',
-    gymAvailability: Array(timeSlots.length).fill(false)
+    gymAvailability: Array(timeSlots.length).fill(false),
+    softPreferences: ''
   });
 
   const handleDayToggle = (day: string) => {
@@ -117,6 +119,7 @@ const WorkoutBuddyMatcher = () => {
           ))}
         </div>
       </div>
+      
       <div className={styles.formGroup}>
         <label className={styles.label}>Workout Types (select multiple):</label>
         <select
@@ -124,7 +127,7 @@ const WorkoutBuddyMatcher = () => {
           name="workoutTypes"
           onChange={handleMultiSelectChange}
           className={styles.select}
-          size={6} // Optional: Sets the visible number of options in a drop-down list
+          //</div>size={6} // Optional: Sets the visible number of options in a drop-down list
         >
           <option value="climbing">Climbing</option>
           <option value="push">Push</option>
@@ -146,6 +149,16 @@ const WorkoutBuddyMatcher = () => {
           <option value="female">Female</option>
           <option value="non-binary">Non-binary</option>
         </select>
+      </div>
+      <div className={styles.formGroup}>
+        <label className={styles.label}>Soft Preferences:</label>
+        <textarea
+          name="softPreferences"
+          onChange={handleInputChange}
+          value={formData.softPreferences}
+          className={styles.textarea}
+          placeholder="Any additional preferences or comments..."
+        />
       </div>
       <div className={styles.formGroup}>
         <button type="submit" className={styles.button}>
