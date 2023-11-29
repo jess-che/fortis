@@ -443,6 +443,10 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
 
   const customSelect = {
     control: (styles: any) => ({ ...styles, backgroundColor: 'rgba(255, 255, 255, 0.05)' }),
+    input: (styles: any) => ({
+      ...styles,
+      color: 'white', // Set text color to white for typed text
+    }),
     menu: (styles: any) => ({ ...styles, backgroundColor: 'rgba(18, 18, 18, 0.6)', backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)', }),
     option: (provided: any, state: any) => ({
       ...provided,
