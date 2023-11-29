@@ -28,6 +28,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
 
   const handleRowClick = (exercise: Exercise) => {
     setActiveExercise(exercise);
+    console.log(exercise);
     setSelectedExercise(exercise); // Update the selected exercise in context
   };
 

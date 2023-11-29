@@ -3,7 +3,7 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 // Assuming you have defined 'Exercise' type in ExerciseTypes file
-import { Exercise } from './ExerciseTypes';
+import { Exercise } from '../public/types/ExerciseTypes';
 
 // Define the shape of the context's value
 interface ExerciseContextValue {
