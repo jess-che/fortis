@@ -189,7 +189,6 @@ const DiscoverPage: React.FC = () => {
               <div className="activity-info">
                 <h2>{activity.Activity_name}</h2>
                 <span>Aid: {activity.Aid}</span>
-                <span>favorites: {activity.Favorite}</span>
                 {/* Display the aggregated set counts by category */}
                 {Object.entries(activity.categorySetCounts).map(([category, count]) => (
                   <div key={category}>{category}: {count as number} sets</div>
