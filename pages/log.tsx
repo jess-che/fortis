@@ -9,7 +9,7 @@ import { GetServerSideProps } from 'next';
 import React, { FC, useState, useEffect, ChangeEvent, useContext } from 'react';
 import '@/public/styles/log.css';     // style sheet for animations
 import { useRouter } from 'next/router';
-import ExerciseContext, { useExerciseContext } from './ExerciseContext';
+import ExerciseContext, { useExerciseContext, ExerciseProvider } from './ExerciseContext';
 
 
 
@@ -468,6 +468,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
 
   return (
     <DefLayout>
+      <ExerciseProvider>
       <div>
         {exercises.map((exercise, index) => (
           <div key={index}>
@@ -642,6 +643,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
           </div>
         )}
       </div>
+      </ExerciseProvider>
     </DefLayout >
   );
 }
