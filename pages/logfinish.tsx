@@ -180,7 +180,7 @@ const LogFinish: React.FC = () => {
     <DefLayout>
       <div className='flex flex-col w-screen items-center justify-center'>
         {activityData.map((activity: any, i: number) => (
-          <div className="flex flex-row w-[90vw] items-end justify-between relative z-10 px-4 mb-4">
+          <div className="flex flex-row w-[90vw] items-end justify-between relative z-10 px-4 mb-4 mt-2">
             <div className="text-4xl font-bold">
               <input
                 type="text"
@@ -213,7 +213,7 @@ const LogFinish: React.FC = () => {
         ))}
 
 
-        <div className="w-[80vw] h-[1px] bg-white bg-opacity-65"></div>
+        <div className="w-[80vw] h-[1px] bg-white bg-opacity-60"></div>
 
         <div className='w-[85vw] px-5'>
 

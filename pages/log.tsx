@@ -442,7 +442,11 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   };
 
   const customSelect = {
-    control: (styles: any) => ({ ...styles, backgroundColor: 'rgba(255, 255, 255, 0.05)' }),
+    control: (styles: any) => ({ ...styles, backgroundColor: 'rgba(255, 255, 255, 0.05)', color: 'white' }),
+    input: (styles: any) => ({
+      ...styles,
+      color: 'white', // Set text color to white for typed text
+    }),
     menu: (styles: any) => ({ ...styles, backgroundColor: 'rgba(18, 18, 18, 0.6)', backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)', }),
     option: (provided: any, state: any) => ({
       ...provided,
@@ -564,7 +568,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                       <td className="flex flex-row min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle items-center">
                         <Select
                           styles={customSelect}
-                          className="w-[15vw] rounded-md text-black"
+                          className="w-[15vw] rounded-md text-white"
                           options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
                           name='exerciseName'
                           value={{ value: currentExercise.exerciseName, label: currentExercise.exerciseName }}
