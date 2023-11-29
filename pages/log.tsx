@@ -30,11 +30,18 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   const [exerciseEids, setExerciseEids] = useState<number[]>([]);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
 
+  const [dataFromSearch, setDataFromSearch] = useState('');
+
   const router = useRouter(); // use for redirecting to different pages
 
   // is show all exercises open
   const toggleSidePanel = () => {
     setIsSidePanelOpen(!isSidePanelOpen);
+  };
+
+  const receiveDataFromSearch = (data:any) => {
+    setDataFromSearch(data);
+    setCurrentExercise({ ...currentExercise, exerciseName: data.name, eid: data.eid });
   };
 
   useEffect(() => {
@@ -512,8 +519,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                     {exercises.map((exercise, index) => (
                       <tr key={index}>
                         {editingIndex === index ? (
-                          <>
-                          
+                          <> 
                           
                           {/* This ensures Edit and Delete work as intended. */}
 
@@ -611,7 +617,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                 {isSidePanelOpen && (
                   <aside className="w-[25vw] pl-[5vw] ml-[5vw] border-l border-white border-opacity-50">
                     <div className="search-bar-container" style={searchBarStyle}>
-                      <SearchBar />
+                      <SearchBar sendDataToA={receiveDataFromSearch}/>
                     </div>
                   </aside>
                 )}

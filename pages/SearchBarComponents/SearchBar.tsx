@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import SearchResultsList from "./SearchResultsList";
 import "./SearchBar.css";
+import { send } from "process";
 
+interface SearchResultsListProps {
+  sendDataToA: (data: any) => void;
+}
 
-const SearchBar = () => {
+const SearchBar: React.FC<SearchResultsListProps> = ({ sendDataToA }) => {
   const [input, setInput] = useState("");
   const [results, setResults] = useState([]);
+
 
   const populatelist = async (query: any) => {
     const response = await fetch('/api/searchExcName', {
@@ -48,7 +53,7 @@ const SearchBar = () => {
           onChange={(e) => handleChange(e.target.value)}
         />
       </div>
-      {results && results.length > 0 && <SearchResultsList results={results} />}
+      {results && results.length > 0 && <SearchResultsList results={results}  sendDataToA={sendDataToA}/>}
     </div>
   );
 };
