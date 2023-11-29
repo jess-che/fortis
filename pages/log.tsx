@@ -564,9 +564,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                           className="w-[15vw] rounded-md text-black"
                           options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
                           name='exerciseName'
-                          value={exerciseOptions.find(option => option === currentExercise.exerciseName)
-                            ? { value: currentExercise.exerciseName, label: currentExercise.exerciseName }
-                            : null}
+                          value={{ value: currentExercise.exerciseName, label: currentExercise.exerciseName }}
                           onChange={handleSelectChange}
                           isSearchable
                           loadingMessage={() => 'Loading...'}
