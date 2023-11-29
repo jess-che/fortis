@@ -9,13 +9,18 @@ import "./SearchResultsList.css";
 
 interface Exercise {
   name: string;
-  description?: string;
+  description: string;
   muscle_group: string;
+  eid: number;
+  equipment: string;
+  favorite: boolean;
+  popularity: number;
+  type: string;
 }
 
 interface SearchResultsListProps {
   results: Exercise[];
-}
+} 
 
 const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
   const { setSelectedExercise } = useContext(ExerciseContext);
