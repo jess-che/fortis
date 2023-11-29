@@ -557,7 +557,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                         )}
                       </tr>
                     ))}
-                    <tr>
+                    <tr> 
                       <td className="flex flex-row min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle items-center">
                         <Select
                           styles={customSelect}
