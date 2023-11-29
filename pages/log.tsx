@@ -329,6 +329,9 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     }
 
     const data = await response.json();
+    let transfAID: string | null = data.data.rows[0].Aid.toString();
+    if (transfAID != null)
+      localStorage.setItem('aidTransfer', transfAID);
     return parseInt(data.data.rows[0].Aid);
   };
 
