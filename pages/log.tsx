@@ -9,9 +9,7 @@ import { GetServerSideProps } from 'next';
 import React, { FC, useState, useEffect, ChangeEvent, useContext } from 'react';
 import '@/public/styles/log.css';     // style sheet for animations
 import { useRouter } from 'next/router';
-import ExerciseContext, { useExerciseContext, ExerciseProvider } from './ExerciseContext';
-
-
+// import ExerciseContext, { useExerciseContext, ExerciseProvider } from './ExerciseContext';
 
 // exercise type
 interface Exercise {
@@ -27,7 +25,7 @@ interface Exercise {
 const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   // ---- start of use state declarations + other declarations ----
   // const { selectedExercise } = useExerciseContext();
-  const { selectedExercise } = useContext(ExerciseContext);
+  // const { selectedExercise } = useContext(ExerciseContext);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [exerciseEids, setExerciseEids] = useState<number[]>([]);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
@@ -46,26 +44,8 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
         const workoutExercises = JSON.parse(savedWorkoutData);
         console.log("Workout Data from HistoryPage:", workoutExercises);
   
-      //   if (Array.isArray(workoutExercises)) {
-      //     const newExercises = workoutExercises.map(exercise => ({
-      //       exerciseName: exercise.exerciseData.name, 
-      //       numberOfReps: exercise.Rep,
-      //       numberOfSets: exercise.Set,
-      //       weight: exercise.Weight,
-      //       eid: exercise.Eid,
-      //       aid: exercise.Aid,
-      //       uid: exercise.Uid
-      //     }));
-      //     console.log("New exercises to set:", newExercises);  
-      //     // add to existing exercises
-      //     setExercises(prevExercises => [...prevExercises, ...newExercises]);
-      //   }
-      //   // console.log("Exercises after update:", exercises);  
-      //   // localStorage.removeItem('workoutData');
-      // }
-      if (Array.isArray(workoutExercises)) {
-        workoutExercises.forEach(exercise => {
-          const newExercise = {
+        if (Array.isArray(workoutExercises)) {
+          const newExercises = workoutExercises.map(exercise => ({
             exerciseName: exercise.exerciseData.name, 
             numberOfReps: exercise.Rep,
             numberOfSets: exercise.Set,
@@ -73,11 +53,27 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
             eid: exercise.Eid,
             aid: exercise.Aid,
             uid: exercise.Uid
-          };
+          }));
+          console.log("New exercises to set:", newExercises);  
+          // add to existing exercises
+          setExercises(prevExercises => [...prevExercises, ...newExercises]);
+        }
 
-          setExercises(prevExercises => [...prevExercises, newExercise]);
-        });
-      }
+      // if (Array.isArray(workoutExercises)) {
+      //   workoutExercises.forEach(exercise => {
+      //     const newExercise = {
+      //       exerciseName: exercise.exerciseData.name, 
+      //       numberOfReps: exercise.Rep,
+      //       numberOfSets: exercise.Set,
+      //       weight: exercise.Weight,
+      //       eid: exercise.Eid,
+      //       aid: exercise.Aid,
+      //       uid: exercise.Uid
+      //     };
+
+      //     setExercises(prevExercises => [...prevExercises, newExercise]);
+      //   });
+      // }
     }
     } catch (error) {
         console.error("Error retrieving workout data from local storage:", error);
@@ -90,14 +86,14 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
 
 
   // use state for getting selected exercise from exercisecontext.js
-  useEffect(() => {
-    if (selectedExercise) {
-      setCurrentExercise({
-        ...currentExercise,
-        exerciseName: selectedExercise.name,
-      });
-    }
-  }, [selectedExercise]); // Dependency array includes selectedExercise
+  // useEffect(() => {
+  //   if (selectedExercise) {
+  //     setCurrentExercise({
+  //       ...currentExercise,
+  //       exerciseName: selectedExercise.name,
+  //     });
+  //   }
+  // }, [selectedExercise]); // Dependency array includes selectedExercise
   
   
   // use state for exercise
@@ -468,7 +464,6 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
 
   return (
     <DefLayout>
-      <ExerciseProvider>
       <div>
         {exercises.map((exercise, index) => (
           <div key={index}>
@@ -643,7 +638,6 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
           </div>
         )}
       </div>
-      </ExerciseProvider>
     </DefLayout >
   );
 }
