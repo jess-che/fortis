@@ -16,6 +16,7 @@ import '@/public/styles/home.css';                              // style sheet f
 setCookie('uid', 'b24e24f4-86b8-4b83-8947-b2472a43b436');
 // setCookie('uid', 'neot logged in');  // <- change to this to get it to work for development first login
 console.log(getCookie('uid'));
+setCookie('login', 'false');
 
 setCookie('name', 'temp name');
 
@@ -83,6 +84,7 @@ const Home: React.FC = () => {
 
       const data = await response.json();
       setCookie('uid', data.data.rows[0].uid);
+      setCookie('login', 'true');
       console.log("Got UID in History: ");
       console.log(getCookie('uid'));
       return data.data.rows[0].uid;
@@ -390,7 +392,10 @@ const Home: React.FC = () => {
       </LoginLayout>
     );
   }
-
+  
+  if (user) {
+    setCookie('login', 'true');
+  }
   // ---- start of auth0 logic ----
   // set whether or not it is user's first login
   if (user && user['https://cs316-fortis.vercel.app/firstLogin']) {
@@ -416,11 +421,10 @@ const Home: React.FC = () => {
       // Handle errors here if necessary
       console.error(error);
     }
-    window.location.reload();
   }
-  useEffect(() => {
+  if(getCookie('login') === 'false') {
     setCookies();
-  }, []);
+  }
   
   // ---- end of auth0 logic ----
 
