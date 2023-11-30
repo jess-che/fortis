@@ -13,7 +13,7 @@ import MuscleModel from '@/pages/MuscleModel'; // Adjust the path as needed
 import '@/public/styles/home.css';                              // style sheet for animations
 
 // !! FOR DEVELOPMENT ONLY !!
-setCookie('uid', 'b24e24f4-86b8-4b83-8947-b2472a43b436');
+setCookie('uid', 'neot logged in');
 console.log(getCookie('uid'));
 
 interface DataPoint {
@@ -85,7 +85,10 @@ const Home: React.FC = () => {
       return data.data.rows[0].uid;
     }
     catch {
-
+      handleUserSave();
+      if (user)
+        getUID(user.email);
+      handleUserDataSave();
     }
   };
 
