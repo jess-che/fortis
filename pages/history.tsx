@@ -174,10 +174,34 @@ const HistoryPage: FC = () => {
     }
   }, [specificAid]);
   // ---- end of API calls with useEffect ----
+  
+  const addActivity = async () => {
+    setCookie('log', 'true');       // sets cookie to show that user is logging workout
+
+    try {
+      const response = await fetch('/api/addActivity', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: getCookie('uid'),
+        }),
+      });
+      if (!response.ok) throw new Error('Network response was not ok.');
+      // Handle the response here
+    } catch (error) {
+      console.error('Failed to add activity:', error);
+      // Handle errors here
+    }
+  };
 
   // Add a new function to handle the Save click
   const handleSaveClick = (workoutData: any[]) => {
     localStorage.setItem('workoutData', JSON.stringify(workoutData));
+    if (getCookie('log') === 'false') {
+      addActivity();
+    }
     router.push('/log'); // Assuming '/log' is the path to Log2Page
   };
 
