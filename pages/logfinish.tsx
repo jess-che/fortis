@@ -70,10 +70,12 @@ const LogFinish: React.FC = () => {
       const responseBody = await response.text();
       console.log('Response body:', responseBody);
 
+      alert('Changes saved successfully!');
+
       if (!response.ok) throw new Error('Network response was not ok.');
       // Handle the response here
     } catch (error) {
-      console.error('Failed to add activity:', error);
+      alert('Please use YYYY-MM-DD format for date and _d _h _m _s for duration.');
       // Handle errors here
     }
   };
