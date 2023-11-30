@@ -21,6 +21,15 @@ interface DataPoint {
   duration: number;
 }
 
+interface Exercise {
+  exerciseName: string;
+  numberOfReps: number;
+  numberOfSets: number;
+  weight: number;
+  eid: number;
+  aid: number;
+  uid: string;
+}
 
 const HistoryPage: FC = () => {
   const router = useRouter();
@@ -198,7 +207,20 @@ const HistoryPage: FC = () => {
 
   // Add a new function to handle the Save click
   const handleSaveClick = (workoutData: any[]) => {
-    localStorage.setItem('workoutData', JSON.stringify(workoutData));
+    const exerciseArray: Exercise[] = workoutData.map((item) => {
+      return {
+        exerciseName: item.exerciseData.name,
+        numberOfReps: item.Rep,
+        numberOfSets: item.Set,
+        weight: item.Weight,
+        eid: item.Eid,
+        aid: item.Aid,
+        uid: item.Uid,
+      };
+    });
+
+    console.log(exerciseArray);
+    localStorage.setItem('exercises', JSON.stringify(exerciseArray));
     if (getCookie('log') === 'false') {
       addActivity();
     }
