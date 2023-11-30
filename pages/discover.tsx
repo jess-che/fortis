@@ -13,7 +13,7 @@ const DiscoverPage: React.FC = () => {
   type StringToArrayMappingType = {
     [key: string]: string[];
   };
- 
+
   type CategorySetCounts = {
     [category: string]: number;
   };
@@ -62,10 +62,10 @@ const DiscoverPage: React.FC = () => {
   };
   // Filter and sort activities based on the selected category and set count
   const filteredAndSortedActivityData = selectedCategory
-  ? activityData
+    ? activityData
       .filter(activity => activity.categorySetCounts[selectedCategory] > 5)
       .sort((a, b) => b.categorySetCounts[selectedCategory] - a.categorySetCounts[selectedCategory])
-  : activityData;
+    : activityData;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,7 +76,7 @@ const DiscoverPage: React.FC = () => {
         }
         const activityJson = await response.json();
         const activitiesWithCategorySetCounts = await Promise.all(activityJson.data.rows.map(async (activity: any) => {
-        const categorySetCounts: CategorySetCounts = {};
+          const categorySetCounts: CategorySetCounts = {};
 
           const workoutResponse = await fetch('/api/TemplateWorkouts', {
             method: 'POST',
@@ -88,7 +88,7 @@ const DiscoverPage: React.FC = () => {
               aid: activity.Aid,
             }),
           });
-        
+
           if (!workoutResponse.ok) {
             throw new Error('Failed to retrieve history workouts');
           }
@@ -96,32 +96,32 @@ const DiscoverPage: React.FC = () => {
           const workoutsWithExerciseData = await Promise.all(workoutJson.data.rows.map(async (workout: any) => {
             const exerciseDataResponse = await ExcDatafromEID(workout.Eid);
             const muscleGroups = exerciseDataResponse?.muscle_group?.split(',') || [];
-          muscleGroups.forEach((muscleGroup: string) => {
-            const trimmedMuscleGroup = muscleGroup.trim();
-            const category = muscleToWorkoutMap[trimmedMuscleGroup];
-            if (category) {
-              categorySetCounts[category] = (categorySetCounts[category] || 0) + parseInt(workout.Set, 10);
-            }
-          });
+            muscleGroups.forEach((muscleGroup: string) => {
+              const trimmedMuscleGroup = muscleGroup.trim();
+              const category = muscleToWorkoutMap[trimmedMuscleGroup];
+              if (category) {
+                categorySetCounts[category] = (categorySetCounts[category] || 0) + parseInt(workout.Set, 10);
+              }
+            });
+            return {
+              ...workout,
+              exerciseData: exerciseDataResponse,
+            };
+          }));
           return {
-            ...workout,
-            exerciseData: exerciseDataResponse,
+            ...activity,
+            workouts: workoutsWithExerciseData,
+            categorySetCounts,
           };
         }));
-        return {
-          ...activity,
-          workouts: workoutsWithExerciseData,
-          categorySetCounts,
-        };
-      }));
-      setActivityData(activitiesWithCategorySetCounts);
+        setActivityData(activitiesWithCategorySetCounts);
       } catch (error) {
         console.error('Error:', error);
       }
     };
     fetchData();
   }, []);
- 
+
 
 
   const workoutRectangleStyle = {
@@ -130,10 +130,10 @@ const DiscoverPage: React.FC = () => {
     padding: '.5rem',
     borderRadius: '10px',
   };
- 
+
   const [results, setResults] = useState<string[]>([]);
   // const handleWorkoutClick = (workoutName: string) => {console.log(`You clicked ${workoutName}`);};
- 
+
   const [selectedWorkout, setSelectedWorkout] = useState<string | null>(null);
   const handleWorkoutClick = (workoutName: string) => {
     setSelectedWorkout(prevWorkout => {
@@ -154,8 +154,8 @@ const DiscoverPage: React.FC = () => {
   };
   // Filter activities based on the selected category and set count
   const filteredActivityData = selectedCategory
-  ? activityData.filter(activity => activity.categorySetCounts[selectedCategory] > 5)
-  : activityData;
+    ? activityData.filter(activity => activity.categorySetCounts[selectedCategory] > 5)
+    : activityData;
 
   return (
     <DefLayout>
@@ -166,7 +166,7 @@ const DiscoverPage: React.FC = () => {
             const itemStyle = isSelected
               ? { ...workoutRectangleStyle, background: "green" }
               : workoutRectangleStyle;
- 
+
             return (
               <div key={workout.name} className="workout-item" style={itemStyle} onClick={() => handleCategoryClick(workout.name)}>
                 <div className="workout-rectangle">
