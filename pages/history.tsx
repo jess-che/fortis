@@ -402,48 +402,6 @@ const HistoryPage: FC = () => {
               </svg>
             </button>
 
-            {showGraph && (
-              <div className="w-[100vw] min-h-[90vh] flex flex-row items-center justify-center flex-shrink-0 text-center bg-black">
-                <div className="flex flex-col items-center justify-center">
-                  <div className="text-center">
-                    <span className='text-4xl font-bold'>Welcome {" "}{" "}</span>
-                    <span className='text-5xl font-bold glow-text'>{getCookie('name')}</span>
-                    <span className='text-4xl font-bold'>!</span>
-                  </div>
-
-                  <div className="w-full h-[1px] bg-white mt-5 opacity-50"></div>
-
-                  {!isLoading && parsedData.length > 0 ? (
-                    <StreakGraph parsedData={parsedData} /> // Render the StreakGraph component here
-                  ) : (
-                    isLoading ? <p>Loading...</p> : <p>No data to display</p>
-                  )}
-
-                  <div className="w-full h-[1px] bg-white mb-5"></div>
-
-                  <div className="flex flex-col items-center">
-                    <div className="ml-2 text-2xl">
-                      <span className='text-3xl font-bold'>Workout Time This Week: {" "}{" "}</span>
-                      {` ${workoutTimeText}`}
-                    </div>
-
-                    <div className="mr-3">
-                      {workoutChangeText && (
-                        <div
-                          style={{
-                            color: isPositiveChange ? '#55BBA4' : '#C32E67',
-                          }}
-                          className="text-xl"
-                        >
-                          ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
             <div className="h-[2px] w-[18vw] bg-white bg-opacity-50 mb-5"></div>
 
             <ul className="overflow-y-auto mb-3 min-w-[19vw]">
