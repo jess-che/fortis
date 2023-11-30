@@ -418,7 +418,10 @@ const Home: React.FC = () => {
     }
     window.location.reload();
   }
-  setCookies();
+  useEffect(() => {
+    setCookies();
+  }, []);
+  
   // ---- end of auth0 logic ----
 
   return (
