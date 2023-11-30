@@ -7,7 +7,7 @@ const pool = new Pool({
 
 const searchUserName = `
     SELECT * FROM user_data
-    WHERE user_data.uid = $1
+    WHERE user_data."uid" = $1
     `;
 
 export default async (req, res) => {
@@ -16,8 +16,7 @@ export default async (req, res) => {
         console.log(searchQuery);
 
         try {
-            const values = [`%${searchQuery}%`];
-            const results = await pool.query(searchUserName, values);
+            const results = await pool.query(searchUserName, [searchQuery]);
 
             console.log('Success! GetUIDfromEmail');
             res.json({ success: true, data: results });
