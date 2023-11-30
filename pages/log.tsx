@@ -444,7 +444,12 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   const customSelect = {
     control: (styles: any) => ({ ...styles, backgroundColor: 'rgba(255, 255, 255, 0.05)' }),
     input: (styles:any) => ( {...styles, color:'white' } ),
-    menu: (styles: any) => ({ ...styles, backgroundColor: 'rgba(18, 18, 18, 0.6)', backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)', }),
+    menu: (styles: any) => ({ ...styles, backgroundColor: 'rgba(18, 18, 18, 0.6)', backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)', zIndex: 9999, maxHeight: '150px',}),
+    menuList: (base:any) => ({
+      ...base,
+      maxHeight: '150px', // Set the maximum height to 5vh
+      overflowY: 'auto', // Enable vertical scrolling if content exceeds maxHeight
+    }),
     option: (provided: any, state: any) => ({
       ...provided,
       color: state.isSelected ? 'white' : 'white', // Text color for options
@@ -487,7 +492,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
         {isLogging ? (
           <>
             <div className="w-screen flex flex-row items-center justify-center">
-              <div className="flex flex-col overflow-hidden items-center">
+              <div className="flex flex-col items-center">
                 <div>
                   {isEditing ? (
                     // Render an input field if edit mode is active
