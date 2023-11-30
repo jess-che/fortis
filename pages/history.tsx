@@ -1,18 +1,25 @@
 'use client'
 import React, { FC, useEffect, useState } from 'react';
-import DefLayout                          from '@/components/def_layout';
-import LoginLayout                        from '@/components/login_layout';  // !! FOR DEVELOPMENT ONLY
-import Image                              from 'next/image';
-import Link                               from 'next/link';
-import { useUser }                        from '@auth0/nextjs-auth0/client';
-import { setCookie, getCookie}            from 'cookies-next';
+import DefLayout from '@/components/def_layout';
+import LoginLayout from '@/components/login_layout';  // !! FOR DEVELOPMENT ONLY
+import Image from 'next/image';
+import Link from 'next/link';
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { setCookie, getCookie } from 'cookies-next';
 import '@/public/styles/history.css';     // style sheet for animations
 import { useRouter } from 'next/router';
+import '@/pages/StreakGraphs.css';
+import StreakGraph from '@/pages/StreakGraph'; // Adjust the path as needed
 
 // define type
 type DataType = {
   workouts: any[];
 };
+
+interface DataPoint {
+  date: string;
+  duration: number;
+}
 
 
 const HistoryPage: FC = () => {
@@ -36,6 +43,12 @@ const HistoryPage: FC = () => {
   // side bar
   const [weeksBefore, setWeeksBefore] = useState(1);  // weeks -- used to query by week in sidebar
   const [loading, setLoading] = useState(true);       // if data is being fetched for sidebar
+
+  const [showGraph, setShowGraph] = useState(false);
+
+  const toggleGraph = () => {
+    setShowGraph(!showGraph);
+  };
   // ---- end of use state components ----
 
   // ---- start of API fn calls ----
@@ -73,8 +86,8 @@ const HistoryPage: FC = () => {
       setLoading(true);   // set loading to true while data is being fetched
 
       const today = new Date();
-      const today2 = new Date(); 
-      today2.setDate(today.getDate()+ 1);                                       // add a day for edge case
+      const today2 = new Date();
+      today2.setDate(today.getDate() + 1);                                       // add a day for edge case
       const currentDateString = new Date(today2).toISOString().split('T')[0];   // make postgre able
 
       try {
@@ -113,7 +126,7 @@ const HistoryPage: FC = () => {
     };
 
     fetchData();
-  }, [weeksBefore]);   
+  }, [weeksBefore]);
 
   // get data for specific activity
   useEffect(() => {
@@ -155,11 +168,11 @@ const HistoryPage: FC = () => {
     };
 
     fetchData();
-    if (specificAid != null){
+    if (specificAid != null) {
       let transfAID: string | null = specificAid.toString();
       localStorage.setItem('aidTransfer', transfAID);
     }
-  }, [specificAid]);   
+  }, [specificAid]);
   // ---- end of API calls with useEffect ----
 
   // Add a new function to handle the Save click
@@ -228,6 +241,127 @@ const HistoryPage: FC = () => {
   };
   // ---- start of reformating ----
 
+
+  // trying to add graph
+  const [parsedData, setParsedData] = useState<DataPoint[]>([]);
+  const [loadingGraph, setIsGraphLoading] = useState(false); // new state for loading indicator
+  const [workoutTimeText, setWorkoutTimeText] = useState('');
+  const [workoutChangeText, setWorkoutChangeText] = useState('');
+  const [isPositiveChange, setIsPositiveChange] = useState(false);
+
+  useEffect(() => {
+    const handleAnalStreaks = async () => {
+      try {
+        await AnalStreaks();
+        console.log('AnalStreaks called successfully');
+      } catch (error) {
+        console.error('Error calling AnalStreaks:', error);
+      }
+      // } else {
+      //   console.error('User email is not available.');
+      // }
+
+      try {
+        await time();
+        console.log('time Done');
+      } catch (error) {
+        console.error('Error calling time:', error);
+      }
+    };
+
+    handleAnalStreaks();
+  }, [setIsGraphLoading]);
+
+  // work time this week
+  const time = async () => {
+    try {
+      const res = await fetch('api/TotalTime', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          searchQuery: getCookie('uid'),
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const data = await res.json();
+      const totalMinutes = Math.round(parseFloat(data.data.rows[0].total_workout_minutes));
+      const previousWeekMinutes = Math.round(parseFloat(data.data.rows[0].previous_week_minutes));
+
+      // Calculate percentage change
+      let percentageChange = 0;
+      if (previousWeekMinutes > 0) {
+        percentageChange = ((totalMinutes - previousWeekMinutes) / previousWeekMinutes) * 100;
+      }
+
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+
+      const formattedTime = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+      setWorkoutTimeText(`${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`);
+      setWorkoutChangeText(`${percentageChange.toFixed(1)}%`);
+      setIsPositiveChange(percentageChange > 0);
+
+      console.log(formattedTime);
+
+      return formattedTime; // This line returns the formatted time, which can be used elsewhere
+    } catch (error) {
+      console.error('Error in time:', error);
+      return ''; // Return an empty string or some default value in case of an error
+    }
+  };
+
+  // the your workout streaks
+  const AnalStreaks = async () => {
+    setIsGraphLoading(true); // Set loading to true before fetching data
+    try {
+      const response = await fetch('api/AnalStreaks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          searchQuery: getCookie('uid'),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const responseData = await response.json();
+
+      if (responseData.data && Array.isArray(responseData.data.rows)) {
+        // This will hold dates as keys and durations as values
+        const durationByDate: Record<string, number> = {};
+
+        responseData.data.rows.forEach((row: any) => {
+          const date = new Date(row.Date).toLocaleDateString("en-US");
+          const duration = (row.Duration.hours || 0) * 60 + (row.Duration.minutes || 0);
+          durationByDate[date] = (durationByDate[date] || 0) + duration;
+        });
+
+        // Convert the durationByDate object into an array of DataPoint objects
+        const newParsedData: DataPoint[] = Object.entries(durationByDate).map(([date, duration]): DataPoint => ({
+          date,
+          duration
+        }));
+
+        setParsedData(newParsedData); // Update state with the new parsed data
+      } else {
+        console.error('Unexpected data structure:', responseData);
+      }
+    } catch (error) {
+      console.error('Error in AnalStreaks:', error);
+    }
+    setIsGraphLoading(false); // Set loading to false after fetching data
+  };
+
   if (user) {
     return (
       <DefLayout>
@@ -260,7 +394,55 @@ const HistoryPage: FC = () => {
               </svg>
             </div>
 
-            <div className="w-[15vh] h-[15vh] bg-red-400 mb-3 rounded-2xl flex-shrink-0 text-center opacity-50">graph</div>
+            <button onClick={toggleGraph} className={`w-[15vh] h-[15vh] border border-white border-opacity-20 mb-3 rounded-2xl flex-shrink-0 text-center items-center justify-center glow ${showGraph ? 'clicked' : ''}`}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-[15vh] h-[15vh]">
+                <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75" fill="#2FABDD" />
+                <path d="M9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625" fill="#55BBA4" />
+                <path d="M3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75" fill="#C32E67" />
+              </svg>
+            </button>
+
+            {showGraph && (
+              <div className="w-[100vw] min-h-[90vh] flex flex-row items-center justify-center flex-shrink-0 text-center bg-black">
+                <div className="flex flex-col items-center justify-center">
+                  <div className="text-center">
+                    <span className='text-4xl font-bold'>Welcome {" "}{" "}</span>
+                    <span className='text-5xl font-bold glow-text'>{getCookie('name')}</span>
+                    <span className='text-4xl font-bold'>!</span>
+                  </div>
+
+                  <div className="w-full h-[1px] bg-white mt-5 opacity-50"></div>
+
+                  {!isLoading && parsedData.length > 0 ? (
+                    <StreakGraph parsedData={parsedData} /> // Render the StreakGraph component here
+                  ) : (
+                    isLoading ? <p>Loading...</p> : <p>No data to display</p>
+                  )}
+
+                  <div className="w-full h-[1px] bg-white mb-5"></div>
+
+                  <div className="flex flex-col items-center">
+                    <div className="ml-2 text-2xl">
+                      <span className='text-3xl font-bold'>Workout Time This Week: {" "}{" "}</span>
+                      {` ${workoutTimeText}`}
+                    </div>
+
+                    <div className="mr-3">
+                      {workoutChangeText && (
+                        <div
+                          style={{
+                            color: isPositiveChange ? '#55BBA4' : '#C32E67',
+                          }}
+                          className="text-xl"
+                        >
+                          ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="h-[2px] w-[18vw] bg-white bg-opacity-50 mb-5"></div>
 
@@ -317,6 +499,40 @@ const HistoryPage: FC = () => {
 
           {/* summary of history */}
           <div className="h-[85vh] w-[70vw] bg-blur overflow-y-auto">
+            {showGraph && (
+              <div className="absolute  border border-white border-opacity-40 rounded-xl h-[85vh] w-[70vw] flex flex-row items-center justify-center flex-shrink-0 text-center bg-[#121212] backdrop-blur-md bg-opacity-10 z-50">
+                <div className="flex flex-col items-center justify-center">
+                  {!isLoading && parsedData.length > 0 ? (
+                    <StreakGraph parsedData={parsedData} /> // Render the StreakGraph component here
+                  ) : (
+                    isLoading ? <p>Loading...</p> : <p>No data to display</p>
+                  )}
+
+                  <div className="w-full h-[1px] bg-white mb-5"></div>
+
+                  <div className="flex flex-col items-center">
+                    <div className="ml-2 text-2xl">
+                      <span className='text-3xl font-bold'>Workout Time This Week: {" "}{" "}</span>
+                      {` ${workoutTimeText}`}
+                    </div>
+
+                    <div className="mr-3">
+                      {workoutChangeText && (
+                        <div
+                          style={{
+                            color: isPositiveChange ? '#55BBA4' : '#C32E67',
+                          }}
+                          className="text-xl"
+                        >
+                          ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <ul className="space-y-4">
               {/* no activity been clicked */}
               {specificAid === null &&
@@ -473,7 +689,13 @@ const HistoryPage: FC = () => {
               </svg>
             </div>
 
-            <div className="w-[15vh] h-[15vh] bg-red-400 mb-3 rounded-2xl flex-shrink-0 text-center opacity-50">graph</div>
+            <button onClick={toggleGraph} className={`w-[15vh] h-[15vh] border border-white border-opacity-20 mb-3 rounded-2xl flex-shrink-0 text-center items-center justify-center glow ${showGraph ? 'clicked' : ''}`}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-[15vh] h-[15vh]">
+                <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75" fill="#2FABDD" />
+                <path d="M9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625" fill="#55BBA4" />
+                <path d="M3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75" fill="#C32E67" />
+              </svg>
+            </button>
 
             <div className="h-[2px] w-[18vw] bg-white bg-opacity-50 mb-5"></div>
 
@@ -530,6 +752,40 @@ const HistoryPage: FC = () => {
 
           {/* summary of history */}
           <div className="h-[85vh] w-[70vw] bg-blur overflow-y-auto">
+            {showGraph && (
+              <div className="absolute  border border-white border-opacity-40 rounded-xl h-[85vh] w-[70vw] flex flex-row items-center justify-center flex-shrink-0 text-center bg-[#121212] backdrop-blur-md bg-opacity-10 z-50">
+                <div className="flex flex-col items-center justify-center">
+                  {!isLoading && parsedData.length > 0 ? (
+                    <StreakGraph parsedData={parsedData} /> // Render the StreakGraph component here
+                  ) : (
+                    isLoading ? <p>Loading...</p> : <p>No data to display</p>
+                  )}
+
+                  <div className="w-full h-[1px] bg-white mb-5"></div>
+
+                  <div className="flex flex-col items-center">
+                    <div className="ml-2 text-2xl">
+                      <span className='text-3xl font-bold'>Workout Time This Week: {" "}{" "}</span>
+                      {` ${workoutTimeText}`}
+                    </div>
+
+                    <div className="mr-3">
+                      {workoutChangeText && (
+                        <div
+                          style={{
+                            color: isPositiveChange ? '#55BBA4' : '#C32E67',
+                          }}
+                          className="text-xl"
+                        >
+                          ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <ul className="space-y-4">
               {/* no activity been clicked */}
               {specificAid === null &&

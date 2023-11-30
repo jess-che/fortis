@@ -242,7 +242,7 @@ const LogFinish: React.FC = () => {
     );
   }
 
-
+  
 
   return (
     <DefLayout>
