@@ -424,6 +424,7 @@ const Home: React.FC = () => {
   }
   if(getCookie('login') === 'false') {
     setCookies();
+    console.log(getCookie('uid'));
   }
   
   // ---- end of auth0 logic ----
