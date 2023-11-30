@@ -6,7 +6,7 @@ const pool = new Pool({
 });
 
 const searchUserName = `
-    SELECT * FROM "users_data"
+    SELECT * FROM "user_data"
     WHERE uid LIKE $1
     `;
 

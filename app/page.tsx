@@ -98,6 +98,8 @@ const Home: React.FC = () => {
 
   const getName = async (uid: any) => {
     try {
+      console.log(uid);
+
       const response = await fetch('/api/getNamefromUID', {
         method: 'POST',
         headers: {
