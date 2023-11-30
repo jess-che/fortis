@@ -86,10 +86,10 @@ const Home: React.FC = () => {
       return data.data.rows[0].uid;
     }
     catch {
-      handleUserSave();
+      await handleUserSave();
       if (user)
-        getUID(user.email);
-      handleUserDataSave();
+        await getUID(user.email);
+      await handleUserDataSave();
       window.location.reload();
     }
   };
@@ -110,7 +110,7 @@ const Home: React.FC = () => {
       throw new Error('Failed to save user');
     }
   };
-  const saveUserDataToDatabase = async (user: any) => {
+  const saveUserDataToDatabase = async (username: any) => {
     const response = await fetch('/api/insertUserData', {
       method: 'POST',
       headers: {
@@ -119,7 +119,7 @@ const Home: React.FC = () => {
       body: JSON.stringify({
         uid: getCookie('uid'),
         // name: 'test'
-        name: user.name
+        name: username
       }),
     });
 
@@ -151,7 +151,7 @@ const Home: React.FC = () => {
     }
 
     try {
-      await saveUserDataToDatabase(user);
+      await saveUserDataToDatabase(user.name);
       console.log('User saved successfully');
     } catch (error) {
       console.error('Error saving user:', error);
