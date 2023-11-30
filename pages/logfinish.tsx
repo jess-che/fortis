@@ -25,7 +25,6 @@ const LogFinish: React.FC = () => {
     if (!interval) {
       return str;
     }
-
     if (interval.days) {
       str += interval.days + 'd ';
     } else {
@@ -34,21 +33,50 @@ const LogFinish: React.FC = () => {
     if (interval.hours) {
       str += interval.hours + 'h ';
     } else {
-      str += '0' + 'h '; 
+      str += '0' + 'h ';
     }
     if (interval.minutes) {
       str += interval.minutes + 'm ';
     } else {
-      str += '0' + 'm '; 
+      str += '0' + 'm ';
     }
     if (interval.seconds) {
       str += interval.seconds + 's';
     } else {
-      str += '0' + 's '; 
+      str += '0' + 's ';
     }
 
     return str.trim();
   }
+
+  const updateActivityMetaData = async () => {
+    try {
+      console.log(getCookie('uid'), aid, title, date, duration)
+      const response = await fetch('/api/updateActivityMetaData', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: getCookie('uid'),
+          aid: aid,
+          name: title,
+          date: date,
+          duration: duration
+        }),
+      });
+
+      console.log('Response status:', response.status);
+      const responseBody = await response.text();
+      console.log('Response body:', responseBody);
+
+      if (!response.ok) throw new Error('Network response was not ok.');
+      // Handle the response here
+    } catch (error) {
+      console.error('Failed to add activity:', error);
+      // Handle errors here
+    }
+  };
 
   // get exercise data from EID
   const ExcDatafromEID = async (query: any) => {
@@ -180,8 +208,8 @@ const LogFinish: React.FC = () => {
     <DefLayout>
       <div className='flex flex-col w-screen items-center justify-center'>
         {activityData.map((activity: any, i: number) => (
-          <div className="flex flex-row w-[90vw] items-end justify-between relative z-10 px-4 mb-4">
-            <div className="text-4xl font-bold">
+          <div className="flex flex-row w-[90vw] items-end justify-between relative z-10 px-4 my-4">
+            <div className="text-4xl font-bold flex flex-row relative">
               <input
                 type="text"
                 className="appearance-none bg-transparent border-transparent text-white text-opacity-80"
@@ -189,28 +217,107 @@ const LogFinish: React.FC = () => {
                 onChange={handleTitleChange}
                 autoFocus
               />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                className="absolute top-2 right-2 w-4 h-4 opacity-70"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                />
+              </svg>
             </div>
-            <span className="text-2xl">
-            <input
+            <span className="text-2xl flex flex-row relative">
+              <input
                 type="text"
                 className="appearance-none bg-transparent border-transparent text-white text-opacity-80"
                 value={date}
                 onChange={handleDate}
                 autoFocus
               />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                className="absolute top-2 right-2 w-4 h-4 opacity-70"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                />
+              </svg>
             </span>
-            <span className="text-2xl mt-auto">
-            <input
+            <span className="text-2xl mt-auto flex flex-row relative">
+              <input
                 type="text"
                 className="appearance-none bg-transparent border-transparent text-white text-opacity-80"
                 value={duration}
                 onChange={handleDuration}
                 autoFocus
               />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                className="absolute top-2 right-2 w-4 h-4 opacity-70"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                />
+              </svg>
             </span>
 
           </div>
         ))}
+
+        <div className='p-2 mt-3 flex flex-row mb-4 border border-white rounded-md border-opacity-50 bg-white bg-opacity-10'>
+          <button
+            onClick={() => {
+              updateActivityMetaData();
+            }}
+            className="inline-flex items-center border-r"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#55BBA4" className="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+            </svg>
+
+            <p className="pl-2 pr-3 text-white text-opacity-75 text-md hover:gradient-text-bp duration-300 text-center">SAVE EDITS</p>
+          </button>
+
+          <div className="pl-3 flex flex-row border-r">
+            <button
+              onClick={() => {
+
+              }}
+              className="inline-flex items-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2FABDD" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+              </svg>
+              <p className="pl-2 pr-3 text-white text-opacity-75 text-md hover:gradient-text-pg duration-300 text-center">ADD TO TEMPLATES</p>
+            </button>
+          </div>
+
+          <Link href="/history" className="inline-flex items-center pl-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#C32E67" className="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+            </svg>
+
+            <p className="pl-2 text-white text-opacity-75 text-md hover:gradient-text-gb duration-300 text-center">VIEW HISTORY</p>
+          </Link>
+        </div>
 
 
         <div className="w-[80vw] h-[1px] bg-white bg-opacity-65"></div>
