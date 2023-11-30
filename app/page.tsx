@@ -113,11 +113,12 @@ const Home: React.FC = () => {
       }
 
       const data = await response.json();
+      console.log(getCookie('name'))
       setCookie('name', data.data.rows[0].uid);
       return data.data.rows[0].uid;
     }
     catch {
-      
+      console.log('name failed');
     }
   };
 
