@@ -90,6 +90,7 @@ const Home: React.FC = () => {
       if (user)
         getUID(user.email);
       handleUserDataSave();
+      window.location.reload();
     }
   };
 
@@ -117,8 +118,8 @@ const Home: React.FC = () => {
       },
       body: JSON.stringify({
         uid: getCookie('uid'),
-        name: 'test'
-        // name: user.name
+        // name: 'test'
+        name: user.name
       }),
     });
 
