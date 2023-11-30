@@ -117,8 +117,8 @@ const Home: React.FC = () => {
       setCookie('name', data.data.rows[0].uid);
       return data.data.rows[0].uid;
     }
-    catch {
-      console.log('name failed');
+    catch (err){
+      console.log('Error in GetUIDfromEmail:', err);
     }
   };
 
