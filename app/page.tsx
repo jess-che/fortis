@@ -85,7 +85,6 @@ const Home: React.FC = () => {
       setCookie('uid', data.data.rows[0].uid);
       console.log("Got UID in History: ");
       console.log(getCookie('uid'));
-      window.location.reload();
       return data.data.rows[0].uid;
     }
     catch {
@@ -417,6 +416,7 @@ const Home: React.FC = () => {
       // Handle errors here if necessary
       console.error(error);
     }
+    window.location.reload();
   }
   setCookies();
   // ---- end of auth0 logic ----
