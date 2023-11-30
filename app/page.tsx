@@ -13,7 +13,8 @@ import MuscleModel from '@/pages/MuscleModel'; // Adjust the path as needed
 import '@/public/styles/home.css';                              // style sheet for animations
 
 // !! FOR DEVELOPMENT ONLY !!
-setCookie('uid', 'neot logged in');
+setCookie('uid', 'b24e24f4-86b8-4b83-8947-b2472a43b436');
+// setCookie('uid', 'neot logged in');  // <- change to this to get it to work for development first login
 console.log(getCookie('uid'));
 
 interface DataPoint {
@@ -116,12 +117,13 @@ const Home: React.FC = () => {
       },
       body: JSON.stringify({
         uid: getCookie('uid'),
-        name: user.name
+        name: 'test'
+        // name: user.name
       }),
     });
 
     if (!response.ok) {
-      throw new Error('Failed to save user');
+      throw new Error('Failed to save user data');
     }
   };
   // ---- end of API fn ----
@@ -308,6 +310,8 @@ const Home: React.FC = () => {
     setIsLoading(false); // Set loading to false after fetching data
   };
   // ---- end of analytics API calls ----
+
+  handleUserDataSave();
 
   // home if no one is logged in
   if (!user) {
