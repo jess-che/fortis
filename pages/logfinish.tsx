@@ -61,7 +61,7 @@ const LogFinish: React.FC = () => {
           uid: getCookie('uid'),
           aid: aid,
           name: title,
-          date: date,
+          date: new Date(date).toISOString().split('T')[0],
           duration: duration
         }),
       });

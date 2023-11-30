@@ -8,9 +8,9 @@ const pool = new Pool({
 const query = `
 UPDATE activity
 SET 
-    "Date" = $3,
+    "Date" = $4,
     "Duration" = $5,
-    "Activity_name" = $4
+    "Activity_name" = $3
 WHERE 
     "Uid" = $1
     AND "Aid" = $2
@@ -19,7 +19,7 @@ WHERE
 export default async (req, res) => {
     if (req.method === 'POST') {
         const { uid, aid, name, date, duration } = req.body;
-
+        
         try {
             const values = [uid, aid, name, date, duration];
             await pool.query(query, values);
