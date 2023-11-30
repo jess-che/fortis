@@ -311,8 +311,6 @@ const Home: React.FC = () => {
   };
   // ---- end of analytics API calls ----
 
-  handleUserDataSave();
-
   // home if no one is logged in
   if (!user) {
     return (
