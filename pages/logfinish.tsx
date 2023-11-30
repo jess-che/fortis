@@ -4,6 +4,7 @@ import React, { FC, useEffect, useState } from 'react';
 import DefLayout from '@/components/def_layout';
 import { setCookie, getCookie } from 'cookies-next';
 import '@/public/styles/logfinish.css';     // style sheet for animationsi
+import PrivacyOptionsDialog from '@/components/PrivacyOptionsDialog';
 
 type DataType = {
   workouts: any[];
@@ -18,6 +19,41 @@ const LogFinish: React.FC = () => {
   const [title, setTitle] = useState('No Name');
   const [date, setDate] = useState('No Date');
   const [duration, setDuration] = useState('No Duraition');
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleSavePrivacyOption = async (option: any) => {
+    try {
+      console.log(getCookie('uid'), aid, option)
+      const response = await fetch('/api/updateTemplateStatus', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: getCookie('uid'),
+          aid: aid,
+          option: option
+        }),
+      });
+
+      console.log('Response status:', response.status);
+      const responseBody = await response.text();
+      console.log('Response body:', responseBody);
+
+      alert('Changes saved successfully!');
+
+      if (!response.ok) throw new Error('Network response was not ok.');
+      // Handle the response here
+    } catch (error) {
+      alert('Failed to add to templates.');
+      // Handle errors here
+    }
+  }
+
+  const toggleDialog = () => {
+    setIsDialogOpen(!isDialogOpen);
+  };
 
   function intervalToString(interval: any) {
     let str = '';
@@ -206,6 +242,8 @@ const LogFinish: React.FC = () => {
     );
   }
 
+
+
   return (
     <DefLayout>
       <div className='flex flex-col w-screen items-center justify-center'>
@@ -299,17 +337,25 @@ const LogFinish: React.FC = () => {
           </button>
 
           <div className="pl-3 flex flex-row border-r">
-            <button
-              onClick={() => {
-
-              }}
-              className="inline-flex items-center"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2FABDD" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
-              </svg>
-              <p className="pl-2 pr-3 text-white text-opacity-75 text-md hover:gradient-text-pg duration-300 text-center">ADD TO TEMPLATES</p>
-            </button>
+            <div>
+              <button
+                onClick={toggleDialog}
+                className="inline-flex items-center"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#2FABDD" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+                </svg>
+                <p className="pl-2 pr-3 text-white text-opacity-75 text-md hover:gradient-text-pg duration-300 text-center">ADD TO TEMPLATES</p>
+              </button>
+              {isDialogOpen && (
+                <div className="absolute backdrop-blur-md opacity-100 z-50">
+                  <PrivacyOptionsDialog
+                    onClose={toggleDialog}
+                    onSave={handleSavePrivacyOption}
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
           <Link href="/history" className="inline-flex items-center pl-3">
