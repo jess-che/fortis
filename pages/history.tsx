@@ -183,7 +183,7 @@ const HistoryPage: FC = () => {
     }
   }, [specificAid]);
   // ---- end of API calls with useEffect ----
-  
+
   const addActivity = async () => {
     setCookie('log', 'true');       // sets cookie to show that user is logging workout
 
@@ -205,8 +205,36 @@ const HistoryPage: FC = () => {
     }
   };
 
+  const fetchAid = async () => {
+    const response = await fetch('/api/getAID', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        searchQuery: getCookie('uid'),
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch aid');
+    }
+
+    const data = await response.json();
+    let transfAID: string | null = data.data.rows[0].Aid.toString();
+    if (transfAID != null)
+      localStorage.setItem('aidTransfer', transfAID);
+    return parseInt(data.data.rows[0].Aid);
+  };
+
   // Add a new function to handle the Save click
-  const handleSaveClick = (workoutData: any[]) => {
+  const handleSaveClick = async (workoutData: any[]) => {
+    if (getCookie('log') === 'false') {
+      await addActivity();
+    }
+
+    const templateAid = await fetchAid();
+
     const exerciseArray: Exercise[] = workoutData.map((item) => {
       return {
         exerciseName: item.exerciseData.name,
@@ -214,16 +242,24 @@ const HistoryPage: FC = () => {
         numberOfSets: item.Set,
         weight: item.Weight,
         eid: item.Eid,
-        aid: item.Aid,
+        aid: templateAid,
         uid: item.Uid,
       };
     });
 
     console.log(exerciseArray);
-    localStorage.setItem('exercises', JSON.stringify(exerciseArray));
-    if (getCookie('log') === 'false') {
-      addActivity();
-    }
+    // Retrieve existing data from localStorage or initialize it as an empty array
+    const existingDataString = localStorage.getItem('exercises');
+    const existingData: Exercise[] = existingDataString
+      ? JSON.parse(existingDataString)
+      : [];
+
+    // Append the new data to the existing data
+    const combinedData = [...existingData, ...exerciseArray];
+
+    // Save the combined data back to localStorage
+    localStorage.setItem('exercises', JSON.stringify(combinedData));
+
     router.push('/log'); // Assuming '/log' is the path to Log2Page
   };
 
