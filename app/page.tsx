@@ -422,7 +422,7 @@ const Home: React.FC = () => {
       console.error(error);
     }
   }
-  if(getCookie('login') === 'false') {
+  if(getCookie('login') === 'true') {
     setCookies();
     console.log(getCookie('uid'));
   }
