@@ -96,7 +96,7 @@ const Home: React.FC = () => {
     }
   };
 
-  const getName = async () => {
+  const getName = async (uid: any) => {
     try {
       const response = await fetch('/api/getNamefromUID', {
         method: 'POST',
@@ -104,7 +104,7 @@ const Home: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          searchQuery: getCookie('uid'),
+          searchQuery: uid,
         }),
       });
 
@@ -404,8 +404,18 @@ const Home: React.FC = () => {
 
   // since you got here, you are logged in 
   // thus get the uid from email and set the cookies
-  getUID(user.email);
-  getName();
+  async function setCookies() {
+    try {
+      if (user != null)
+        await getUID(user.email);
+       await getName(getCookie('uid'));
+  
+    } catch (error) {
+      // Handle errors here if necessary
+      console.error(error);
+    }
+  }
+  setCookies();
   // ---- end of auth0 logic ----
 
   return (
