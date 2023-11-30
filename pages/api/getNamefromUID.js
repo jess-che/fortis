@@ -7,7 +7,7 @@ const pool = new Pool({
 
 const searchUserName = `
     SELECT * FROM user_data
-    WHERE "uid" = $1
+    WHERE user_data.uid = $1
     `;
 
 export default async (req, res) => {
