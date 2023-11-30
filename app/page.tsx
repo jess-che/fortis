@@ -17,6 +17,8 @@ setCookie('uid', 'b24e24f4-86b8-4b83-8947-b2472a43b436');
 // setCookie('uid', 'neot logged in');  // <- change to this to get it to work for development first login
 console.log(getCookie('uid'));
 
+setCookie('name', 'temp name');
+
 interface DataPoint {
   date: string;
   duration: number;
@@ -91,6 +93,31 @@ const Home: React.FC = () => {
         await getUID(user.email);
       await handleUserDataSave();
       window.location.reload();
+    }
+  };
+
+  const getName = async () => {
+    try {
+      const response = await fetch('/api/getNamefromUID', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          searchQuery: getCookie('uid'),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get UID from email');
+      }
+
+      const data = await response.json();
+      setCookie('name', data.data.rows[0].uid);
+      return data.data.rows[0].uid;
+    }
+    catch {
+      
     }
   };
 
@@ -377,6 +404,7 @@ const Home: React.FC = () => {
   // since you got here, you are logged in 
   // thus get the uid from email and set the cookies
   getUID(user.email);
+  getName();
   // ---- end of auth0 logic ----
 
   return (
@@ -386,7 +414,7 @@ const Home: React.FC = () => {
           <div className="flex flex-col items-center justify-center">
             <div className="text-center">
               <span className='text-4xl font-bold'>Welcome {" "}{" "}</span>
-              <span className='text-5xl font-bold glow-text'>{user.name}</span>
+              <span className='text-5xl font-bold glow-text'>{getCookie('name')}</span>
               <span className='text-4xl font-bold'>!</span>
             </div>
 
