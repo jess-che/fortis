@@ -712,27 +712,6 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                               <button onClick={() => handleUneditExercise(index)}>
                                 <img src="/images/unedit.png" alt="Unedit icon" width="24" height="30" />
                               </button>
-                              <button className="button-hover relative group" onClick={handleTypeChange}>
-                                {currentExercise.type === 'timenotes' ? (
-                                  <>
-                                    <span className="absolute min-w-[8vw] hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
-                                      Log Reps, Sets, Weight
-                                    </span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                                      <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
-                                    </svg>
-                                  </>
-                                ) : (
-                                  <>
-                                    <span className="absolute min-w-[8vw] hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
-                                      Log Time and Notes
-                                    </span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5" />
-                                    </svg>
-                                  </>
-                                )}
-                              </button>
                             </td>
                           </>
                         ) : (
@@ -767,27 +746,6 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                                   <img src="/images/edit1.png" alt="Edit icon" width="24" height="30" />
                                 </button>
                               </div>
-                              <button className="button-hover relative group" onClick={handleTypeChange}>
-                                {currentExercise.type === 'timenotes' ? (
-                                  <>
-                                    <span className="absolute min-w-[8vw] hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
-                                      Log Reps, Sets, Weight
-                                    </span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                                      <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
-                                    </svg>
-                                  </>
-                                ) : (
-                                  <>
-                                    <span className="absolute min-w-[8vw] hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
-                                      Log Time and Notes
-                                    </span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5" />
-                                    </svg>
-                                  </>
-                                )}
-                              </button>
                             </td>
                           </>
                         )}
@@ -819,7 +777,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                       </td>
                       {currentExercise.type === 'timenotes' ? (
                         <>
-                          <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                          <td className="min-w-[10vw] border border-white border-opacity-50 px-5 py-2 text-center align-middle">
                             <input
                               className="text-white text-sm text-center text-opacity-75"
                               type="text"
@@ -829,7 +787,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                               onChange={handleInputChange}
                             />
                           </td>
-                          <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                          <td className="min-w-[20vw] border border-white border-opacity-50 px-5 py-2 text-center align-middle">
                             <input
                               className="text-white text-sm text-center text-opacity-75"
                               type="text"
