@@ -140,7 +140,7 @@ const ProfilePage: React.FC = () => {
 
         const data = await response.json();
         console.log(data);
-        
+
         const userdata = data.data.rows[0];
         setCookie('name', data.data.rows[0].name);
 
@@ -303,7 +303,7 @@ const ProfilePage: React.FC = () => {
                   </svg>
                 </div>
               ) : (
-                <div className='text-6xl font-bold gradient-text-gb displayheader'>{name}</div>
+                <div className='text-6xl font-bold gradient-text-gb displayheader text-center'>{name}</div>
               )}
             </div>
           </div>
