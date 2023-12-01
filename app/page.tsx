@@ -13,7 +13,7 @@ import MuscleModel from '@/pages/MuscleModel'; // Adjust the path as needed
 import '@/public/styles/home.css';                              // style sheet for animations
 
 // !! FOR DEVELOPMENT ONLY !!
-setCookie('uid', 'b24e24f4-86b8-4b83-8947-b2472a43b436');
+setCookie('uid', '71379e91-a26a-41fe-9901-4478133052e6');
 // setCookie('uid', 'neot logged in');  // <- change to this to get it to work for development first login
 console.log(getCookie('uid'));
 setCookie('login', 'false');
@@ -45,6 +45,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     // This function will be called on scroll events
     const handleScroll = () => {
+      console.log(getCookie('uid'));
       if (window.scrollY > 5) {
         setShowTextBox(true);
         setShowScrollArrow(false);

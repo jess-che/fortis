@@ -8,7 +8,6 @@ import DeleteConfirmation from '@/components/DeleteConfirmation';
 import { useRouter } from 'next/router';
 
 const ProfilePage: React.FC = () => {
-
   const [name, setName] = useState('John Doe');
   const [email, setEmail] = useState('johndoe@example.com');
   const [age, setAge] = useState(30);
@@ -49,7 +48,6 @@ const ProfilePage: React.FC = () => {
     await deleteUser();
     await setCookie('uid', 'no id');
     router.push('/api/auth/logout');
-
   };
 
 
@@ -66,6 +64,8 @@ const ProfilePage: React.FC = () => {
       // Convert weight from kilograms to pounds for Imperial units
       weightToSend = Math.round(weight / 0.453592);
     }
+
+    setCookie('name', name);
 
     try {
       const response = await fetch('/api/updateUserData', {
@@ -121,6 +121,7 @@ const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(getCookie('uid'));
       try {
 
         const response = await fetch('/api/getNamefromUID', {
@@ -138,6 +139,8 @@ const ProfilePage: React.FC = () => {
         }
 
         const data = await response.json();
+        console.log(data);
+        
         const userdata = data.data.rows[0];
         setCookie('name', data.data.rows[0].name);
 
