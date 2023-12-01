@@ -1056,7 +1056,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                     <li key={i} className="min-w-[25vw] max-w-[27vw] activity-item relative list-none mx-3 p-2 rounded-xl border-t border-b border-white border-opacity-60">
                       <div className="flex flex-col relative z-10">
                         <div className="flex flex-row justify-between p-2">
-                          <div className="text-xl">{activity.Activity_name}</div>
+                          <div className="text-xl font-bold">{activity.Activity_name}</div>
                           <button
                             onClick={() => {
                               handleSaveClick(activityData[i].workouts);
