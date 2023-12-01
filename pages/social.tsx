@@ -78,11 +78,11 @@ const SocialPage: React.FC = () => {
     if (!response.ok) {
       throw new Error('Failed to fetch matches');
     }
-  
+
     const data = await response.json();
     console.log('API response:', data); // Log the full response
-    if (data && data.rows) {
-      setMatchedPersons(data.rows);
+    if (data && data.data.rows) {
+      setMatchedPersons(data.data.rows);
     } else {
       console.log('No rows in response'); // Log if no rows are found
     }
