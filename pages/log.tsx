@@ -818,25 +818,28 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
             <div className="flex flex-col h-[85vh] w-[60vw] justify-center items-center">
               <div className="container grid grid-cols-3 gap-0">
                 <div className="flex flex-col column justify-center items-center h-[75vh] border-r border-white border-opacity-25">
-                  <h2>New</h2>
-                  <div className="relative">
+                  <h2 className="mb-4 text-[5vw] font-bold displayheader gradient-text-bp">New</h2>
+                  <div className="text-sm mx-2 text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
+                  <div className="relative mt-8">
                     <button onClick={addActivity} className="startActivity rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#55BBA4]">
                       Add Activity
                     </button>
                   </div>
                 </div>
                 <div className="flex flex-col column justify-center items-center h-[75vh] border-r border-white border-opacity-25">
-                  <h2>Discover</h2>
-                  <div className="relative">
-                    <Link href="/discover" className="startActivity rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#55BBA4]">
+                  <h2 className="mb-4 text-[5vw] font-bold displayheader gradient-text-pg">Discover</h2>
+                  <div className="text-sm mx-2 text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
+                  <div className="relative mt-8">
+                    <Link href="/discover" className="discover rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#2FABDD]">
                       Discover
                     </Link>
                   </div>
                 </div>
                 <div className="flex flex-col column justify-center items-center h-[75vh]">
-                  <h2>History</h2>
-                  <div className="relative">
-                    <Link href="/history" className="startActivity rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#55BBA4]">
+                  <h2 className="mb-4 text-[5vw] font-bold displayheader gradient-text-gb">History</h2>
+                  <div className="text-sm mx-2 text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
+                  <div className="relative mt-8">
+                    <Link href="/history" className="history rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#C32E67]">
                       History
                     </Link>
                   </div>
@@ -850,6 +853,8 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
             <div className="flex flex-col w-[30vw]">
 
               <div className="flex flex-col h-[85vh] min-w-[25vw] max-w-[27vw] items-center justify-center">
+                <h2 className="mb-4 text-[5vw] font-bold displayheader gradient-text-pg">Quick Add</h2>
+
                 <ul className="overflow-y-auto mb-3 min-w-[19vw]">
                   {/* waiting for query */}
                   <style jsx>{`
@@ -879,8 +884,8 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                   {!loading && activityData.length > 0 && activityData.map((activity: any, i: number) => (
                     <li key={i} className="min-w-[25vw] max-w-[27vw] activity-item relative list-none mx-3 p-2 rounded-xl border-t border-b border-white border-opacity-60">
                       <div className="flex flex-col relative z-10">
-                        <div className="flex flex-row justify-between">
-                          <div className="text-2xl">{activity.Activity_name}</div>
+                        <div className="flex flex-row justify-between p-2">
+                          <div className="text-xl">{activity.Activity_name}</div>
                           <button
                             onClick={() => {
                               handleSaveClick(activityData[i].workouts);
@@ -898,7 +903,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                       {activityData[i].workouts !== null && activityData[i].workouts.length === 0 && (
                         <div>
                           <div className="w-[20vw] h-[1px] m-[1vw] bg-white bg-opacity-50"></div>
-                          <div className="text-xl text-center opacity-60">No Exercise Data</div>
+                          <div className="text-md text-center opacity-60">No Exercise Data</div>
                         </div>
                       )}
 
@@ -910,7 +915,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                       {/* Map over data and render exercises */}
                       {activityData[i].workouts !== null && activityData[i].workouts.map((workout: any, index: number) => (
                         <li key={index} className="">
-                          <div className="text-xl text-center">{workout.exerciseData.name}</div>
+                          <div className="text-md text-center">{workout.exerciseData.name}</div>
                         </li>
                       ))}
                     </li>
