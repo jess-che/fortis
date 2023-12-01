@@ -5,34 +5,62 @@ import { send } from "process";
 
 interface SearchResultsListProps {
   sendDataToA: (data: any) => void;
+  gym: string;
+  key: number;
 }
 
-const SearchBar: React.FC<SearchResultsListProps> = ({ sendDataToA }) => {
+const SearchBar: React.FC<SearchResultsListProps> = ({ sendDataToA, gym, key }) => {
   const [input, setInput] = useState("");
   const [results, setResults] = useState([]);
 
 
   const populatelist = async (query: any) => {
-    const response = await fetch('/api/searchExcName', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        searchQuery: query
-      }),
-    });
+    if (gym === 'any') {
+      const response = await fetch('/api/searchExcName', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          searchQuery: query
+        }),
+      });
 
-    if (!response.ok) {
-      throw new Error('Failed to save query');
+      if (!response.ok) {
+        throw new Error('Failed to save query');
+      }
+
+      const data = await response.json();
+      const dataName = data.data.rows.map((row: { name: any; }) => row.name);
+      console.log(data);
+      console.log(data.data.rows);
+      setResults(data.data.rows);
+      //setResults(dataName) -- For only Excercise name (changed to account for description etc.)
+    } else {
+      const response = await fetch('/api/searchExcNameFiltered', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          searchQuery: query,
+          gym: gym
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save query');
+      }
+
+      const data = await response.json();
+      const dataName = data.data.rows.map((row: { name: any; }) => row.name);
+      console.log(data);
+      console.log(data.data.rows);
+      setResults(data.data.rows);
+      //setResults(dataName) -- For only Excercise name (changed to account for description etc.)
     }
 
-    const data = await response.json();
-    const dataName = data.data.rows.map((row: { name: any; }) => row.name);
-    console.log(data);
-    console.log(data.data.rows);
-    setResults(data.data.rows);
-    //setResults(dataName) -- For only Excercise name (changed to account for description etc.)
+    
   };
 
   const handleChange = (value: React.SetStateAction<string>) => {

@@ -7,17 +7,18 @@ const pool = new Pool({
 
 const searchExcName = `
     SELECT * FROM exercise 
-    WHERE name LIKE $1
+    WHERE name LIKE $1 AND (gym LIKE $2 or gym LIKE 'both')
     ORDER BY popularity DESC;
     `;
 
 export default async (req, res) => {
     if (req.method === 'POST') {
-        const searchQuery = req.body.searchQuery;;
+        const searchQuery = req.body.searchQuery;
+        const gym = req.body.gym;
 
         try {
             // Insert user
-            const values = [`%${searchQuery}%`];
+            const values = [`%${searchQuery}%`, gym];
             console.log('hi');
             const results = await pool.query(searchExcName, values);
             

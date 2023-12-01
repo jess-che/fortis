@@ -30,6 +30,14 @@ type DataType = {
   workouts: any[];
 };
 
+interface ButtonStyles {
+  textOpacity: number;
+  isClicked: boolean;
+}
+
+type GymState = {
+  [key: string]: ButtonStyles;
+};
 
 const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   // ---- start of use state declarations + other declarations ----
@@ -38,6 +46,22 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   const [loading, setLoading] = useState(true);       // if data is being fetched for sidebar
   const [activityData, setActivityData] = useState<any[]>([]);
   const [data, setData] = useState<DataType[]>([]);
+  const [searchGym, setSearchGym] = useState('any');
+  const [searchBarKey, setSearchBarKey] = useState(0);
+  const [buttonStyles, setButtonStyles] = useState<{ [key: string]: ButtonStyles }>({
+    any: {
+      textOpacity: 100,
+      isClicked: false,
+    },
+    wilson: {
+      textOpacity: 50,
+      isClicked: false,
+    },
+    brodie: {
+      textOpacity: 50,
+      isClicked: false,
+    },
+  });
 
   // store current activity
   const [specificAid, setSpecificAid] = useState<number | null>(null); // specificAid of clicked workout   
@@ -81,6 +105,24 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
       console.error('Error fetching exercise data:', error);
       return null;
     }
+  };
+
+  const handleGymSwitch = (gym: string) => {
+    setSearchGym(gym);
+    setSearchBarKey((prevKey) => prevKey + 1); // Change the key to force a re-render
+
+    
+    // Initialize textOpacity and isClicked for all gyms that are not selected
+    const updatedButtonStyles: GymState = Object.keys(buttonStyles).reduce((styles: GymState, gymKey) => {
+      styles[gymKey] = {
+        textOpacity: gymKey === gym.toLowerCase() ? (buttonStyles[gymKey].isClicked ? 50 : 100) : 50,
+        isClicked: gymKey === gym.toLowerCase() ? !buttonStyles[gymKey].isClicked : false,
+      };
+      return styles;
+    }, {}); 
+
+    // Update button styles
+    setButtonStyles(updatedButtonStyles);
   };
 
   useEffect(() => {
@@ -883,8 +925,37 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
               <div>
                 {isSidePanelOpen && (
                   <aside className="w-[25vw] pl-[5vw] ml-[5vw] border-l border-white border-opacity-50">
-                    <div className="search-bar-container" style={searchBarStyle}>
-                      <SearchBar sendDataToA={receiveDataFromSearch} />
+                    <div className="flex flex-row justify-between mb-4">
+                      <button
+                        onClick={() => handleGymSwitch('any')}
+                        className={`text-white text-lg hover:gradient-text-bp duration-300 text-center ${
+                          searchGym === 'any' ? 'gradient-text-bp' : ''
+                        }`}
+                        style={{ opacity: buttonStyles.any.textOpacity / 100 }}
+                      >
+                        <p>ALL</p>
+                      </button>
+                      <button
+                        onClick={() => handleGymSwitch('Wilson')}
+                        className={`text-white text-lg hover:gradient-text-pg duration-300 text-center ${
+                          searchGym === 'Wilson' ? 'gradient-text-pg' : ''
+                        }`}
+                        style={{ opacity: buttonStyles.wilson.textOpacity / 100 }}
+                      >
+                        <p>WILSON</p>
+                      </button>
+                      <button
+                        onClick={() => handleGymSwitch('Brodie')}
+                        className={`text-white text-lg hover:gradient-text-gb duration-300 text-center ${
+                          searchGym === 'Brodie' ? 'gradient-text-pg' : ''
+                        }`}
+                        style={{ opacity: buttonStyles.brodie.textOpacity / 100 }}
+                      >
+                        <p>BRODIE</p>
+                      </button>
+                    </div>
+                    <div className="search-bar-container w-[20vw]" style={searchBarStyle}>
+                      <SearchBar sendDataToA={receiveDataFromSearch} gym={searchGym} key={searchBarKey} />
                     </div>
                   </aside>
                 )}
@@ -896,7 +967,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
             {/* this side is add Activity button, but also make it cooler */}
             <div className="flex flex-col h-[85vh] w-[60vw] justify-center items-center">
               <div className="container grid grid-cols-3 gap-0">
-                <div className="flex flex-col column justify-center items-center h-[75vh] border-r border-white border-opacity-25">
+                <div className="flex flex-col column justify-center items-center h-[75vh]">
                   <h2 className="mb-4 text-[5vw] font-bold displayheader gradient-text-bp">New</h2>
                   <div className="text-sm mx-2 text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
                   <div className="relative mt-8">
@@ -905,7 +976,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                     </button>
                   </div>
                 </div>
-                <div className="flex flex-col column justify-center items-center h-[75vh] border-r border-white border-opacity-25">
+                <div className="flex flex-col column justify-center items-center h-[75vh]">
                   <h2 className="mb-4 text-[5vw] font-bold displayheader gradient-text-pg">Discover</h2>
                   <div className="text-sm mx-2 text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
                   <div className="relative mt-8">
