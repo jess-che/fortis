@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
+
+/* change all font to Nunito */
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+.displayheader {
+    font-family: 'Kanit', sans-serif;
+}
+
+input {
+    background: transparent;
+    text-align: center;
+
+    width: auto;
+    /* Reset the width to auto */
+    height: auto;
+    /* Reset the height to auto */
+}
+
+textarea {
+    background: transparent;
+}
+
+select {
+    background: transparent;
+    text-align: right;
+
+    width: auto;
+    /* Reset the width to auto */
+    height: auto;
+    /* Reset the height to auto */
+}

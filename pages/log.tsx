@@ -10,7 +10,6 @@ import React, { FC, useState, useEffect, ChangeEvent, useContext } from 'react';
 import '@/public/styles/log.css';     // style sheet for animations
 import '@/public/styles/history.css';     // style sheet for animations
 import { useRouter } from 'next/router';
-import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 // import ExerciseContext, { useExerciseContext, ExerciseProvider } from './ExerciseContext';
 
 // exercise type
