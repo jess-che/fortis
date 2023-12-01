@@ -4,7 +4,8 @@ import React, { FC, useState, useEffect } from 'react';
 import DefLayout from '@/components/def_layout';
 import { setCookie, getCookie } from 'cookies-next';
 import '@/public/styles/profile.css';     // style sheet for animations
-
+import DeleteConfirmation from '@/components/DeleteConfirmation';
+import { useRouter } from 'next/router';
 
 const ProfilePage: React.FC = () => {
 
@@ -21,14 +22,36 @@ const ProfilePage: React.FC = () => {
   // Define state variables to track edit mode
   const [isEditing, setIsEditing] = useState(false);
 
+  const router = useRouter();
+
   const handleEditClick = (reload: boolean) => {
     setIsEditing(!isEditing);
-    
+
     if (reload) {
       window.location.reload();
     }
   };
-  
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const handleDelete = () => {
+    // Show the confirmation dialog
+    setShowConfirmation(true);
+  };
+
+  const handleCancelDelete = () => {
+    // Hide the confirmation dialog
+    setShowConfirmation(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    setShowConfirmation(false); // Hide the confirmation dialog after successful deletion
+    await deleteUser();
+    await setCookie('uid', 'no id');
+    router.push('/api/auth/logout');
+
+  };
+
 
   const handleUpdateUserData = async () => {
     handleEditClick(false);
@@ -73,7 +96,28 @@ const ProfilePage: React.FC = () => {
     }
   };
 
+  const deleteUser = async () => {
 
+    try {
+      const response = await fetch('/api/deleteUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: getCookie('uid'),
+        }),
+      });
+
+      if (response.status === 200) {
+        console.log('User deleted  successfully');
+      } else {
+        console.error('Failed to delete user');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -229,7 +273,11 @@ const ProfilePage: React.FC = () => {
                 rows={20} // Set the number of visible rows initially
               />
             ) : (
-              `${about !== null ? about : '-'}`
+              <textarea
+                value={`${about !== null ? about : '-'}`}
+                className="w-full text-left opacity-75 resize-y"
+                rows={20} // Set the number of visible rows initially
+              />
             )}
           </div>
         </div>
@@ -399,16 +447,21 @@ const ProfilePage: React.FC = () => {
                 <p className="pl-2 pr-3 text-white text-opacity-75 text-md hover:gradient-text-pg duration-300 text-center">SAVE CHANGES</p>
               </button>
               :
-              <button
-                className="inline-flex items-center pl-3"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#C32E67" className="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
-                </svg>
+              <div className="inline-flex items-center pl-3">
+                <button
+                  onClick={handleDelete}
+                  className="inline-flex items-center pl-3"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#C32E67" className="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                  </svg>
 
-
-                <p className="pl-2 pr-3 text-white text-opacity-75 text-md hover:gradient-text-pg duration-300 text-center">DELETE ACCOUNT</p>
-              </button>
+                  <p className="pl-2 pr-3 text-white text-opacity-75 text-md hover:gradient-text-pg duration-300 text-center">DELETE ACCOUNT</p>
+                </button>
+                {showConfirmation && (
+                  <DeleteConfirmation onCancel={handleCancelDelete} onConfirm={handleConfirmDelete} />
+                )}
+              </div>
             }
           </div>
 

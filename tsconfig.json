@@ -38,7 +38,7 @@
     "app/profile-client/page.jsx",
     "app/logout.jsx",
     "app/login.jsx"
-, "pages/api/insertAuthUser.js"  ],
+, "pages/api/insertAuthUser.js", "components/DeleteConfirmation.js"  ],
   "exclude": [
     "node_modules"
   ]
