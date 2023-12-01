@@ -26,7 +26,7 @@ body {
 }
 
 .button-hover:hover svg {
-    animation: spin 2s linear infinite;
+    animation: spin 1s linear forwards;
 }
 
 .button-hover:hover {

@@ -6,8 +6,8 @@ const pool = new Pool({
 });
 
 const insertQuery = `
-INSERT INTO workouts ("Uid", "Aid", "Seq_num", "Eid", "Weight", "Rep", "Set")
-VALUES ($1, $2, DEFAULT, $3, $4, $5, $6);
+INSERT INTO workouts ("Uid", "Aid", "Seq_num", "Eid", "Weight", "Rep", "Set", "Time", "Notes")
+VALUES ($1, $2, DEFAULT, $3, $4, $5, $6, $7, $8);
 `;
 
 // ... rest of your imports and setup ...
@@ -29,8 +29,8 @@ export default async (req, res) => {
         await client.query('BEGIN');
 
         for (let exercise of exercises) {
-            const { aid, eid, exerciseName, numberOfReps, numberOfSets, uid, weight } = exercise;
-            await client.query(insertQuery, [uid, aid, eid, weight, numberOfReps, numberOfSets]);
+            const { aid, eid, exerciseName, notes, numberOfReps, numberOfSets, time, uid, weight } = exercise;
+            await client.query(insertQuery, [uid, aid, eid, weight, numberOfReps, numberOfSets, time, notes]);
         }
 
         await client.query('COMMIT');

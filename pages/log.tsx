@@ -24,6 +24,7 @@ interface Exercise {
   uid: string;
   time?: string;
   notes?: string;
+  type?: string;
 }
 type DataType = {
   workouts: any[];
@@ -58,53 +59,6 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     setDataFromSearch(data);
     setCurrentExercise({ ...currentExercise, exerciseName: data.name, eid: data.eid });
   };
-
-  // useEffect(() => {
-  //   try {
-  //     const savedWorkoutData = localStorage.getItem('workoutData');
-  //     if (savedWorkoutData) {
-  //       const workoutExercises = JSON.parse(savedWorkoutData);
-  //       // console.log("Workout Data from HistoryPage:", workoutExercises);
-
-  //       if (Array.isArray(workoutExercises)) {
-  //         const newExercises = workoutExercises.map(exercise => ({
-  //           exerciseName: exercise.exerciseData.name,
-  //           numberOfReps: exercise.Rep,
-  //           numberOfSets: exercise.Set,
-  //           weight: exercise.Weight,
-  //           eid: exercise.Eid,
-  //           aid: exercise.Aid,
-  //           uid: exercise.Uid
-  //         }));
-  //         // console.log("New exercises to set:", newExercises);
-  //         // add to existing exercises
-  //         setExercises(prevExercises => [...prevExercises, ...newExercises]);
-  //       }
-
-  //       // if (Array.isArray(workoutExercises)) {
-  //       //   workoutExercises.forEach(exercise => {
-  //       //     const newExercise = {
-  //       //       exerciseName: exercise.exerciseData.name, 
-  //       //       numberOfReps: exercise.Rep,
-  //       //       numberOfSets: exercise.Set,
-  //       //       weight: exercise.Weight,
-  //       //       eid: exercise.Eid,
-  //       //       aid: exercise.Aid,
-  //       //       uid: exercise.Uid
-  //       //     };
-
-  //       //     setExercises(prevExercises => [...prevExercises, newExercise]);
-  //       //   });
-  //       // }
-  //     }
-  //   } catch (error) {
-  //     console.error("Error retrieving workout data from local storage:", error);
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log("Updated exercises:", exercises);
-  // }, [exercises]);
 
   const ExcDatafromEID = async (query: any) => {
     try {
@@ -198,39 +152,6 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     console.log("data", data);
   }, []);
 
-  // use state for getting selected exercise from exercisecontext.js
-  // useEffect(() => {
-  //   if (selectedExercise) {
-  //     setCurrentExercise({
-  //       ...currentExercise,
-  //       exerciseName: selectedExercise.name,
-  //     });
-  //   }
-  // }, [selectedExercise]); // Dependency array includes selectedExercise
-
-  function intervalToString(interval: any) {
-    let str = '';
-
-    if (!interval) {
-      return str;
-    }
-
-    if (interval.days) {
-      str += interval.days + 'd ';
-    }
-    if (interval.hours) {
-      str += interval.hours + 'h ';
-    }
-    if (interval.minutes) {
-      str += interval.minutes + 'm ';
-    }
-    if (interval.seconds) {
-      str += interval.seconds + 's';
-    }
-
-    return str.trim();
-  }
-
   // use state for exercise
   const [currentExercise, setCurrentExercise] = useState<Exercise>({
     exerciseName: '',
@@ -240,6 +161,9 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     eid: 0,
     aid: 0,
     uid: '',
+    time: '',
+    notes: '',
+    type: '',
   });
   // use state for exercise options
   const [exerciseOptions, setExerciseOptions] = useState<string[]>([]);
@@ -441,6 +365,8 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     if (actionMeta.action === 'select-option') {
       const selectedExerciseName = selectedOption ? selectedOption.value : '';
 
+      console.log(selectedOption);
+
       // Find the eid that matches the selected exercise name
       const eidIndex = exerciseOptions.findIndex(name => name === selectedExerciseName);
       const selectedEid = eidIndex !== -1 ? exerciseEids[eidIndex] : 0;
@@ -456,6 +382,11 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     }
 
     setCurrentExercise({ ...currentExercise, [e.target.name]: e.target.value });
+  }
+
+  const handleTypeChange = () => {
+    const new_type = currentExercise.type === 'timenotes' ? 'weight' : 'timenotes';
+    setCurrentExercise({ ...currentExercise, type: new_type });
   }
   // ---- end of code for user input ----
 
@@ -486,7 +417,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   // save the exercises to uid, aid
   const handleSaveExercises = async () => {
     try {
-      // console.log(exercises)
+      console.log(exercises)
       const response = await fetch('/api/saveExercises', {
         method: 'POST',
         headers: {
@@ -541,6 +472,9 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
           weight: 0,
           aid: 0,
           uid: uid,
+          time: '',
+          notes: '',
+          type: '',
         });
       }
     }
@@ -664,13 +598,6 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
 
   return (
     <DefLayout>
-      <div>
-        {exercises.map((exercise, index) => (
-          <div key={index}>
-            {/* Render your exercise data here */}
-          </div>
-        ))}
-      </div>
       <div className="flex w-screen min-h-[90vh] justify-center items-center">
         {/* if the user is in the middle of a log (or priorly was logging) */}
         {isLogging ? (
@@ -702,9 +629,18 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                   <thead>
                     <tr>
                       <th className="border border-white border-opacity-50 px-5 py-2 min-w-[20vw] text-center align-middle">Exercise Name</th>
-                      <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle ">Reps</th>
-                      <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Sets</th>
-                      <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Weight</th>
+                      {currentExercise.type === 'timenotes' ? (
+                        <>
+                          <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle ">Time</th>
+                          <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Notes</th>
+                        </>
+                      ) : (
+                        <>
+                          <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Reps</th>
+                          <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Sets</th>
+                          <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Weight</th>
+                        </>
+                      )}
                       <th className="border border-white border-opacity-50 px-5 py-2 min-w-[6vw] text-center align-middle">Action</th>
                     </tr>
                   </thead>
@@ -714,73 +650,234 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                         {editingIndex === index ? (
                           <>
                             {/* This ensures Edit and Delete work as intended. */}
-
-                            <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="text" value={editingExercise.exerciseName} onChange={(event) => setEditingExercise({ ...editingExercise, exerciseName: event.target.value })} className="w-full text-center" /></td>
-                            <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="number" value={editingExercise.numberOfReps} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfReps: Number(event.target.value) })} className="w-full text-center" /></td>
-                            <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="number" value={editingExercise.numberOfSets} onChange={(event) => setEditingExercise({ ...editingExercise, numberOfSets: Number(event.target.value) })} className="w-full text-center" /></td>
-                            <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle"><input type="number" value={editingExercise.weight} onChange={(event) => setEditingExercise({ ...editingExercise, weight: Number(event.target.value) })} className="w-full text-center" /></td>
                             <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
-                              <button onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
-                              <button onClick={() => handleUneditExercise(index)}> <img src="/images/unedit.png" alt="Unedit icon" width="24" height="30" /> </button>
+                              <input
+                                type="text"
+                                value={editingExercise.exerciseName}
+                                onChange={(event) => setEditingExercise({ ...editingExercise, exerciseName: event.target.value })}
+                                className="w-full text-center text-white"
+                              />
                             </td>
-
+                            {currentExercise.type === 'timenotes' ? (
+                              <>
+                                <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                                  <input
+                                    type="text" // Change type to text for "Time"
+                                    value={editingExercise.time} // Use a new property like "time" instead of "numberOfReps"
+                                    onChange={(event) => setEditingExercise({ ...editingExercise, time: event.target.value })}
+                                    className="w-full text-center text-white"
+                                  />
+                                </td>
+                                <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                                  <input
+                                    type="text" // Use "text" type for "Notes"
+                                    value={editingExercise.notes} // Use "notes" for Notes
+                                    onChange={(event) => setEditingExercise({ ...editingExercise, notes: event.target.value })}
+                                    className="w-full text-center text-white"
+                                  />
+                                </td>
+                              </>
+                            ) : (
+                              <>
+                                <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                                  <input
+                                    type="number"
+                                    value={editingExercise.numberOfReps}
+                                    onChange={(event) => setEditingExercise({ ...editingExercise, numberOfReps: Number(event.target.value) })}
+                                    className="w-full text-center text-white"
+                                  />
+                                </td>
+                                <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                                  <input
+                                    type="number"
+                                    value={editingExercise.numberOfSets}
+                                    onChange={(event) => setEditingExercise({ ...editingExercise, numberOfSets: Number(event.target.value) })}
+                                    className="w-full text-center text-white"
+                                  />
+                                </td>
+                                <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                                  <input
+                                    type="number"
+                                    value={editingExercise.weight}
+                                    onChange={(event) => setEditingExercise({ ...editingExercise, weight: Number(event.target.value) })}
+                                    className="w-full text-center text-white"
+                                  />
+                                </td>
+                              </>
+                            )}
+                            <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                              <button onClick={() => handleRemoveExercise(index)}>
+                                <img src="/images/remove.png" alt="Remove icon" width="24" height="30" />
+                              </button>
+                              <button onClick={() => handleUneditExercise(index)}>
+                                <img src="/images/unedit.png" alt="Unedit icon" width="24" height="30" />
+                              </button>
+                              <button className="button-hover relative group" onClick={handleTypeChange}>
+                                {currentExercise.type === 'timenotes' ? (
+                                  <>
+                                    <span className="absolute min-w-[8vw] hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                                      Log Reps, Sets, Weight
+                                    </span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
+                                    </svg>
+                                  </>
+                                ) : (
+                                  <>
+                                    <span className="absolute min-w-[8vw] hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                                      Log Time and Notes
+                                    </span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5" />
+                                    </svg>
+                                  </>
+                                )}
+                              </button>
+                            </td>
                           </>
                         ) : (
                           <>
                             <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.exerciseName}</td>
-                            <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.numberOfReps}</td>
-                            <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.numberOfSets}</td>
-                            <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.weight}</td>
+                            {currentExercise.type === 'timenotes' ? (
+                              <>
+                                <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.time}</td>
+                                <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.notes}</td>
+                              </>
+                            ) : (
+                              <>
+                                <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.numberOfReps}</td>
+                                <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.numberOfSets}</td>
+                                <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">{exercise.weight}</td>
+                              </>
+                            )}
                             <td className="w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle text-md">
                               <div className="button-hover relative group">
                                 <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
                                   Delete
                                 </span>
-                                <button className="px-1" onClick={() => handleRemoveExercise(index)}> <img src="/images/remove.png" alt="Remove icon" width="24" height="30" /> </button>
+                                <button className="px-1" onClick={() => handleRemoveExercise(index)}>
+                                  <img src="/images/remove.png" alt="Remove icon" width="24" height="30" />
+                                </button>
                               </div>
                               <div className="button-hover relative group">
                                 <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
                                   Edit
                                 </span>
-                                <button className="px-1" onClick={() => handleEditExercise(index)}> <img src="/images/edit1.png" alt="Edit icon" width="24" height="30" /> </button>
+                                <button className="px-1" onClick={() => handleEditExercise(index)}>
+                                  <img src="/images/edit1.png" alt="Edit icon" width="24" height="30" />
+                                </button>
                               </div>
+                              <button className="button-hover relative group" onClick={handleTypeChange}>
+                                {currentExercise.type === 'timenotes' ? (
+                                  <>
+                                    <span className="absolute min-w-[8vw] hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                                      Log Reps, Sets, Weight
+                                    </span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
+                                    </svg>
+                                  </>
+                                ) : (
+                                  <>
+                                    <span className="absolute min-w-[8vw] hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                                      Log Time and Notes
+                                    </span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5" />
+                                    </svg>
+                                  </>
+                                )}
+                              </button>
                             </td>
                           </>
                         )}
                       </tr>
                     ))}
                     <tr>
-                      <td className="flex flex-row min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle items-center">
-                        <Select
-                          styles={customSelect}
-                          className="w-[15vw] rounded-md text-black"
-                          options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
-                          name='exerciseName'
-                          value={{ value: currentExercise.exerciseName, label: currentExercise.exerciseName }}
-                          onChange={handleSelectChange}
-                          isSearchable
-                          loadingMessage={() => 'Loading...'}
-                          noOptionsMessage={() => 'No options found.'}
-                        />
-                        <button className="ml-3 button-hover relative group" onClick={toggleSidePanel}>
-                          <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
-                            Show All
-                          </span>
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                        </button>
+                      <td className="min-w-full h-full px-5 py-2 text-center align-middle">
+                        <div className="flex flex-row items-center justify-center">
+                          <Select
+                            styles={customSelect}
+                            className="w-[15vw] rounded-md text-black"
+                            options={exerciseOptions.map(exercise => ({ value: exercise, label: exercise }))}
+                            name='exerciseName'
+                            value={{ value: currentExercise.exerciseName, label: currentExercise.exerciseName }}
+                            onChange={handleSelectChange}
+                            isSearchable
+                            loadingMessage={() => 'Loading...'}
+                            noOptionsMessage={() => 'No options found.'}
+                          />
+                          <button className="ml-3 button-hover relative group" onClick={toggleSidePanel}>
+                            <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                              Show All
+                            </span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </button>
+                        </div>
                       </td>
+                      {currentExercise.type === 'timenotes' ? (
+                        <>
+                          <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                            <input
+                              className="text-white text-sm text-center text-opacity-75"
+                              type="text"
+                              name="time"
+                              placeholder="Time"
+                              value={currentExercise.time}
+                              onChange={handleInputChange}
+                            />
+                          </td>
+                          <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                            <input
+                              className="text-white text-sm text-center text-opacity-75"
+                              type="text"
+                              name="notes"
+                              placeholder="Notes"
+                              value={currentExercise.notes}
+                              onChange={handleInputChange}
+                            />
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                            <input
+                              className="text-white text-md text-center text-opacity-75"
+                              type="number"
+                              name="numberOfReps"
+                              placeholder="Number of Reps"
+                              value={currentExercise.numberOfReps}
+                              onChange={handleInputChange}
+                              min="0"
+                            />
+                          </td>
+                          <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                            <input
+                              className="text-white text-md text-center text-opacity-75"
+                              type="number"
+                              name="numberOfSets"
+                              placeholder="Number of Sets"
+                              value={currentExercise.numberOfSets}
+                              onChange={handleInputChange}
+                              min="0"
+                            />
+                          </td>
+                          <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
+                            <input
+                              className="text-white text-md text-center text-opacity-75"
+                              type="number"
+                              name="weight"
+                              placeholder="Weight"
+                              value={currentExercise.weight}
+                              onChange={handleInputChange}
+                              min="0"
+                            />
+                          </td>
+                        </>
+                      )}
                       <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
-                        <input className="text-white text-md text-center text-opacity-75" type="number" name="numberOfReps" placeholder="Number of Reps" value={currentExercise.numberOfReps} onChange={handleInputChange} min="0" />
-                      </td>
-                      <td className="min-w-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
-                        <input className="text-white text-md text-center text-opacity-75" type="number" name="numberOfSets" placeholder="Number of Sets" value={currentExercise.numberOfSets} onChange={handleInputChange} min="0" />
-                      </td>
-                      <td className="minw-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
-                        <input className="text-white text-md text-center text-opacity-75" type="number" name="weight" placeholder="Weight" value={currentExercise.weight} onChange={handleInputChange} min="0" />
-                      </td>
-                      <td className="minw-full border border-white border-opacity-50 px-5 py-2 text-center align-middle">
                         <button className="button-hover relative group" onClick={handleAddExercise}>
                           <span className="absolute hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
                             Add Exercise
@@ -789,10 +886,32 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                         </button>
+                        <button className="button-hover relative group" onClick={handleTypeChange}>
+                          {currentExercise.type === 'timenotes' ? (
+                            <>
+                              <span className="absolute min-w-[8vw] hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                                Log Reps, Sets, Weight
+                              </span>
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
+                              </svg>
+                            </>
+                          ) : (
+                            <>
+                              <span className="absolute min-w-[8vw] hidden group-hover:block bg-black text-white text-sm py-1 px-2 rounded-lg z-10 -translate-y-2 translate-x-[-50%] left-1/2 bottom-full">
+                                Log Time and Notes
+                              </span>
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5" />
+                              </svg>
+                            </>
+                          )}
+                        </button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
+
 
                 <div>
                   <button onClick={toggleLogging}>
