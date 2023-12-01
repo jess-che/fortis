@@ -23,12 +23,14 @@ interface DataPoint {
 
 interface Exercise {
   exerciseName: string;
-  numberOfReps: number;
-  numberOfSets: number;
-  weight: number;
+  numberOfReps?: number;
+  numberOfSets?: number;
+  weight?: number;
   eid: number;
   aid: number;
   uid: string;
+  time?: string;
+  notes?: string;
 }
 
 const HistoryPage: FC = () => {

@@ -1,14 +1,15 @@
 // ExerciseTypes.tsx
 
-export interface Exercise {
-  description: string;
+interface Exercise {
+  exerciseName: string;
+  numberOfReps?: number;
+  numberOfSets?: number;
+  weight?: number;
   eid: number;
-  equipment: string;
-  favorite: boolean;
-  muscle_group: string;
-  name: string;
-  popularity: number;
-  type: string;
+  aid: number;
+  uid: string;
+  time?: string;
+  notes?: string;
 }
 
 

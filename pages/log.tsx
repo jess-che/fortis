@@ -16,12 +16,14 @@ import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 // exercise type
 interface Exercise {
   exerciseName: string;
-  numberOfReps: number;
-  numberOfSets: number;
-  weight: number;
+  numberOfReps?: number;
+  numberOfSets?: number;
+  weight?: number;
   eid: number;
   aid: number;
   uid: string;
+  time?: string;
+  notes?: string;
 }
 type DataType = {
   workouts: any[];
@@ -57,48 +59,48 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     setCurrentExercise({ ...currentExercise, exerciseName: data.name, eid: data.eid });
   };
 
-  useEffect(() => {
-    try {
-      const savedWorkoutData = localStorage.getItem('workoutData');
-      if (savedWorkoutData) {
-        const workoutExercises = JSON.parse(savedWorkoutData);
-        // console.log("Workout Data from HistoryPage:", workoutExercises);
+  // useEffect(() => {
+  //   try {
+  //     const savedWorkoutData = localStorage.getItem('workoutData');
+  //     if (savedWorkoutData) {
+  //       const workoutExercises = JSON.parse(savedWorkoutData);
+  //       // console.log("Workout Data from HistoryPage:", workoutExercises);
 
-        if (Array.isArray(workoutExercises)) {
-          const newExercises = workoutExercises.map(exercise => ({
-            exerciseName: exercise.exerciseData.name,
-            numberOfReps: exercise.Rep,
-            numberOfSets: exercise.Set,
-            weight: exercise.Weight,
-            eid: exercise.Eid,
-            aid: exercise.Aid,
-            uid: exercise.Uid
-          }));
-          // console.log("New exercises to set:", newExercises);
-          // add to existing exercises
-          setExercises(prevExercises => [...prevExercises, ...newExercises]);
-        }
+  //       if (Array.isArray(workoutExercises)) {
+  //         const newExercises = workoutExercises.map(exercise => ({
+  //           exerciseName: exercise.exerciseData.name,
+  //           numberOfReps: exercise.Rep,
+  //           numberOfSets: exercise.Set,
+  //           weight: exercise.Weight,
+  //           eid: exercise.Eid,
+  //           aid: exercise.Aid,
+  //           uid: exercise.Uid
+  //         }));
+  //         // console.log("New exercises to set:", newExercises);
+  //         // add to existing exercises
+  //         setExercises(prevExercises => [...prevExercises, ...newExercises]);
+  //       }
 
-        // if (Array.isArray(workoutExercises)) {
-        //   workoutExercises.forEach(exercise => {
-        //     const newExercise = {
-        //       exerciseName: exercise.exerciseData.name, 
-        //       numberOfReps: exercise.Rep,
-        //       numberOfSets: exercise.Set,
-        //       weight: exercise.Weight,
-        //       eid: exercise.Eid,
-        //       aid: exercise.Aid,
-        //       uid: exercise.Uid
-        //     };
+  //       // if (Array.isArray(workoutExercises)) {
+  //       //   workoutExercises.forEach(exercise => {
+  //       //     const newExercise = {
+  //       //       exerciseName: exercise.exerciseData.name, 
+  //       //       numberOfReps: exercise.Rep,
+  //       //       numberOfSets: exercise.Set,
+  //       //       weight: exercise.Weight,
+  //       //       eid: exercise.Eid,
+  //       //       aid: exercise.Aid,
+  //       //       uid: exercise.Uid
+  //       //     };
 
-        //     setExercises(prevExercises => [...prevExercises, newExercise]);
-        //   });
-        // }
-      }
-    } catch (error) {
-      console.error("Error retrieving workout data from local storage:", error);
-    }
-  }, []);
+  //       //     setExercises(prevExercises => [...prevExercises, newExercise]);
+  //       //   });
+  //       // }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error retrieving workout data from local storage:", error);
+  //   }
+  // }, []);
 
   // useEffect(() => {
   //   console.log("Updated exercises:", exercises);
