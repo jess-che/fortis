@@ -19,7 +19,8 @@ console.log(getCookie('uid'));
 setCookie('login', 'false');
 
 setCookie('name', 'temp name');
-setCookie('units', 'Imperial');
+// remove this (for development only)
+// setCookie('units', 'Imperial');
 
 interface DataPoint {
   date: string;
@@ -96,6 +97,7 @@ const Home: React.FC = () => {
       if (user)
         await getUID(user.email);
       await handleUserDataSave();
+      setCookie('units', 'Imperial');
       window.location.reload();
     }
   };

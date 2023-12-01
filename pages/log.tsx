@@ -109,7 +109,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     setSearchGym(gym);
     setSearchBarKey((prevKey) => prevKey + 1); // Change the key to force a re-render
 
-    
+
     // Initialize textOpacity and isClicked for all gyms that are not selected
     const updatedButtonStyles: GymState = Object.keys(buttonStyles).reduce((styles: GymState, gymKey) => {
       styles[gymKey] = {
@@ -117,7 +117,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
         isClicked: gymKey === gym.toLowerCase() ? !buttonStyles[gymKey].isClicked : false,
       };
       return styles;
-    }, {}); 
+    }, {});
 
     // Update button styles
     setButtonStyles(updatedButtonStyles);
@@ -456,18 +456,18 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     return parseInt(data.data.rows[0].Aid);
   };
 
-  function kilogramsToPounds(kilograms:any) {
+  function kilogramsToPounds(kilograms: any) {
     return Math.round(kilograms / 0.453592);
-  }  
+  }
 
   // save the exercises to uid, aid
   const handleSaveExercises = async () => {
     const modifiedExercises = exercises.map((exercise) => {
       const isMetric = getCookie('units') === 'Metric';
-    
+
       // Convert the weight property if necessary
       const convertedWeight = isMetric ? kilogramsToPounds(exercise.weight) : exercise.weight;
-    
+
       // Return the modified Exercise object
       return {
         ...exercise,
@@ -952,27 +952,24 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                     <div className="flex flex-row justify-between mb-4">
                       <button
                         onClick={() => handleGymSwitch('any')}
-                        className={`text-white text-xl hover:gradient-text-bp duration-300 font-bold text-center ${
-                          searchGym === 'any' ? 'gradient-text-bp' : ''
-                        }`}
+                        className={`text-white text-xl hover:gradient-text-bp duration-300 font-bold text-center ${searchGym === 'any' ? 'gradient-text-bp' : ''
+                          }`}
                         style={{ opacity: buttonStyles.any.textOpacity / 100 }}
                       >
                         <p>ALL</p>
                       </button>
                       <button
                         onClick={() => handleGymSwitch('Wilson')}
-                        className={`text-white text-xl hover:gradient-text-pg duration-300 font-bold text-center ${
-                          searchGym === 'Wilson' ? 'gradient-text-pg' : ''
-                        }`}
+                        className={`text-white text-xl hover:gradient-text-pg duration-300 font-bold text-center ${searchGym === 'Wilson' ? 'gradient-text-pg' : ''
+                          }`}
                         style={{ opacity: buttonStyles.wilson.textOpacity / 100 }}
                       >
                         <p>WILSON</p>
                       </button>
                       <button
                         onClick={() => handleGymSwitch('Brodie')}
-                        className={`text-white text-xl hover:gradient-text-gb duration-300 font-bold text-center ${
-                          searchGym === 'Brodie' ? 'gradient-text-pg' : ''
-                        }`}
+                        className={`text-white text-xl hover:gradient-text-gb duration-300 font-bold text-center ${searchGym === 'Brodie' ? 'gradient-text-pg' : ''
+                          }`}
                         style={{ opacity: buttonStyles.brodie.textOpacity / 100 }}
                       >
                         <p>BRODIE</p>
@@ -1089,7 +1086,36 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                       {/* Map over data and render exercises */}
                       {activityData[i].workouts !== null && activityData[i].workouts.map((workout: any, index: number) => (
                         <li key={index} className="">
-                          <div className="text-md text-center">{workout.exerciseData.name}</div>
+                          <div className="text-md text-left font-bold px-2">{workout.exerciseData.name}</div>
+                          <div className="grid grid-cols-3 gap-1 px-5 mb-2">
+                            <div className="flex flex-row text-sm text-left">
+                              <Image
+                                src="/animated/set.svg"
+                                alt=""
+                                width={20}
+                                height={20}
+                              />
+                              <div className="ml-2">{workout.Set}</div>
+                            </div>
+                            <div className="flex flex-row text-sm text-left">
+                              <Image
+                                src="/animated/rep.svg"
+                                alt=""
+                                width={20}
+                                height={20}
+                              />
+                              <div className="ml-2">{workout.Rep}</div>
+                            </div>
+                            <div className="flex flex-row text-sm text-left">
+                              <Image
+                                src="/animated/weight.svg"
+                                alt=""
+                                width={20}
+                                height={20}
+                              />
+                              <div className="ml-2">{getCookie('units') === 'Metric' ? poundsToKilograms(workout.Weight) : workout.Weight}</div>
+                            </div>
+                          </div>
                         </li>
                       ))}
                     </li>

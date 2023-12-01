@@ -50,6 +50,10 @@ const LogFinish: React.FC = () => {
       // Handle errors here
     }
   }
+  
+  function poundsToKilograms(pounds: any) {
+    return Math.round(pounds * 0.453592);
+  }
 
   const toggleDialog = () => {
     setIsDialogOpen(!isDialogOpen);
@@ -407,7 +411,7 @@ const LogFinish: React.FC = () => {
                       width={38}
                       height={38}
                     />
-                    <div className="text-lg pl-2 text-white opacity-70">Weight: {workout.Weight}</div>
+                    <div className="text-lg pl-2 text-white opacity-70">Weight: {getCookie('units') === 'Metric' ? poundsToKilograms(workout.Weight) : workout.Weight}</div>
                   </div>
                   <div className="col-span-1 flex flex-row items-center">
                     <Image
@@ -416,7 +420,7 @@ const LogFinish: React.FC = () => {
                       width={45}
                       height={45}
                     />
-                    <div className="text-xl text-white pl-1">Total Weight: {workout.Rep * workout.Set * workout.Weight}</div>
+                    <div className="text-xl text-white pl-1">Total Weight: {workout.Rep * workout.Set * (getCookie('units') === 'Metric' ? poundsToKilograms(workout.Weight) : workout.Weight)}</div>
                   </div>
                 </div>
               </li>
