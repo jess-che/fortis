@@ -17,17 +17,17 @@ const SearchBar = () => {
                 searchQuery: query
             }),
         });
-
+    
         if (!response.ok) {
             throw new Error('Failed to save query');
         }
-
+    
         const data = await response.json();
         const dataName = data.data.rows.map((row: { name: any; }) => row.name);
-        // setResults(dataName);
-        setResults((prevResults: string[]) => [...prevResults, ...dataName]);
+        setResults(dataName);
         console.log(dataName);
     };
+    
 
     // const populatelist2 = async (query: any) => {
     //     const response = await fetch('/api/searchUserEmail', {
@@ -59,11 +59,13 @@ const SearchBar = () => {
 
     const handleChange = (value: React.SetStateAction<string>) => {
         setInput(value);
-        setResults([]);
-
-        populatelist(value);
-        // populatelist2(value);
-    };
+        if (value === "") {
+            setResults([]);
+        } else {
+            populatelist(value);
+            // populatelist2(value); // Uncomment if needed
+        }
+    };    
 
     return (
         <div className="search-container">
