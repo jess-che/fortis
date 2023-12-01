@@ -1,35 +1,3 @@
-
-
-//   // USELESS STUFF, JUST CHECKING
-//   const getAID = async (query: any) => {
-//     const response = await fetch('/api/getAID', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436"
-//         //query
-//       }),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error('Failed to save query');
-//     }
-
-//     const data = await response.json();
-//     console.log(data)
-//   };
-
-//     // END OF USELESS STUFF, JUST CHECKING
-
-
-
-// WHen you click a button: 
-//   "   getAID(value);    "  <-   This needs to be called.
-
-
-
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -53,7 +21,8 @@ const matchyboo = `
         FROM unnest(string_to_array(trim(both '{}' from replace(input."gymAvailability", '"', '')), ',')) WITH ORDINALITY AS input_avail(value, ord)
         JOIN unnest(string_to_array(trim(both '{}' from replace(m."gymAvailability", '"', '')), ',')) WITH ORDINALITY AS m_avail(value, ord) 
         ON input_avail.ord = m_avail.ord AND input_avail.value::boolean AND m_avail.value::boolean
-    );
+    )
+    AND input.location LIKE m.location;
     `;
 
 export default async (req, res) => {
