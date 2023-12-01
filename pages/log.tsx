@@ -8,7 +8,6 @@ import { setCookie, getCookie } from 'cookies-next';
 import { GetServerSideProps } from 'next';
 import React, { FC, useState, useEffect, ChangeEvent, useContext } from 'react';
 import '@/public/styles/log.css';     // style sheet for animations
-import '@/public/styles/history.css';     // style sheet for animations
 import { useRouter } from 'next/router';
 // import ExerciseContext, { useExerciseContext, ExerciseProvider } from './ExerciseContext';
 
