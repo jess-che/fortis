@@ -928,7 +928,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                     <div className="flex flex-row justify-between mb-4">
                       <button
                         onClick={() => handleGymSwitch('any')}
-                        className={`text-white text-lg hover:gradient-text-bp duration-300 text-center ${
+                        className={`text-white text-xl hover:gradient-text-bp duration-300 font-bold text-center ${
                           searchGym === 'any' ? 'gradient-text-bp' : ''
                         }`}
                         style={{ opacity: buttonStyles.any.textOpacity / 100 }}
@@ -937,7 +937,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                       </button>
                       <button
                         onClick={() => handleGymSwitch('Wilson')}
-                        className={`text-white text-lg hover:gradient-text-pg duration-300 text-center ${
+                        className={`text-white text-xl hover:gradient-text-pg duration-300 font-bold text-center ${
                           searchGym === 'Wilson' ? 'gradient-text-pg' : ''
                         }`}
                         style={{ opacity: buttonStyles.wilson.textOpacity / 100 }}
@@ -946,7 +946,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                       </button>
                       <button
                         onClick={() => handleGymSwitch('Brodie')}
-                        className={`text-white text-lg hover:gradient-text-gb duration-300 text-center ${
+                        className={`text-white text-xl hover:gradient-text-gb duration-300 font-bold text-center ${
                           searchGym === 'Brodie' ? 'gradient-text-pg' : ''
                         }`}
                         style={{ opacity: buttonStyles.brodie.textOpacity / 100 }}
