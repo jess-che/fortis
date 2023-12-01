@@ -1,0 +1,25 @@
+.matchedPerson {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .matchedPersonsList {
+    margin-top: 20px;
+  }
+  
+  .matcherButton {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px 0;
+  }
+  
+  .matcherButton:hover {
+    background-color: #0056b3;
+  }
+  
