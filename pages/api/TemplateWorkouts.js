@@ -17,7 +17,7 @@ export default async (req, res) => {
         const aid = req.body.aid;
 
         try {
-            console.log('Querying database');
+            //console.log('Querying database');
             const results = await pool.query(History, [aid]);
             
             res.json({ success: true, data: results });

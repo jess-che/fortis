@@ -157,6 +157,37 @@ const DiscoverPage: React.FC = () => {
     ? activityData.filter(activity => activity.categorySetCounts[selectedCategory] > 5)
     : activityData;
 
+  const handleTemplateClick = (aid: any) => {
+    // Logic to handle the favorite button click
+    // For example, updating the favorite count in the state or making an API call
+    console.log('Work in progress, have some patience bro:', aid);
+    // Add your implementation here
+  };
+  const handleFavoriteClick = (aid: any) => {
+    // Logic to handle the favorite button click
+    // For example, updating the favorite count in the state or making an API call
+    console.log('Favorite clicked for Aid:', aid);
+    updateFavorites(aid);
+    // Add your implementation here
+  };
+    
+  const updateFavorites = async (aid: any) => {
+    const response = await fetch('/api/updateFavorites', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Aid : aid
+      }),
+    });
+    console.log("easy money");
+
+    if (!response.ok) {
+      throw new Error('Failed to save user');
+    }
+  };
+
   return (
     <DefLayout>
       <div className="discover-page">
@@ -189,6 +220,14 @@ const DiscoverPage: React.FC = () => {
               <div className="activity-info">
                 <h2>{activity.Activity_name}</h2>
                 <span>Aid: {activity.Aid}</span>
+                <span>Favorites: {activity.Favorite}</span>
+                {/* Button next to favorites */}
+                <button onClick={() => handleFavoriteClick(activity.Aid)} className="favorite-button">
+                  + Favorite 
+                </button>
+                <button onClick={() => handleTemplateClick(activity.Aid)} className="template-button">
+                  Use as template
+                </button>
                 {/* Display the aggregated set counts by category */}
                 {Object.entries(activity.categorySetCounts).map(([category, count]) => (
                   <div key={category}>{category}: {count as number} sets</div>

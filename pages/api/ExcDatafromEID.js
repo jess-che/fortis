@@ -48,7 +48,7 @@ export default async (req, res) => {
             const values = [`${searchQuery}`];
             const results = await pool.query(History, values);
             
-            console.log('Success! ExcDatafromEID');
+        //    console.log('Success! ExcDatafromEID');
             res.json({ success: true, data: results });
         } catch (err) {
             console.log('error in ExcDatafromEID');
