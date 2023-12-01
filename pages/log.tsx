@@ -1003,7 +1003,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
             <div className="flex flex-col w-[30vw]">
 
               <div className="flex flex-col h-[85vh] min-w-[25vw] max-w-[27vw] items-center justify-center">
-                <h2 className="mb-4 text-[5vw] font-bold displayheader gradient-text-pg">Quick Add</h2>
+                <h2 className="mb-4 text-[5vw] font-bold displayheader gradient-text-bp">Quick Add</h2>
 
                 <ul className="overflow-y-auto mb-3 min-w-[19vw]">
                   {/* waiting for query */}
