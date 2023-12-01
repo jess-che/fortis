@@ -815,17 +815,38 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
         ) : (
           <div className="flex flex-row w-screen min-h-[90vh] justify-center items-center">
             {/* this side is add Activity button, but also make it cooler */}
-            <div className="flex flex-col w-[60vw] justify-center items-center">
-              <div className="relative">
-                <button onClick={addActivity} className="startActivity rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#55BBA4]">
-                  Add Activity
-                </button>
+            <div className="flex flex-col h-[85vh] w-[60vw] justify-center items-center">
+              <div className="container grid grid-cols-3 gap-0">
+                <div className="flex flex-col column justify-center items-center h-[75vh] border-r border-white border-opacity-25">
+                  <h2>New</h2>
+                  <div className="relative">
+                    <button onClick={addActivity} className="startActivity rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#55BBA4]">
+                      Add Activity
+                    </button>
+                  </div>
+                </div>
+                <div className="flex flex-col column justify-center items-center h-[75vh] border-r border-white border-opacity-25">
+                  <h2>Discover</h2>
+                  <div className="relative">
+                    <Link href="/discover" className="startActivity rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#55BBA4]">
+                      Discover
+                    </Link>
+                  </div>
+                </div>
+                <div className="flex flex-col column justify-center items-center h-[75vh]">
+                  <h2>History</h2>
+                  <div className="relative">
+                    <Link href="/history" className="startActivity rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#55BBA4]">
+                      History
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
 
             <div className="h-[80vh] w-[2px] mx-[1vw] bg-white bg-opacity-50"></div>
 
-            {/* this side show most popular templates */}
+            {/* this side show most recent templates */}
             <div className="flex flex-col w-[30vw]">
 
               <div className="flex flex-col h-[85vh] min-w-[25vw] max-w-[27vw] items-center justify-center">
@@ -877,7 +898,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                       {activityData[i].workouts !== null && activityData[i].workouts.length === 0 && (
                         <div>
                           <div className="w-[20vw] h-[1px] m-[1vw] bg-white bg-opacity-50"></div>
-                          <div className="text-xl text-center">No Exercise Data</div>
+                          <div className="text-xl text-center opacity-60">No Exercise Data</div>
                         </div>
                       )}
 
@@ -887,7 +908,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                       )}
 
                       {/* Map over data and render exercises */}
-                      {activityData[i].workouts !== null && activityData[i].workouts.map((workout:any, index:number) => (
+                      {activityData[i].workouts !== null && activityData[i].workouts.map((workout: any, index: number) => (
                         <li key={index} className="">
                           <div className="text-xl text-center">{workout.exerciseData.name}</div>
                         </li>
