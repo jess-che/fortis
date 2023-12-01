@@ -320,6 +320,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     // Toggle the value of 'log' cookie
     setCookie('log', isLogging ? 'false' : 'true');
 
+
     // also want to clear local storage
     setExercises([]);
 
@@ -328,6 +329,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
 
     // also delete the most recent activity
     await handleSaveExercises();
+
 
     // redirect to new page to edit things
     router.push('/logfinish');
@@ -455,16 +457,33 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     return parseInt(data.data.rows[0].Aid);
   };
 
+  function kilogramsToPounds(kilograms:any) {
+    return Math.round(kilograms / 0.453592);
+  }  
+
   // save the exercises to uid, aid
   const handleSaveExercises = async () => {
+    const modifiedExercises = exercises.map((exercise) => {
+      const isMetric = getCookie('units') === 'Metric';
+    
+      // Convert the weight property if necessary
+      const convertedWeight = isMetric ? kilogramsToPounds(exercise.weight) : exercise.weight;
+    
+      // Return the modified Exercise object
+      return {
+        ...exercise,
+        weight: convertedWeight,
+      };
+    });
+
     try {
-      console.log(exercises)
+      console.log(modifiedExercises);
       const response = await fetch('/api/saveExercises', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(exercises)
+        body: JSON.stringify(modifiedExercises)
       });
       // console.log(response)
       // console.log('Response body:', await response.text());
@@ -521,6 +540,10 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     }
   };
 
+  function poundsToKilograms(pounds: any) {
+    return Math.round(pounds * 0.453592);
+  }
+
   const handleSaveClick = async (workoutData: any[]) => {
     if (getCookie('log') === 'false') {
       await addActivity2();
@@ -529,11 +552,14 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     const templateAid = await fetchAid();
 
     const exerciseArray: Exercise[] = workoutData.map((item) => {
+      const isMetric = getCookie('units') === 'Metric';
+      const convertedWeight = isMetric ? poundsToKilograms(item.Weight) : item.Weight;
+
       return {
         exerciseName: item.exerciseData.name,
         numberOfReps: item.Rep,
         numberOfSets: item.Set,
-        weight: item.Weight,
+        weight: convertedWeight,
         eid: item.Eid,
         aid: templateAid,
         uid: item.Uid,

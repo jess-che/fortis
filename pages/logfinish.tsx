@@ -337,7 +337,7 @@ const LogFinish: React.FC = () => {
           </button>
 
           <div className="pl-3 flex flex-row border-r">
-            <div>
+            <div className="inline-flex items-center">
               <button
                 onClick={toggleDialog}
                 className="inline-flex items-center"

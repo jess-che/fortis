@@ -66,6 +66,8 @@ const ProfilePage: React.FC = () => {
     }
 
     setCookie('name', name);
+    setCookie('units', units);
+    console.log(getCookie('units'));
 
     try {
       const response = await fetch('/api/updateUserData', {

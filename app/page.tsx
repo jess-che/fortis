@@ -19,6 +19,7 @@ console.log(getCookie('uid'));
 setCookie('login', 'false');
 
 setCookie('name', 'temp name');
+setCookie('units', 'Imperial');
 
 interface DataPoint {
   date: string;
