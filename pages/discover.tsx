@@ -286,7 +286,7 @@ const DiscoverPage: React.FC = () => {
       </div>
             {/* Load More Button */}
             <div className="load-more-container">
-        <button onClick={handleLoadMore} className="load-more-button">
+        <button onClick={handleLoadMore} className="loadmore-button">
           Load More
         </button>
       </div>

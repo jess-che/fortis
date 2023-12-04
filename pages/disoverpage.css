@@ -74,3 +74,18 @@
   .template-button:hover {
     background-color: #20481e; /* Darker shade on hover */
   }
+
+  .loadmore-button {
+    background-color: #af7979; /* Bootstrap primary color for reference */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-left: 10px; /* Space between the button and the Favorites text */
+    cursor: pointer;
+    transition: background-color 0.2s; /* Smooth transition for hover effect */
+  }
+  
+  .loadmore-button:hover {
+    background-color: #481e1e; /* Darker shade on hover */
+  }
