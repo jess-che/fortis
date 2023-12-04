@@ -14,6 +14,11 @@ const DiscoverPage: React.FC = () => {
     [key: string]: string[];
   };
 
+  const [page, setPage] = useState(0);
+  const pageSize = 10; // Number of workouts per page
+  const [hasMore, setHasMore] = useState(true);
+
+
   type CategorySetCounts = {
     [category: string]: number;
   };
@@ -67,15 +72,35 @@ const DiscoverPage: React.FC = () => {
       .sort((a, b) => b.categorySetCounts[selectedCategory] - a.categorySetCounts[selectedCategory])
     : activityData;
 
-  useEffect(() => {
-    const fetchData = async () => {
+
+
+    const fetchData = async (pageNumber: number) => {
       try {
-        const response = await fetch('/api/TemplateActivities');
+        const pageSize = 10; // or another appropriate number
+
+        console.log('Sending:', { page: pageNumber, size: pageSize });
+
+        const response = await fetch('/api/TemplateActivities', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ page: pageNumber, size: pageSize }),
+        });
+
+        
         if (!response.ok) {
           throw new Error('Failed to fetch activity data');
         }
         const activityJson = await response.json();
-        const activitiesWithCategorySetCounts = await Promise.all(activityJson.data.rows.map(async (activity: any) => {
+  
+        // Check if there is more data to load
+        if (activityJson.data.length < pageSize) {
+          setHasMore(false);
+        }
+
+        console.log(activityJson)
+        const activitiesWithCategorySetCounts = await Promise.all(activityJson.data.map(async (activity: any) => {
           const categorySetCounts: CategorySetCounts = {};
 
           const workoutResponse = await fetch('/api/TemplateWorkouts', {
@@ -114,15 +139,15 @@ const DiscoverPage: React.FC = () => {
             categorySetCounts,
           };
         }));
-        setActivityData(activitiesWithCategorySetCounts);
+      setActivityData(prevData => [...prevData, ...activitiesWithCategorySetCounts]);
       } catch (error) {
         console.error('Error:', error);
       }
     };
-    fetchData();
+
+  useEffect(() => {
+    fetchData(0);
   }, []);
-
-
 
   const workoutRectangleStyle = {
     background: 'gray',
@@ -188,6 +213,15 @@ const DiscoverPage: React.FC = () => {
     }
   };
 
+  // Function to handle Load More button click
+  const handleLoadMore = () => {
+    if (hasMore) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      fetchData(nextPage);
+    }
+  };
+
   return (
     <DefLayout>
       <div className="discover-page">
@@ -225,6 +259,7 @@ const DiscoverPage: React.FC = () => {
                 <button onClick={() => handleFavoriteClick(activity.Aid)} className="favorite-button">
                   + Favorite 
                 </button>
+                
                 <button onClick={() => handleTemplateClick(activity.Aid)} className="template-button">
                   Use as template
                 </button>
@@ -249,7 +284,14 @@ const DiscoverPage: React.FC = () => {
           ))}
         </ul>
       </div>
+            {/* Load More Button */}
+            <div className="load-more-container">
+        <button onClick={handleLoadMore} className="load-more-button">
+          Load More
+        </button>
+      </div>
     </DefLayout>
   );
 }
+
 export default DiscoverPage;
