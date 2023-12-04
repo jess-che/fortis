@@ -10,6 +10,7 @@ const matchyboo = `
     FROM public.matcher m
     JOIN public.user_data ud ON m."Uid" = ud.uid
     JOIN public.matcher input ON input."Uid" = $1::uuid
+    JOIN public.user_data input_ud ON input."Uid" = input_ud.uid
     WHERE m."Uid" != $1::uuid
     AND EXISTS (
         SELECT 1
@@ -22,7 +23,13 @@ const matchyboo = `
         JOIN unnest(string_to_array(trim(both '{}' from replace(m."gymAvailability", '"', '')), ',')) WITH ORDINALITY AS m_avail(value, ord) 
         ON input_avail.ord = m_avail.ord AND input_avail.value::boolean AND m_avail.value::boolean
     )
-    AND input.location LIKE m.location;
+    AND input.location LIKE m.location
+    AND (
+        (input."genderPreference" = '' OR input."genderPreference" = ud.gender)
+        AND (m."genderPreference" = '' OR m."genderPreference" = input_ud.gender)
+        AND (ud.gender != '-' OR input."genderPreference" = '')
+        AND (input_ud.gender != '-' OR m."genderPreference" = '')
+    );
     `;
 
 export default async (req, res) => {
