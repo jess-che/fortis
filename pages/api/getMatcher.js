@@ -27,8 +27,8 @@ const matchyboo = `
     AND (
         (input."genderPreference" = '' OR input."genderPreference" = ud.gender)
         AND (m."genderPreference" = '' OR m."genderPreference" = input_ud.gender)
-        AND (ud.gender != '-' OR input."genderPreference" = '')
-        AND (input_ud.gender != '-' OR m."genderPreference" = '')
+        AND (ud.gender != '' OR input."genderPreference" = '')
+        AND (input_ud.gender != '' OR m."genderPreference" = '')
     );
     `;
 
