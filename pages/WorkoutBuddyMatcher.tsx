@@ -171,8 +171,8 @@ const WorkoutBuddyMatcher = () => {
           className={styles.select}
         >
           <option value="any">Any</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
+          <option value="male">Man</option>
+          <option value="female">Woman</option>
           <option value="non-binary">Non-binary</option>
         </select>
       </div>

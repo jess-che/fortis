@@ -9,8 +9,15 @@ export default async (req, res) => {
     const { uid, workoutTypes, location, frequency, genderPreference, gymAvailability, softPreferences } = req.body;
 
     const insertMatcherData = `
-      INSERT INTO public.matcher ("Uid", frequency, "genderPreference", "workoutTypes", location, "gymAvailability", "softPreferences")
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO public.matcher ("Uid", frequency, "genderPreference", "workoutTypes", location, "gymAvailability", "softPreferences")
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    ON CONFLICT ("Uid") DO UPDATE SET
+    frequency = EXCLUDED.frequency,
+    "genderPreference" = EXCLUDED."genderPreference",
+    "workoutTypes" = EXCLUDED."workoutTypes",
+    location = EXCLUDED.location,
+    "gymAvailability" = EXCLUDED."gymAvailability",
+    "softPreferences" = EXCLUDED."softPreferences";    
     `;
 
     try {
