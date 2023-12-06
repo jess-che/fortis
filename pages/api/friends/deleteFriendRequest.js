@@ -11,12 +11,18 @@ WHERE "Sender" = $1 AND "Receiver" = $2;
 `;
 
 export default async (req, res) => {
-    if (req.method === 'DELETE') {
+    console.log("this is called at least");
+    if (req.method === 'POST') {
         const { sender, receiver } = req.body;
+        console.log(sender, receiver);
 
         try {
-            await pool.query(deleteFriendRequestQuery, [sender, receiver]);
-            res.status(200).send('Friend request deleted successfully');
+            const result = await pool.query(deleteFriendRequestQuery, [sender, receiver]);
+            if (result.rowCount === 0) {
+                res.status(404).send('Friend request not found');
+            } else {
+                res.status(200).send('Friend request deleted successfully');
+            }
         } catch (err) {
             console.error('Error in deleting friend request:', err);
             res.status(500).json({ error: err.message });

@@ -7,8 +7,8 @@ const pool = new Pool({
 
 const sendFriendRequest = `
 INSERT INTO public.friend ("Sender", "Receiver", accepted)
-VALUES ($1, $2, 0)
-    `;
+VALUES ($1, $2, 0);
+`;
 
 export default async (req, res) => {
     if (req.method === 'POST') {

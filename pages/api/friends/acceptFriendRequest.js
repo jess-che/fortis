@@ -8,7 +8,7 @@ const pool = new Pool({
 const acceptFriendRequestQuery = `
 UPDATE public.friend 
 SET accepted = 1
-WHERE "Receiver" = $1 AND "Sender" = $2;
+WHERE "Receiver" LIKE $1 AND "Sender" LIKE $2;
 `;
 
 export default async (req, res) => {

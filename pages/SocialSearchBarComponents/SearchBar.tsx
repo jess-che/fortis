@@ -23,9 +23,12 @@ const SearchBar = () => {
         }
     
         const data = await response.json();
+        console.log("Here " + data);
         const dataName = data.data.rows.map((row: { name: any; }) => row.name);
-        setResults(dataName);
-        console.log(dataName);
+        const dataEmail = data.data.rows.map((row: { uid: any; }) => row.uid);
+        // setResults(dataName);
+        setResults((prevResults: string[]) => [...prevResults, ...dataName]);
+        console.log(dataEmail);
     };
     
 
