@@ -2,8 +2,23 @@ import React, { FC, useEffect, useState } from 'react';
 import DefLayout from "@/components/def_layout";
 import { setCookie, getCookie } from 'cookies-next';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+
+interface Exercise {
+    exerciseName: string;
+    numberOfReps?: number;
+    numberOfSets?: number;
+    weight?: number;
+    eid: number;
+    aid: number;
+    uid: string;
+    time?: string;
+    notes?: string;
+}
 
 const DiscoverPage2: React.FC = () => {
+    const router = useRouter();
+
     const workouts = [
         { name: "Push", description: "A push workout targets your chest, shoulder, and triceps" },
         { name: "Pull", description: "A pull workout targets your back and biceps" },
@@ -186,12 +201,87 @@ const DiscoverPage2: React.FC = () => {
         ? activityData.filter(activity => activity.categorySetCounts[selectedCategory] > 5)
         : activityData;
 
-    const handleTemplateClick = (aid: any) => {
-        // Logic to handle the favorite button click
-        // For example, updating the favorite count in the state or making an API call
-        console.log('Work in progress, have some patience bro:', aid);
-        // Add your implementation here
+    const addActivity = async () => {
+        setCookie('log', 'true');       // sets cookie to show that user is logging workout
+
+        try {
+            const response = await fetch('/api/addActivity', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    uid: getCookie('uid'),
+                }),
+            });
+            if (!response.ok) throw new Error('Network response was not ok.');
+            // Handle the response here
+        } catch (error) {
+            console.error('Failed to add activity:', error);
+            // Handle errors here
+        }
     };
+
+    const fetchAid = async () => {
+        const response = await fetch('/api/getAID', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                searchQuery: getCookie('uid'),
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch aid');
+        }
+
+        const data = await response.json();
+        let transfAID: string | null = data.data.rows[0].Aid.toString();
+        if (transfAID != null)
+            localStorage.setItem('aidTransfer', transfAID);
+        return parseInt(data.data.rows[0].Aid);
+    };
+
+    const handleTemplateClick = async (workoutData: any[]) => {
+        if (getCookie('log') === 'false') {
+            await addActivity();
+        }
+
+        const templateAid = await fetchAid();
+
+        const exerciseArray: Exercise[] = workoutData.map((item) => {
+            const isMetric = getCookie('units') === 'Metric';
+            const convertedWeight = isMetric ? poundsToKilograms(item.Weight) : item.Weight;
+
+            return {
+                exerciseName: item.exerciseData.name,
+                numberOfReps: item.Rep,
+                numberOfSets: item.Set,
+                weight: convertedWeight,
+                eid: item.Eid,
+                aid: templateAid,
+                uid: item.Uid,
+            };
+        });
+
+        console.log(exerciseArray);
+        // Retrieve existing data from localStorage or initialize it as an empty array
+        const existingDataString = localStorage.getItem('exercises');
+        const existingData: Exercise[] = existingDataString
+            ? JSON.parse(existingDataString)
+            : [];
+
+        // Append the new data to the existing data
+        const combinedData = [...existingData, ...exerciseArray];
+
+        // Save the combined data back to localStorage
+        localStorage.setItem('exercises', JSON.stringify(combinedData));
+
+        router.push('/log'); // Assuming '/log' is the path to Log2Page
+    };
+
     const handleFavoriteClick = (aid: any) => {
         // Logic to handle the favorite button click
         // For example, updating the favorite count in the state or making an API call
@@ -230,8 +320,8 @@ const DiscoverPage2: React.FC = () => {
         <DefLayout>
             <div className="flex flex-row w-screen min-h-[90vh] justify-center items-center">
                 <div className="flex flex-col column justify-center items-center w-[20vw] h-[90vh]">
-                    <h2 className="mb-4 text-[4vw] font-bold displayheader gradient-text-bp text-center">Template Types</h2>
-                    <div className="h-[2px] w-[3vw] mb-[2vh] bg-white bg-opacity-50"></div>
+                    <h2 className="mb-4 text-[4vw] font-bold displayheader gradient-text-bp text-center">Templates</h2>
+                    <div className="h-[2px] w-[3vw] mb-[1vh] bg-white bg-opacity-50"></div>
                     <div className="w-[18vw]">
                         <div className="workout-list grid grid-cols-1 gap-2">
                             {workouts.map((workout) => {
@@ -258,12 +348,12 @@ const DiscoverPage2: React.FC = () => {
                 <div className="h-[80vh] w-[2px] mx-[1vw] bg-white bg-opacity-50"></div>
 
                 <div className="flex flex-col column px-[1vw] w-[73vw] h-[80vh] items-center" style={{ overflowY: 'auto' }}>
-                    <div className="w-[68vw]">
+                    <div className="w-[70vw]">
                         <ul className="">
                             {filteredAndSortedActivityData.map((activity: any, i: number) => (
                                 <li key={i} className="border-b border-white p-5 border-opacity-50">
                                     <div className="">
-                                        <div className="flex flex-row justify-between mb-2">
+                                        <div className="grid grid-cols-3 gap-2">
                                             <h2 className="text-2xl font-bold displayheader gradient-text-pg w-[15vw] overflow-x-auto">{activity.Activity_name}</h2>
 
                                             <span className='flex flex-row items-center'>
@@ -290,13 +380,20 @@ const DiscoverPage2: React.FC = () => {
                                                     <p className="pl-2 pr-3 border-r text-white text-opacity-75 text-lg hover:gradient-text-gb duration-300 text-center">+ FAVORITE</p>
                                                 </button>
 
-                                                <button onClick={() => handleTemplateClick(activity.Aid)} className="template-button">
+                                                <button onClick={() => {
+                                                    if (activity && activity.workouts) {
+                                                        handleTemplateClick(activity.workouts);
+                                                    } else {
+                                                        console.log("No workout data to save");
+                                                        // Optionally, you could display a notification or alert to the user here.
+                                                    }
+                                                }} className="template-button">
                                                     <p className="pl-3 text-white text-opacity-75 text-lg hover:gradient-text-bp duration-300 text-center">USE AS TEMPLATE</p>
                                                 </button>
                                             </div>
                                         </div>
-
                                     </div>
+
                                     <ul className="workout-list">
                                         {activity.workouts.map((workout: any, j: number) => (
                                             <li key={j} className="workout-item">
@@ -340,23 +437,17 @@ const DiscoverPage2: React.FC = () => {
 
                     </div>
                     {/* Load More Button */}
-                    <div className="flex flex-row justify-between mb-2">
-                        <h2 className="opacity-0">filler name</h2>
+                    <div className="grid grid-cols-3 gap-2 w-[70vw]">
+                        <h2 className=""></h2>
 
-                        <div className='p-2 mt-5 flex flex-row mb-4 border border-white rounded-md border-opacity-50 bg-white bg-opacity-10'>
-                            <button onClick={handleLoadMore} className="text-center hover:gradient-text-gb duration-300">
+                        <div className=''>
+                            <button onClick={handleLoadMore} className="text-center hover:gradient-text-gb duration-300 p-2 mt-5 flex flex-row mb-4 border border-white rounded-md border-opacity-50 bg-white bg-opacity-10">
                                 Load More
                             </button>
                         </div>
 
-                        <div>
-                            <button className="favorite-button">
-                                <p className="pl-2 pr-3 opacity-0 text-center">+ FAVORITE</p>
-                            </button>
-
-                            <button className="template-button">
-                                <p className="pl-3 text-white opacity-0 text-lg text-center">USE AS TEMPLATE</p>
-                            </button>
+                        <div className="">
+                            
                         </div>
                     </div>
 
