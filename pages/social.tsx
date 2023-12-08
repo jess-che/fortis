@@ -11,9 +11,7 @@ import Modal from './modal'; // Make sure you have this component created
 import WorkoutBuddyMatcher from './WorkoutBuddyMatcher'; // This is the separate form component
 import styles from './WorkoutBuddy.module.css';
 import { getCookie } from 'cookies-next';
-
-
-
+import Styles from './social.module.css';
 
 const searchBarStyle = {
   // backgroundColor: '#aaa',
@@ -34,6 +32,18 @@ interface Person {
   frequency: string;
   gymAvailability: string;
   // Add other fields as needed
+}
+
+interface FlexiblePerson {
+  uid: string;
+  name: string;
+  age?: number | null;
+  height?: number | null;
+  weight?: number | null;
+  gender?: string | null;
+  unit?: string;
+  privacy?: string;
+  about?: string;
 }
 
 interface MatchedPersonDisplayProps {
@@ -68,6 +78,42 @@ const MatchedPersonDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) =
   );
 };
 
+interface FlexiblePersonListProps {
+  people: FlexiblePerson[];
+}
+
+const FlexiblePersonList: React.FC<FlexiblePersonListProps> = ({ people }) => {
+  return (
+    <ul className={styles.flexiblePersonList}>
+      {people.map(person => (
+        <li key={person.uid} className={styles.flexiblePersonItem}>
+          <p>Name: {person.name || 'Not specified'}</p>
+          <p>Age: {person.age !== null ? person.age : 'Not specified'}</p>
+          <p>Height: {person.height !== null ? `${person.height} cm` : 'Not specified'}</p>
+          <p>Weight: {person.weight !== null ? `${person.weight} kg` : 'Not specified'}</p>
+          <p>Gender: {person.gender || 'Not specified'}</p>
+          <p>Unit: {person.unit || 'Not specified'}</p>
+          <p>Privacy: {person.privacy || 'Not specified'}</p>
+          <p>About: {person.about || 'Not specified'}</p>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+
+
+const SocialPage: React.FC = () => {
+  const [showMatcherForm, setShowMatcherForm] = useState(false);
+  const [matchedPersons, setMatchedPersons] = useState<Person[]>([]);
+
+  
+  const [friendsList, setFriendsList] = useState<FlexiblePerson[]>([]);
+  const [pendingFriends, setPendingFriends] = useState<FlexiblePerson[]>([]);
+  const [friendRequests, setFriendRequests] = useState<FlexiblePerson[]>([]);
+  
+
+  
 const friendslist = async (query: any) => {
   const response = await fetch('/api/friends/friendList', {
       method: 'POST',
@@ -84,7 +130,8 @@ const friendslist = async (query: any) => {
   }
 
   const data = await response.json();
-  console.log("Here are your friends: ", data);
+  console.log("Here are your friends: ", data.data);
+  setFriendsList(data.data); 
 };
 
 const friendsPending = async (query: any) => {
@@ -103,7 +150,8 @@ const friendsPending = async (query: any) => {
   }
 
   const data = await response.json();
-  console.log("Pending friends :( ", data);
+  console.log("Pending friends :( ", data.data);
+  setPendingFriends(data.data);
 };
 
 
@@ -123,13 +171,9 @@ const friendLanding = async (query: any) => {
   }
 
   const data = await response.json();
-  console.log("Here the people who have sent you a friend request: ", data);
+  console.log("Here the people who have sent you a friend request: ", data.data);
+  setFriendRequests(data.data);
 };
-
-
-const SocialPage: React.FC = () => {
-  const [showMatcherForm, setShowMatcherForm] = useState(false);
-  const [matchedPersons, setMatchedPersons] = useState<Person[]>([]);
 
 
   const toggleMatcherForm = () => setShowMatcherForm(!showMatcherForm);
@@ -165,7 +209,7 @@ const SocialPage: React.FC = () => {
     } else {
       console.log('No rows in response'); // Log if no rows are found
     }
-  };  
+  }; 
 
   return (
     <DefLayout>
@@ -195,6 +239,45 @@ const SocialPage: React.FC = () => {
           )}
         </div>
       </div>
+
+      <div className={Styles.listsContainer}>
+          {/* My Friends List */}
+          <div className={Styles.listColumn}>
+            <h3>My Friends</h3>
+            <ul>
+              {Array.isArray(friendsList) && friendsList.map(person => (
+                <li key={person.uid} className={Styles.listItemBox}>
+                <FlexiblePersonList people={friendsList} />
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Pending Friends List */}
+          <div className={Styles.listColumn}>
+            <h3>Pending Friends</h3>
+            <ul>
+              {Array.isArray(pendingFriends) && pendingFriends.map(person => (
+                <li key={person.uid} className={Styles.listItemBox}>
+                <FlexiblePersonList people={pendingFriends} />
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Friend Requests List */}
+          <div className={Styles.listColumn}>
+            <h3>Friend Requests</h3>
+            <ul>
+              {Array.isArray(friendRequests) && friendRequests.map(person => (
+                <li key={person.uid} className={Styles.listItemBox}>
+                <FlexiblePersonList people={friendRequests} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
     </DefLayout>
   );
 };

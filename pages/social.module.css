@@ -1,0 +1,24 @@
+/* Add these styles to your CSS module */
+.listsContainer {
+    display: flex; /* Enables flexbox layout */
+    justify-content: space-around; /* Distributes space evenly between columns */
+    align-items: start; /* Aligns columns to the start of the container */
+    padding: 20px; /* Optional padding for the container */
+  }
+  
+  .listColumn {
+    flex: 1; /* Each column takes equal width */
+    margin: 10px; /* Margin around each column */
+    border: 1px solid #ccc; /* Border for the column */
+    border-radius: 5px; /* Optional: for rounded corners */
+    padding: 10px; /* Padding inside each column */
+  }
+  
+  .listItemBox {
+    border: 1px solid #ddd; /* Border for each box */
+    margin-bottom: 10px; /* Space between boxes */
+    padding: 10px; /* Padding inside each box */
+    border-radius: 5px; /* Optional: for rounded corners */
+    background-color: #f9f9f9; /* Background color for the box */
+  }
+  

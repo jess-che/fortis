@@ -6,10 +6,14 @@ const pool = new Pool({
 });
 
 const query = `
-    SELECT * FROM public.friend
-    WHERE "Sender" = $1
-    OR "Receiver" = $1
-    AND accepted = 0;
+    SELECT *
+    FROM 
+        public.friend AS f
+    JOIN 
+        public.user_data AS u ON f."Receiver" = u.uid
+    WHERE 
+        f."Sender" = $1
+        AND f.accepted = 0;
     `;
 
     export default async (req, res) => {
