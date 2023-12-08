@@ -14,7 +14,6 @@ JOIN
 WHERE 
     f."Receiver" = $1
     AND f.accepted = 0;
-
     `;
 
     export default async (req, res) => {
