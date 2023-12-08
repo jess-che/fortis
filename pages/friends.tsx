@@ -35,6 +35,7 @@ interface FlexiblePerson {
   privacy?: string;
   about?: string;
   email?: string;
+  totalsets?: number;
 }
 
 interface MatchedPersonDisplayProps {
@@ -142,6 +143,9 @@ const FlexiblePersonList1: React.FC<FlexiblePersonListProps> = ({ people, onAcce
 
             <p className="col-span-1 font-bold">Email:</p>
             <p className="col-span-4">{person.email !== null ? person.email : ''}</p>
+
+            <p className="col-span-1 font-bold">Sets (2 weeks):</p>
+            <p className="col-span-4">{person.totalsets !== 0 ? person.totalsets : 'FAILURE'}</p>
 
             <p className="col-span-1 font-bold">About:</p>
             <p className="col-span-4">
