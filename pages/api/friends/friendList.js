@@ -6,19 +6,53 @@ const pool = new Pool({
 });
 
 const query = `
-    SELECT ud.*
-    FROM public.friend AS f
-    JOIN public.user_data AS ud ON f."Receiver" = ud.uid
-    WHERE f."Sender" = $1
-    AND f.accepted = 1
+    WITH UserSets AS (
+        SELECT 
+            a."Uid", 
+            SUM(w."Set") AS TotalSets
+        FROM 
+            public.activity a
+        INNER JOIN 
+            public.workouts w ON a."Aid" = w."Aid" AND a."Uid" = w."Uid"
+        WHERE 
+            a."Date" >= CURRENT_DATE - INTERVAL '2 weeks'
+        GROUP BY 
+            a."Uid"
+    )
+
+    SELECT 
+        ud.*, 
+        u.email, 
+        COALESCE(us.TotalSets, 0) AS TotalSets
+    FROM 
+        public.friend AS f
+    JOIN 
+        public.user_data AS ud ON f."Receiver" = ud.uid
+    JOIN 
+        public.users AS u ON ud.uid = u.uid
+    LEFT JOIN 
+        UserSets us ON ud.uid = us."Uid"
+    WHERE 
+        f."Sender" = $1
+        AND f.accepted = 1
 
     UNION
 
-    SELECT ud.*
-    FROM public.friend AS f
-    JOIN public.user_data AS ud ON f."Sender" = ud.uid
-    WHERE f."Receiver" = $1
-    AND f.accepted = 1;
+    SELECT 
+        ud.*, 
+        u.email, 
+        COALESCE(us.TotalSets, 0) AS TotalSets
+    FROM 
+        public.friend AS f
+    JOIN 
+        public.user_data AS ud ON f."Sender" = ud.uid
+    JOIN 
+        public.users AS u ON ud.uid = u.uid
+    LEFT JOIN 
+        UserSets us ON ud.uid = us."Uid"
+    WHERE 
+        f."Receiver" = $1
+        AND f.accepted = 1;
     `;
 
     export default async (req, res) => {

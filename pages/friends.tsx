@@ -34,6 +34,8 @@ interface FlexiblePerson {
   unit?: string;
   privacy?: string;
   about?: string;
+  email?: string;
+  totalsets?: number;
 }
 
 interface MatchedPersonDisplayProps {
@@ -109,6 +111,8 @@ interface FlexiblePersonListProps {
 const FlexiblePersonList1: React.FC<FlexiblePersonListProps> = ({ people, onAcceptFriendRequest, onRejectFriendRequest }) => {
   const receiverUid = getCookie('uid');
 
+  const isFirstPersonActive = people.length > 0;
+
   const [showMore, setShowMore] = useState<boolean[]>(people.map(() => false));
 
   const toggleShowMore = (index: number) => {
@@ -121,8 +125,8 @@ const FlexiblePersonList1: React.FC<FlexiblePersonListProps> = ({ people, onAcce
 
   return (
     <ul className="">
-      {people.map((person, index) => (
-        <li key={person.uid} className="border border-white p-3 rounded-md m-3 border-opacity-60  bg-white bg-opacity-5">
+    {people.map((person, index) => (
+      <li key={person.uid} className={`border border-white p-3 rounded-md m-3 border-opacity-60 bg-white bg-opacity-5 ${isFirstPersonActive && index === 0 ? 'bg-red-900' : ''}`}>
           <div className='flex flex-row items-center justify-between'>
             <h2 className="text-2xl font-bold  gradient-text-pb">{person.name || 'Not specified'}</h2>
             <button onClick={() => handleFriendRequest(person.uid)} className="">
@@ -137,7 +141,13 @@ const FlexiblePersonList1: React.FC<FlexiblePersonListProps> = ({ people, onAcce
             <p className="col-span-4">{person.age !== null ? person.age : 'Not specified'}</p>
 
             <p className="col-span-1 font-bold">Gender:</p>
-            <p className="col-span-4">{person.age !== null ? person.gender : 'Not specified'}</p>
+            <p className="col-span-4">{person.gender !== null ? person.gender : 'Not specified'}</p>
+
+            <p className="col-span-1 font-bold">Email:</p>
+            <p className="col-span-4">{person.email !== null ? person.email : ''}</p>
+
+            <p className="col-span-1 font-bold">Sets (2 weeks):</p>
+            <p className="col-span-4">{person.totalsets !== 0 ? person.totalsets : 'FAILURE'}</p>
 
             <p className="col-span-1 font-bold">About:</p>
             <p className="col-span-4">
@@ -297,7 +307,8 @@ const SocialPage: React.FC = () => {
 
     const data = await response.json();
     console.log("Here are your friends: ", data.data);
-    setFriendsList(data.data);
+    const sortedFriendsList = data.data.sort((a: { totalsets: number; }, b: { totalsets: number; }) => b.totalsets - a.totalsets);
+    setFriendsList(sortedFriendsList);
   };
 
   const friendsPending = async (query: any) => {

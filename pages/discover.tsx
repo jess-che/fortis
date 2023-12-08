@@ -33,7 +33,7 @@ const DiscoverPage2: React.FC = () => {
     };
 
     const [page, setPage] = useState(0);
-    const pageSize = 10; // Number of workouts per page
+    const pageSize = 20; // Number of workouts per page
     const [hasMore, setHasMore] = useState(true);
 
     type CategorySetCounts = {
@@ -97,7 +97,7 @@ const DiscoverPage2: React.FC = () => {
 
     const fetchData = async (pageNumber: number) => {
         try {
-            const pageSize = 10; // or another appropriate number
+            const pageSize = 20; // or another appropriate number
 
             console.log('Sending:', { page: pageNumber, size: pageSize });
 
