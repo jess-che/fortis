@@ -32,6 +32,13 @@ module.exports = {
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
         },
+        '.gradient-text-bg': {
+          background: 'linear-gradient(45deg, #2FABDD, #55BBA4)',
+          backgroundClip: 'text',
+          color: 'transparent',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+        },
         '.gradient-text-pg': {
           background: 'linear-gradient(45deg, #C32E67, #55BBA4)',
           backgroundClip: 'text',
@@ -39,8 +46,22 @@ module.exports = {
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
         },
+        '.gradient-text-gp': {
+          background: 'linear-gradient(45deg, #55BBA4, #C32E67)',
+          backgroundClip: 'text',
+          color: 'transparent',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+        },
         '.gradient-text-bp': {
           background: 'linear-gradient(45deg, #2FABDD, #C32E67)',
+          backgroundClip: 'text',
+          color: 'transparent',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+        },
+        '.gradient-text-pb': {
+          background: 'linear-gradient(45deg, #C32E67, #2FABDD)',
           backgroundClip: 'text',
           color: 'transparent',
           WebkitBackgroundClip: 'text',

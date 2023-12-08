@@ -3,6 +3,7 @@ import DefLayout from "@/components/def_layout";
 import { setCookie, getCookie } from 'cookies-next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import '@/public/styles/discover.css';
 
 interface Exercise {
     exerciseName: string;
