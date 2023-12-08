@@ -353,10 +353,10 @@ const DiscoverPage2: React.FC = () => {
                             {filteredAndSortedActivityData.map((activity: any, i: number) => (
                                 <li key={i} className="border-b border-white p-5 border-opacity-50">
                                     <div className="">
-                                        <div className="grid grid-cols-3 gap-2">
-                                            <h2 className="text-2xl font-bold displayheader gradient-text-pg w-[15vw] overflow-x-auto">{activity.Activity_name}</h2>
+                                        <div className="grid grid-cols-5 gap-2">
+                                            <h2 className="text-2xl font-bold displayheader gradient-text-pg overflow-x-auto flex flex-row items-center col-span-1">{activity.Activity_name}</h2>
 
-                                            <span className='flex flex-row items-center'>
+                                            <span className='flex flex-row items-center overflow-x-auto col-span-3 items-center justify-center'>
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#C32E67" className="w-6 h-6 mr-2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                                                 </svg>
@@ -375,7 +375,7 @@ const DiscoverPage2: React.FC = () => {
                                                 ))}
                                             </span>
 
-                                            <div>
+                                            <div className='col-span-1 flex flex-row items-center'>
                                                 <button onClick={() => handleFavoriteClick(activity.Aid)} className="favorite-button">
                                                     <p className="pl-2 pr-3 border-r text-white text-opacity-75 text-lg hover:gradient-text-gb duration-300 text-center">+ FAVORITE</p>
                                                 </button>
@@ -440,7 +440,7 @@ const DiscoverPage2: React.FC = () => {
                     <div className="grid grid-cols-3 gap-2 w-[70vw]">
                         <h2 className=""></h2>
 
-                        <div className=''>
+                        <div className='flex flex-row items-center justify-center'>
                             <button onClick={handleLoadMore} className="text-center hover:gradient-text-gb duration-300 p-2 mt-5 flex flex-row mb-4 border border-white rounded-md border-opacity-50 bg-white bg-opacity-10">
                                 Load More
                             </button>
