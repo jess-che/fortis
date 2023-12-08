@@ -9,3 +9,8 @@ body {
 .displayheader {
     font-family: 'Kanit', sans-serif;
 }
+
+.glow-effect {
+    box-shadow: 0 0 10px #C32E67; 
+  }
+  
