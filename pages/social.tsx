@@ -81,10 +81,11 @@ const MatchedPersonDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) =
 interface FlexiblePersonListProps {
   people: FlexiblePerson[];
   onAcceptFriendRequest?: (receiver: any, sender: string) => void;
+  onRejectFriendRequest?: (receiver: any, sender: string) => void;
   }
 
 
-const FlexiblePersonList: React.FC<FlexiblePersonListProps> = ({ people, onAcceptFriendRequest }) => {
+const FlexiblePersonList: React.FC<FlexiblePersonListProps> = ({ people, onAcceptFriendRequest, onRejectFriendRequest }) => {
   const receiverUid = getCookie('uid');
   return (
     <ul className={styles.flexiblePersonList}>
@@ -97,11 +98,18 @@ const FlexiblePersonList: React.FC<FlexiblePersonListProps> = ({ people, onAccep
           <p>Gender: {person.gender || 'Not specified'}</p>
           <p>Unit: {person.unit || 'Not specified'}</p>
           <p>Privacy: {person.privacy || 'Not specified'}</p>
-          <p>About: {person.about || 'Not specified'}</p>          {onAcceptFriendRequest && (
+          <p>About: {person.about || 'Not specified'}</p>          
+          {onAcceptFriendRequest && (
             <button onClick={() => onAcceptFriendRequest(receiverUid, person.uid)}>
             Accept Friend Request
           </button>
-        )}
+          )}
+          {onRejectFriendRequest && (
+            <button onClick={() => onRejectFriendRequest(receiverUid, person.uid)}>
+              Reject Friend Request
+            </button>
+          )}
+
       </li>
     ))}
   </ul>
@@ -212,6 +220,28 @@ const friendLanding = async (query: any) => {
       console.error('Error accepting friend request:', error);
     }
   };
+
+  const handleRejectFriendRequest = async (receiver: any, sender: any) => {
+    try {
+      const response = await fetch('/api/friends/deleteFriendRequest', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ receiver, sender }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to reject friend request');
+      }
+  
+      // Optionally, update your state or UI based on the successful rejection
+      console.log(`Friend request from ${sender} to ${receiver} rejected`);
+    } catch (error) {
+      console.error('Error rejecting friend request:', error);
+    }
+  };
+  
     
 
   const getMatcher = async (query: any) => {
@@ -300,8 +330,9 @@ const friendLanding = async (query: any) => {
               <li key={person.uid} className={Styles.listItemBox}>
                 <FlexiblePersonList 
                   people={[person]} 
-                  onAcceptFriendRequest={handleAcceptFriendRequest} 
-                />
+                  onAcceptFriendRequest={handleAcceptFriendRequest}
+                  onRejectFriendRequest={handleRejectFriendRequest} 
+               />
               </li>
             ))}
           </ul>
