@@ -451,7 +451,7 @@ const DiscoverPage2: React.FC = () => {
                     <div className="grid grid-cols-3 gap-2 w-[70vw]">
                         <h2 className=""></h2>
 
-                        <div className='flex flex-row items-center'>
+                        <div className='flex flex-row items-center justify-center'>
                             <button onClick={handleLoadMore} className="text-center hover:gradient-text-gb duration-300 p-2 mt-5 flex flex-row mb-4 border border-white rounded-md border-opacity-50 bg-white bg-opacity-10">
                                 Load More
                             </button>
