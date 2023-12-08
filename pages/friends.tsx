@@ -111,7 +111,7 @@ interface FlexiblePersonListProps {
 const FlexiblePersonList1: React.FC<FlexiblePersonListProps> = ({ people, onAcceptFriendRequest, onRejectFriendRequest }) => {
   const receiverUid = getCookie('uid');
 
-  const isFirstPersonActive = people.length > 0 && people[0]?.totalsets > 0;
+  const isFirstPersonActive = people.length > 0;
 
   const [showMore, setShowMore] = useState<boolean[]>(people.map(() => false));
 
