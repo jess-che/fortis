@@ -263,7 +263,7 @@ const DiscoverPage2: React.FC = () => {
                 weight: convertedWeight,
                 eid: item.Eid,
                 aid: templateAid,
-                uid: item.Uid,
+                uid: String(getCookie('uid')),
             };
         });
 

@@ -561,7 +561,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
         weight: convertedWeight,
         eid: item.Eid,
         aid: templateAid,
-        uid: item.Uid,
+        uid: String(getCookie('uid')),
       };
     });
 
