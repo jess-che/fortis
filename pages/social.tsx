@@ -11,9 +11,7 @@ import Modal from './modal'; // Make sure you have this component created
 import WorkoutBuddyMatcher from './WorkoutBuddyMatcher'; // This is the separate form component
 import styles from './WorkoutBuddy.module.css';
 import { getCookie } from 'cookies-next';
-
-
-
+import Styles from './social.module.css';
 
 const searchBarStyle = {
   // backgroundColor: '#aaa',
@@ -34,6 +32,18 @@ interface Person {
   frequency: string;
   gymAvailability: string;
   // Add other fields as needed
+}
+
+interface FlexiblePerson {
+  uid: string;
+  name: string;
+  age?: number | null;
+  height?: number | null;
+  weight?: number | null;
+  gender?: string | null;
+  unit?: string;
+  privacy?: string;
+  about?: string;
 }
 
 interface MatchedPersonDisplayProps {
@@ -68,19 +78,171 @@ const MatchedPersonDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) =
   );
 };
 
+interface FlexiblePersonListProps {
+  people: FlexiblePerson[];
+  onAcceptFriendRequest?: (receiver: any, sender: string) => void;
+  onRejectFriendRequest?: (receiver: any, sender: string) => void;
+  }
+
+
+const FlexiblePersonList: React.FC<FlexiblePersonListProps> = ({ people, onAcceptFriendRequest, onRejectFriendRequest }) => {
+  const receiverUid = getCookie('uid');
+  return (
+    <ul className={styles.flexiblePersonList}>
+      {people.map(person => (
+        <li key={person.uid} className={styles.flexiblePersonItem}>
+          <p>Name: {person.name || 'Not specified'}</p>
+          <p>Age: {person.age !== null ? person.age : 'Not specified'}</p>
+          <p>Height: {person.height !== null ? `${person.height} cm` : 'Not specified'}</p>
+          <p>Weight: {person.weight !== null ? `${person.weight} kg` : 'Not specified'}</p>
+          <p>Gender: {person.gender || 'Not specified'}</p>
+          <p>Unit: {person.unit || 'Not specified'}</p>
+          <p>Privacy: {person.privacy || 'Not specified'}</p>
+          <p>About: {person.about || 'Not specified'}</p>          
+          {onAcceptFriendRequest && (
+            <button onClick={() => onAcceptFriendRequest(receiverUid, person.uid)}>
+            Accept Friend Request
+          </button>
+          )}
+          {onRejectFriendRequest && (
+            <button onClick={() => onRejectFriendRequest(receiverUid, person.uid)}>
+              Reject Friend Request
+            </button>
+          )}
+
+      </li>
+    ))}
+  </ul>
+);
+};
+
 
 const SocialPage: React.FC = () => {
   const [showMatcherForm, setShowMatcherForm] = useState(false);
   const [matchedPersons, setMatchedPersons] = useState<Person[]>([]);
+
+  
+  const [friendsList, setFriendsList] = useState<FlexiblePerson[]>([]);
+  const [pendingFriends, setPendingFriends] = useState<FlexiblePerson[]>([]);
+  const [friendRequests, setFriendRequests] = useState<FlexiblePerson[]>([]);
+  
+
+  
+const friendslist = async (query: any) => {
+  const response = await fetch('/api/friends/friendList', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+          searchQuery: getCookie('uid'),
+      }),
+  });
+
+  if (!response.ok) {
+      throw new Error('Failed to save query');
+  }
+
+  const data = await response.json();
+  console.log("Here are your friends: ", data.data);
+  setFriendsList(data.data); 
+};
+
+const friendsPending = async (query: any) => {
+  const response = await fetch('/api/friends/friendPending', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+          searchQuery: getCookie('uid'),
+      }),
+  });
+
+  if (!response.ok) {
+      throw new Error('Failed to save query');
+  }
+
+  const data = await response.json();
+  console.log("Pending friends :( ", data.data);
+  setPendingFriends(data.data);
+};
+
+
+const friendLanding = async (query: any) => {
+  const response = await fetch('/api/friends/friendLanding', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+          searchQuery: getCookie('uid'),
+      }),
+  });
+
+  if (!response.ok) {
+      throw new Error('Failed to save query');
+  }
+
+  const data = await response.json();
+  console.log("Here the people who have sent you a friend request: ", data.data);
+  setFriendRequests(data.data);
+};
 
 
   const toggleMatcherForm = () => setShowMatcherForm(!showMatcherForm);
 
   useEffect(() => {
     getMatcher("monkey banana");
+    friendslist("Monkey");
+    friendLanding("Monkey");
+    friendsPending("Monkey");
   }, []);
 
+  const handleAcceptFriendRequest = async (receiver: any, sender: any) => {
+    try {
+      console.log(receiver, sender);
+      const response = await fetch('/api/friends/acceptFriendRequest', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ receiver, sender }),
+      });
   
+      if (!response.ok) {
+        throw new Error('Failed to accept friend request');
+      }
+  
+      // Optionally, update your state or UI based on the successful acceptance
+      console.log(`Friend request from ${sender} to ${receiver} accepted`);
+    } catch (error) {
+      console.error('Error accepting friend request:', error);
+    }
+  };
+
+  const handleRejectFriendRequest = async (receiver: any, sender: any) => {
+    try {
+      const response = await fetch('/api/friends/deleteFriendRequest', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ receiver, sender }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to reject friend request');
+      }
+  
+      // Optionally, update your state or UI based on the successful rejection
+      console.log(`Friend request from ${sender} to ${receiver} rejected`);
+    } catch (error) {
+      console.error('Error rejecting friend request:', error);
+    }
+  };
+  
+    
 
   const getMatcher = async (query: any) => {
     const response = await fetch('/api/getMatcher', {
@@ -104,7 +266,7 @@ const SocialPage: React.FC = () => {
     } else {
       console.log('No rows in response'); // Log if no rows are found
     }
-  };  
+  }; 
 
   return (
     <DefLayout>
@@ -134,6 +296,49 @@ const SocialPage: React.FC = () => {
           )}
         </div>
       </div>
+
+      <div className={Styles.listsContainer}>
+          {/* My Friends List */}
+          <div className={Styles.listColumn}>
+            <h3>My Friends</h3>
+            <ul>
+              {Array.isArray(friendsList) && friendsList.map(person => (
+                <li key={person.uid} className={Styles.listItemBox}>
+                <FlexiblePersonList people={friendsList} />
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Pending Friends List */}
+          <div className={Styles.listColumn}>
+            <h3>Pending Friends</h3>
+            <ul>
+              {Array.isArray(pendingFriends) && pendingFriends.map(person => (
+                <li key={person.uid} className={Styles.listItemBox}>
+                <FlexiblePersonList people={pendingFriends} />
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Friend Requests List */}
+          <div className={Styles.listColumn}>
+          <h3>Friend Requests</h3>
+          <ul>
+            {Array.isArray(friendRequests) && friendRequests.map(person => (
+              <li key={person.uid} className={Styles.listItemBox}>
+                <FlexiblePersonList 
+                  people={[person]} 
+                  onAcceptFriendRequest={handleAcceptFriendRequest}
+                  onRejectFriendRequest={handleRejectFriendRequest} 
+               />
+              </li>
+            ))}
+          </ul>
+        </div>
+        </div>
+
     </DefLayout>
   );
 };
