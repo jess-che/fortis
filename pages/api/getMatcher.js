@@ -11,7 +11,11 @@ const matchyboo = `
     JOIN public.user_data ud ON m."Uid" = ud.uid
     JOIN public.matcher input ON input."Uid" = $1::uuid
     JOIN public.user_data input_ud ON input."Uid" = input_ud.uid
+    LEFT JOIN public.friend f1 ON m."Uid" = f1."Sender" AND f1."Receiver" = $1::uuid
+    LEFT JOIN public.friend f2 ON m."Uid" = f2."Receiver" AND f2."Sender" = $1::uuid
     WHERE m."Uid" != $1::uuid
+    AND f1."Sender" IS NULL  -- Exclude if the matched user is a friend (as sender)
+    AND f2."Receiver" IS NULL  -- Exclude if the matched user is a friend (as receiver)
     AND EXISTS (
         SELECT 1
         FROM unnest(string_to_array(trim(both '{}' from input.frequency), ',')) AS input_day
