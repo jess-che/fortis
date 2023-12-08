@@ -80,9 +80,12 @@ const MatchedPersonDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) =
 
 interface FlexiblePersonListProps {
   people: FlexiblePerson[];
-}
+  onAcceptFriendRequest?: (receiver: any, sender: string) => void;
+  }
 
-const FlexiblePersonList: React.FC<FlexiblePersonListProps> = ({ people }) => {
+
+const FlexiblePersonList: React.FC<FlexiblePersonListProps> = ({ people, onAcceptFriendRequest }) => {
+  const receiverUid = getCookie('uid');
   return (
     <ul className={styles.flexiblePersonList}>
       {people.map(person => (
@@ -94,13 +97,16 @@ const FlexiblePersonList: React.FC<FlexiblePersonListProps> = ({ people }) => {
           <p>Gender: {person.gender || 'Not specified'}</p>
           <p>Unit: {person.unit || 'Not specified'}</p>
           <p>Privacy: {person.privacy || 'Not specified'}</p>
-          <p>About: {person.about || 'Not specified'}</p>
-        </li>
-      ))}
-    </ul>
-  );
+          <p>About: {person.about || 'Not specified'}</p>          {onAcceptFriendRequest && (
+            <button onClick={() => onAcceptFriendRequest(receiverUid, person.uid)}>
+            Accept Friend Request
+          </button>
+        )}
+      </li>
+    ))}
+  </ul>
+);
 };
-
 
 
 const SocialPage: React.FC = () => {
@@ -185,7 +191,28 @@ const friendLanding = async (query: any) => {
     friendsPending("Monkey");
   }, []);
 
+  const handleAcceptFriendRequest = async (receiver: any, sender: any) => {
+    try {
+      console.log(receiver, sender);
+      const response = await fetch('/api/friends/acceptFriendRequest', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ receiver, sender }),
+      });
   
+      if (!response.ok) {
+        throw new Error('Failed to accept friend request');
+      }
+  
+      // Optionally, update your state or UI based on the successful acceptance
+      console.log(`Friend request from ${sender} to ${receiver} accepted`);
+    } catch (error) {
+      console.error('Error accepting friend request:', error);
+    }
+  };
+    
 
   const getMatcher = async (query: any) => {
     const response = await fetch('/api/getMatcher', {
@@ -267,15 +294,18 @@ const friendLanding = async (query: any) => {
 
           {/* Friend Requests List */}
           <div className={Styles.listColumn}>
-            <h3>Friend Requests</h3>
-            <ul>
-              {Array.isArray(friendRequests) && friendRequests.map(person => (
-                <li key={person.uid} className={Styles.listItemBox}>
-                <FlexiblePersonList people={friendRequests} />
-                </li>
-              ))}
-            </ul>
-          </div>
+          <h3>Friend Requests</h3>
+          <ul>
+            {Array.isArray(friendRequests) && friendRequests.map(person => (
+              <li key={person.uid} className={Styles.listItemBox}>
+                <FlexiblePersonList 
+                  people={[person]} 
+                  onAcceptFriendRequest={handleAcceptFriendRequest} 
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
         </div>
 
     </DefLayout>
