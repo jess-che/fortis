@@ -376,8 +376,12 @@ const DiscoverPage2: React.FC = () => {
                                             </span>
 
                                             <div className='col-span-1 flex flex-row items-center'>
-                                                <button onClick={() => handleFavoriteClick(activity.Aid)} className="favorite-button">
-                                                    <p className="pl-2 pr-3 border-r text-white text-opacity-75 text-lg hover:gradient-text-gb duration-300 text-center">+ FAVORITE</p>
+                                                <button onClick={() => handleFavoriteClick(activity.Aid)} className="flex flex-row items-center justify-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 h-4 opacity-80">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+
+                                                    <p className="pl-2 pr-3 border-r text-white text-opacity-75 text-sm hover:gradient-text-gb duration-300 text-center">FAVORITE</p>
                                                 </button>
 
                                                 <button onClick={() => {
@@ -388,7 +392,7 @@ const DiscoverPage2: React.FC = () => {
                                                         // Optionally, you could display a notification or alert to the user here.
                                                     }
                                                 }} className="template-button">
-                                                    <p className="pl-3 text-white text-opacity-75 text-lg hover:gradient-text-bp duration-300 text-center">USE AS TEMPLATE</p>
+                                                    <p className="pl-3 text-white text-opacity-75 text-sm hover:gradient-text-bp duration-300 text-center">USE AS TEMPLATE</p>
                                                 </button>
                                             </div>
                                         </div>
@@ -447,7 +451,7 @@ const DiscoverPage2: React.FC = () => {
                         </div>
 
                         <div className="">
-                            
+
                         </div>
                     </div>
 
