@@ -8,8 +8,8 @@ import DeleteConfirmation from '@/components/DeleteConfirmation';
 import { useRouter } from 'next/router';
 
 const ProfilePage: React.FC = () => {
-  const [name, setName] = useState('John Doe');
-  const [email, setEmail] = useState('johndoe@example.com');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [age, setAge] = useState(30);
   const [height, setHeight] = useState(175); // in centimeters
   const [weight, setWeight] = useState(70); // in kilograms
