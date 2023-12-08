@@ -248,7 +248,6 @@ const FlexiblePersonList: React.FC<FlexiblePersonListProps> = ({ people, onAccep
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
 
-
                 <p className="pl-2 pr-3 text-white text-opacity-75 text-sm hover:gradient-text-bp duration-300 text-center">ACCEPT</p>
               </button>
             )}
@@ -460,9 +459,7 @@ const SocialPage: React.FC = () => {
               ))}
             </ul>
           </div>
-
         </div>
-
 
         <div className="h-[80vh] w-[2px] mx-[1vw] bg-white bg-opacity-50"></div>
 

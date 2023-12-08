@@ -322,7 +322,7 @@ const DiscoverPage2: React.FC = () => {
             <div className="flex flex-row w-screen min-h-[90vh] justify-center items-center">
                 <div className="flex flex-col column justify-center items-center w-[20vw] h-[90vh]">
                     <h2 className="mb-4 text-[4vw] font-bold displayheader gradient-text-bp text-center">Templates</h2>
-                    <div className="h-[2px] w-[3vw] mb-[1vh] bg-white bg-opacity-50"></div>
+                    <div className="h-[2px] w-[3vw] mb-[2vh] bg-white bg-opacity-50"></div>
                     <div className="w-[18vw]">
                         <div className="workout-list grid grid-cols-1 gap-2">
                             {workouts.map((workout) => {
