@@ -34,6 +34,7 @@ interface FlexiblePerson {
   unit?: string;
   privacy?: string;
   about?: string;
+  email?: string;
 }
 
 interface MatchedPersonDisplayProps {
@@ -137,7 +138,10 @@ const FlexiblePersonList1: React.FC<FlexiblePersonListProps> = ({ people, onAcce
             <p className="col-span-4">{person.age !== null ? person.age : 'Not specified'}</p>
 
             <p className="col-span-1 font-bold">Gender:</p>
-            <p className="col-span-4">{person.age !== null ? person.gender : 'Not specified'}</p>
+            <p className="col-span-4">{person.gender !== null ? person.gender : 'Not specified'}</p>
+
+            <p className="col-span-1 font-bold">Email:</p>
+            <p className="col-span-4">{person.email !== null ? person.email : ''}</p>
 
             <p className="col-span-1 font-bold">About:</p>
             <p className="col-span-4">

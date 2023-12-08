@@ -6,19 +6,22 @@ const pool = new Pool({
 });
 
 const query = `
-    SELECT ud.*
+    SELECT ud.*, u.email
     FROM public.friend AS f
     JOIN public.user_data AS ud ON f."Receiver" = ud.uid
+    JOIN public.users AS u ON ud.uid = u.uid
     WHERE f."Sender" = $1
     AND f.accepted = 1
 
     UNION
 
-    SELECT ud.*
+    SELECT ud.*, u.email
     FROM public.friend AS f
     JOIN public.user_data AS ud ON f."Sender" = ud.uid
+    JOIN public.users AS u ON ud.uid = u.uid
     WHERE f."Receiver" = $1
     AND f.accepted = 1;
+
     `;
 
     export default async (req, res) => {
