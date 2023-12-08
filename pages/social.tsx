@@ -68,6 +68,64 @@ const MatchedPersonDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) =
   );
 };
 
+const friendslist = async (query: any) => {
+  const response = await fetch('/api/friends/friendList', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+          searchQuery: getCookie('uid'),
+      }),
+  });
+
+  if (!response.ok) {
+      throw new Error('Failed to save query');
+  }
+
+  const data = await response.json();
+  console.log("Here are your friends: ", data);
+};
+
+const friendsPending = async (query: any) => {
+  const response = await fetch('/api/friends/friendPending', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+          searchQuery: getCookie('uid'),
+      }),
+  });
+
+  if (!response.ok) {
+      throw new Error('Failed to save query');
+  }
+
+  const data = await response.json();
+  console.log("Pending friends :( ", data);
+};
+
+
+const friendLanding = async (query: any) => {
+  const response = await fetch('/api/friends/friendLanding', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+          searchQuery: getCookie('uid'),
+      }),
+  });
+
+  if (!response.ok) {
+      throw new Error('Failed to save query');
+  }
+
+  const data = await response.json();
+  console.log("Here the people who have sent you a friend request: ", data);
+};
+
 
 const SocialPage: React.FC = () => {
   const [showMatcherForm, setShowMatcherForm] = useState(false);
@@ -78,6 +136,9 @@ const SocialPage: React.FC = () => {
 
   useEffect(() => {
     getMatcher("monkey banana");
+    friendslist("Monkey");
+    friendLanding("Monkey");
+    friendsPending("Monkey");
   }, []);
 
   
