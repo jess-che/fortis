@@ -116,6 +116,52 @@ const MatchedPersonDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) =
             .join(', ');
     };
 
+    const handleSendFriendRequest = async () => {
+        const currentUser = getCookie('uid');
+        let receiverUid;
+
+        try {
+            // Fetch the UID for the person to whom the friend request will be sent
+            const response = await fetch('/api/friends/getUIDfromName', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: person.name }), // Assuming `person.name` is used to fetch UID
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                receiverUid = data.uid;
+            } else {
+                console.error('Response not OK when getting UID');
+                return; // Stop further execution if UID fetch fails
+            }
+        } catch (error) {
+            console.error('Error in getting uid from name:', error);
+            return; // Stop further execution if there's an error
+        }
+
+        try {
+            // Send the friend request
+            const friendRequestResponse = await fetch('/api/friends/sendFriendRequest', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ sender: currentUser, receiver: receiverUid })
+            });
+
+            if (friendRequestResponse.ok) {
+                console.log(`Friend request sent to ${receiverUid}`);
+            } else {
+                console.error('Error sending friend request:', friendRequestResponse.statusText);
+            }
+        } catch (error) {
+            console.error('Error handling friend request:', error);
+        }
+    };
+
     const [showMore, setShowMore] = useState<boolean>(false);
 
     const toggleShowMore = () => {
@@ -126,6 +172,14 @@ const MatchedPersonDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) =
 
     return (
         <div className="grid grid-cols-5 gap-1 mb-5">
+            <div className="col-span-5">
+                <button 
+                    onClick={handleSendFriendRequest} 
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                    Send Friend Request
+                </button>
+            </div>
             <h2 className="text-2xl font-bold  gradient-text-pb col-span-5">{person.name || 'Not specified'}</h2>
 
             <p className="col-span-1 font-bold">Location:</p>
