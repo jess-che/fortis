@@ -99,6 +99,8 @@ const WorkoutBuddyMatcher = () => {
       // Handle error
       alert('Please provide an answer for all sections.');
     }
+
+    window.location.reload();
   };
 
   return (

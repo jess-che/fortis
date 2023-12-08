@@ -355,19 +355,25 @@ const DiscoverPage2: React.FC = () => {
                                 <li key={i} className="border-b border-white p-5 border-opacity-50">
                                     <div className="">
                                         <div className="grid grid-cols-5 gap-2">
-                                            <h2 className="text-2xl font-bold displayheader gradient-text-pg overflow-x-auto flex flex-row items-center col-span-1">{activity.Activity_name}</h2>
 
-                                            <span className='flex flex-row items-center overflow-x-auto col-span-3 items-center justify-center'>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#C32E67" className="w-6 h-6 mr-2">
+                                            <div className='flex flex-row items-center'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#C32E67" className="w-6 h-6 mr-1">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                                                 </svg>
 
-                                                <div className="mr-2">{activity.Favorite}</div>
+                                                <div className="mr-3">{activity.Favorite}</div>
+                                                <h2 className="text-2xl font-bold displayheader gradient-text-pg overflow-x-auto flex flex-row items-center col-span-1">
+                                                    {activity.Activity_name}
+                                                </h2>
+                                            </div>
+
+                                            <span className='flex flex-row items-center overflow-x-auto col-span-3 items-center opacity-70'>
+
 
                                                 {Object.entries(activity.categorySetCounts).map(([category, count]) => (
                                                     <>
                                                         {/* Display the aggregated set counts by category */}
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#55BBA4" className="w-8 h-8 mr-2 pl-2 border-l">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#55BBA4" className="w-8 h-8 mr-2 pl-2">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
                                                         </svg>
 
@@ -445,7 +451,7 @@ const DiscoverPage2: React.FC = () => {
                     <div className="grid grid-cols-3 gap-2 w-[70vw]">
                         <h2 className=""></h2>
 
-                        <div className='flex flex-row items-center justify-center'>
+                        <div className='flex flex-row items-center'>
                             <button onClick={handleLoadMore} className="text-center hover:gradient-text-gb duration-300 p-2 mt-5 flex flex-row mb-4 border border-white rounded-md border-opacity-50 bg-white bg-opacity-10">
                                 Load More
                             </button>
