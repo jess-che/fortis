@@ -1,12 +1,12 @@
-import Image          from 'next/image';
-import Link           from 'next/link';
-import React, { FC, useState }  from 'react';
-import DefLayout      from '@/components/def_layout';
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { FC, useState } from 'react';
+import DefLayout from '@/components/def_layout';
 
 import SearchBar from "./SocialSearchBarComponents/SearchBar";
 import SearchResultsList from "./SocialSearchBarComponents/SearchResultsList";
 import styles from './WorkoutBuddyMatcher.module.css';
-import { setCookie, getCookie}            from 'cookies-next';
+import { setCookie, getCookie } from 'cookies-next';
 
 
 const timeSlots = Array.from({ length: 17 }, (_, index) => `${index + 6}:00`); // 6:00 to 22:00
@@ -36,20 +36,24 @@ const WorkoutBuddyMatcher = () => {
   const handleDayToggle = (day: string) => {
     setFormData(prevState => ({
       ...prevState,
-      frequency: prevState.frequency.includes(day) 
-        ? prevState.frequency.filter(d => d !== day) 
+      frequency: prevState.frequency.includes(day)
+        ? prevState.frequency.filter(d => d !== day)
         : [...prevState.frequency, day],
     }));
   };
 
+  const characterLimit = 500;
+
   const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    if (name !== "softPreferences" || value.length <= characterLimit) {
+      setFormData(prevState => ({
+        ...prevState,
+        [name]: value
+      }));
+    }
   };
-  
+
   const handleTimeSlotToggle = (index: number) => {
     setFormData(prevState => ({
       ...prevState,
@@ -70,7 +74,7 @@ const WorkoutBuddyMatcher = () => {
       workoutTypes: value
     }));
   };
-  
+
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     formData.uid = String(getCookie('uid'));
     e.preventDefault();
@@ -147,7 +151,7 @@ const WorkoutBuddyMatcher = () => {
           ))}
         </div>
       </div>
-      
+
       <div className={styles.formGroup}>
         <label className={styles.label}>Workout Types (select multiple):</label>
         <select
@@ -155,7 +159,7 @@ const WorkoutBuddyMatcher = () => {
           name="workoutTypes"
           onChange={handleMultiSelectChange}
           className={styles.select}
-          //</div>size={6} // Optional: Sets the visible number of options in a drop-down list
+        //</div>size={6} // Optional: Sets the visible number of options in a drop-down list
         >
           <option value="climbing">Climbing</option>
           <option value="push">Push</option>
@@ -179,7 +183,12 @@ const WorkoutBuddyMatcher = () => {
         </select>
       </div>
       <div className={styles.formGroup}>
-        <label className={styles.label}>Soft Preferences:</label>
+        <div className='flex flex-row items-center justify-between'>
+          <label className={styles.label}>Soft Preferences:</label>
+          <p>
+                  Character Count: {formData.softPreferences.length}/{characterLimit}
+                </p>
+        </div>
         <textarea
           name="softPreferences"
           onChange={handleInputChange}
