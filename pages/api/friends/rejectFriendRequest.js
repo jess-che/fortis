@@ -7,7 +7,7 @@ const pool = new Pool({
 
 const rejectFriendRequestQuery = `
 DELETE FROM public.friend 
-WHERE "Receiver" LIKE $1 AND "Sender" LIKE $2;
+WHERE "Receiver" = $1 AND "Sender" = $2;
 `;
 
 export default async (req, res) => {
