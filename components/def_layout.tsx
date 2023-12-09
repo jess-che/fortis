@@ -1,23 +1,24 @@
-import React from 'react';
-import Link from 'next/link';
-import '@/app/globals.css';
-import { UserProvider } from '@auth0/nextjs-auth0/client';
-import Image from 'next/image';
+// layout for all pages if user logged in
+import React                    from 'react';
+import { useState, useEffect }  from 'react';
 import { setCookie, getCookie } from 'cookies-next';
-import { useState, useEffect } from 'react';
+import { UserProvider }         from '@auth0/nextjs-auth0/client';
+import Image                    from 'next/image';
+import Link                     from 'next/link';
+import '@/app/globals.css';
 
 export default function RootLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
+    const [darkMode, setDarkMode] = useState(false);    // this is so the component will actually mount and unmount
 
-    const [darkMode, setDarkMode] = useState(false);
-
+    // function to change modes
     const toggleDarkMode = () => {
-        setDarkMode(!darkMode);
+        setDarkMode(!darkMode);                 // update component
 
-        if (getCookie('mode') === 'normal') {
+        if (getCookie('mode') === 'normal') {   // update actual value -> cookie bc stay in between pages
             setCookie('mode', 'dark');
         } else {
             setCookie('mode', 'normal');
@@ -26,7 +27,6 @@ export default function RootLayout({
 
     return (
         <UserProvider>
-
             {/* main screen */}
             <div className="min-h-screen w-screen flex flex-col bg-[#121212]">
 
@@ -50,6 +50,7 @@ export default function RootLayout({
 
                 {/* navbar */}
                 <div className="fixed top-0 left-0 w-screen p-2 flex flex-row items-center h-[10vh] z-10 bg-nav-gradient backdrop-blur-md">
+                    {/* home image */}
                     <Link href="/">
                         <div className="w-40 h-15 hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300">
                             <Image
@@ -61,6 +62,7 @@ export default function RootLayout({
                         </div>
                     </Link>
 
+                    {/* links to pages */}
                     <div className="w-full flex flex-row h-15 items-center justify-center">
                         <Link href="/profile">
                             <p className="px-3 opacity-75 text-l hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">PROFILE</p>
@@ -79,6 +81,7 @@ export default function RootLayout({
                         </Link>
                     </div>
 
+                    {/* link to logout */}
                     <div className="p-2 flex justify-end items-center">
                         <Link href="api/auth/logout">
                             <div className="flex px-3 items-center hover:shadow-blue transition-shadow duration-300">
@@ -108,7 +111,6 @@ export default function RootLayout({
                         </svg>
                     }
                 </button>
-
             </div>
         </UserProvider>
     )

@@ -1,23 +1,24 @@
-import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import '@/app/globals.css';
-import { UserProvider } from '@auth0/nextjs-auth0/client';
-import { useUser } from '@auth0/nextjs-auth0/client';
+// layout for all pages if user logged out
+import React                    from 'react';
+import { useState, useEffect }  from 'react';
 import { setCookie, getCookie } from 'cookies-next';
-import { useState, useEffect } from 'react';
+import { UserProvider }         from '@auth0/nextjs-auth0/client';
+import Image                    from 'next/image';
+import Link                     from 'next/link';
+import '@/app/globals.css';
 
 export default function RootLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(false);    // this is so the component will actually mount and unmount
 
+    // function to change modes
     const toggleDarkMode = () => {
-        setDarkMode(!darkMode);
+        setDarkMode(!darkMode);                 // update component
 
-        if (getCookie('mode') === 'normal') {
+        if (getCookie('mode') === 'normal') {   // update actual value -> cookie bc stay in between pages
             setCookie('mode', 'dark');
         } else {
             setCookie('mode', 'normal');
@@ -26,7 +27,6 @@ export default function RootLayout({
 
     return (
         <UserProvider>
-
             {/* main screen */}
             <div className="min-h-screen w-screen flex flex-col bg-[#121212]">
 
@@ -55,7 +55,8 @@ export default function RootLayout({
                 </div>
 
                 {/* navbar */}
-                <div className="fixed top-0 left-0 w-screen p-2 flex flex-row items-center h-[10vh] z-10 bg-nav-gradient backdrop-blur-md">
+                <div className="fixed top-0 left-0 w-screen p-2 flex flex-row justify-between items-center h-[10vh] z-10 bg-nav-gradient backdrop-blur-md">
+                    {/* link to return home */}
                     <Link href="/">
                         <div className="w-40 h-15 hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300">
                             <Image
@@ -66,25 +67,28 @@ export default function RootLayout({
                             />
                         </div>
                     </Link>
-
+                    
+                    {/* uncomment for development */} 
+                    {/*                     
                     <div className="w-full flex flex-row h-[10vh] items-center justify-center">
-                        <Link href="/">
+                        <Link href="/profile">
                             <p className="px-3 opacity-75 text-l hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">PROFILE</p>
                         </Link>
-                        <Link href="/">
+                        <Link href="/history">
                             <p className="px-3 opacity-75 text-l hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">HISTORY</p>
                         </Link>
-                        <Link href="/">
+                        <Link href="/log">
                             <p className="px-3 opacity-75 text-l hover:gradient-text-gb hover:shadow-pink transition-shadow duration-300">LOG</p>
                         </Link>
-                        <Link href="/">
+                        <Link href="/social">
                             <p className="px-3 opacity-75 text-l hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300">SOCIAL</p>
                         </Link>
-                        <Link href="/">
+                        <Link href="/discover">
                             <p className="px-3 opacity-75 text-l hover:gradient-text-bp hover:shadow-green transition-shadow duration-300">DISCOVER</p>
                         </Link>
-                    </div>
+                    </div> */}
 
+                    {/* link to login */}
                     <div className="p-2 flex justify-end items-center h-[10vh]">
                         <Link href="api/auth/login">
                             <div className="flex px-3 items-center hover:shadow-blue transition-shadow duration-300">
@@ -114,7 +118,6 @@ export default function RootLayout({
                         </svg>
                     }
                 </button>
-
             </div>
         </UserProvider>
     )
