@@ -157,7 +157,7 @@ const FlexiblePersonList1: React.FC<FlexiblePersonListProps> = ({ people, onAcce
             <p className="col-span-4">{person.totalsets !== 0 ? person.totalsets : 'FAILURE'}</p>
 
             <p className="col-span-1 font-bold">About:</p>
-            <p className="col-span-4">
+            <p className="col-span-4 overflow-x-auto">
               {showMore[index] ? person.about : person.about?.slice(0, MAX_ABOUT_LENGTH) || 'Not specified'}
               {person.about && person.about.length > MAX_ABOUT_LENGTH && (
                 <button onClick={() => toggleShowMore(index)} className="text-[#2FABDD] hover:underline ml-2">

@@ -89,7 +89,7 @@ const MyDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) => {
             <p className="col-span-4">{person.workoutTypes !== null ? parseList(person.workoutTypes) : 'Not specified'}</p>
 
             <p className="col-span-1 font-bold">More Info:</p>
-            <p className="col-span-4">
+            <p className="col-span-4 overflow-x-auto">
                 {showMore ? person.softPreferences : person.softPreferences?.slice(0, MAX_ABOUT_LENGTH) || 'Not specified'}
                 {person.softPreferences && person.softPreferences.length > MAX_ABOUT_LENGTH && (
                     <button onClick={() => toggleShowMore()} className="text-[#2FABDD] hover:underline ml-2">
