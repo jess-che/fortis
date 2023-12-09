@@ -49,6 +49,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
 
   const handleGroupChange = (e: any) => {
     setSearchGroup(e.target.value);
+    setSearchBarKey((prevKey) => prevKey + 1);
   };
 
   const [searchBarKey, setSearchBarKey] = useState(0);
