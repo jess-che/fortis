@@ -1,4 +1,4 @@
-'use client' 
+'use client'
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC } from 'react';
@@ -125,7 +125,7 @@ const Home: React.FC = () => {
       setCookie('name', data.data.rows[0].name);
       return data.data.rows[0].name;
     }
-    catch (err){
+    catch (err) {
       console.log('Error in GetUIDfromEmail:', err);
     }
   };
@@ -223,9 +223,9 @@ const Home: React.FC = () => {
         console.error('Error calling Bob:', error);
       }
     };
-
-    handleAnalStreaks();
-  }, [user, loading, isLoading, error]);
+    if (user)
+      handleAnalStreaks();
+  }, [user]);
 
   // work time this week
   const time = async () => {
@@ -396,7 +396,7 @@ const Home: React.FC = () => {
       </LoginLayout>
     );
   }
-  
+
   if (user) {
     setCookie('login', 'true');
   }
@@ -419,18 +419,18 @@ const Home: React.FC = () => {
     try {
       if (user != null)
         await getUID(user.email);
-       await getName(getCookie('uid'));
-  
+      await getName(getCookie('uid'));
+
     } catch (error) {
       // Handle errors here if necessary
       console.error(error);
     }
   }
-  if(getCookie('login') === 'true') {
+  if (getCookie('login') === 'true') {
     setCookies();
     console.log(getCookie('uid'));
   }
-  
+
   // ---- end of auth0 logic ----
 
   return (
