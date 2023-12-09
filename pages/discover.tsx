@@ -87,11 +87,15 @@ const DiscoverPage2: React.FC = () => {
         }
     };
     // Filter and sort activities based on the selected category and set count
-    const filteredAndSortedActivityData = selectedCategory
-        ? activityData
-            .filter(activity => activity.categorySetCounts[selectedCategory] > 5)
-            .sort((a, b) => b.categorySetCounts[selectedCategory] - a.categorySetCounts[selectedCategory])
-        : activityData;
+    const filteredAndSortedActivityData = activityData
+    .filter(activity => {
+        // Apply any existing filters here
+        return selectedCategory ? activity.categorySetCounts[selectedCategory] > 5 : true;
+    })
+    .sort((a, b) => {
+        // Sort based on the absolute value of the favorite count
+        return Math.abs(b.Favorite) - Math.abs(a.Favorite);
+    });
 
 
 
@@ -364,6 +368,7 @@ const DiscoverPage2: React.FC = () => {
                                                 <div className="mr-3">{activity.Favorite}</div>
                                                 <h2 className="text-2xl font-bold displayheader gradient-text-pg overflow-x-auto flex flex-row items-center col-span-1">
                                                     {activity.Activity_name}
+                                                    {activity.friend_name && <span className="ml-2 text-sm">(by {activity.friend_name})</span>}
                                                 </h2>
                                             </div>
 

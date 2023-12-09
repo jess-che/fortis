@@ -28,9 +28,14 @@ export default async (req, res) => {
       `;
 
       const paginatedHistory = `
-      SELECT a.*
+      SELECT a.*,
+        CASE 
+            WHEN f.accepted = 1 THEN ud.name
+            ELSE NULL
+        END as friend_name
       FROM activity a
       LEFT JOIN friend f ON (f."Sender" = a."Uid" OR f."Receiver" = a."Uid") AND (f."Sender" = $3 OR f."Receiver" = $3) AND f.accepted = 1
+      LEFT JOIN user_data ud ON (a."Uid" = ud.uid)
       WHERE (a."Favorite" > 0) OR (a."Favorite" < 0 AND (f."Sender" IS NOT NULL OR f."Receiver" IS NOT NULL))
       ORDER BY a."Date" DESC
       LIMIT $2 OFFSET $1;
