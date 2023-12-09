@@ -45,6 +45,12 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   const [activityData, setActivityData] = useState<any[]>([]);
   const [data, setData] = useState<DataType[]>([]);
   const [searchGym, setSearchGym] = useState('any');
+  const [searchGroup, setSearchGroup] = useState('any');
+
+  const handleGroupChange = (e: any) => {
+    setSearchGroup(e.target.value);
+  };
+
   const [searchBarKey, setSearchBarKey] = useState(0);
   const [buttonStyles, setButtonStyles] = useState<{ [key: string]: ButtonStyles }>({
     any: {
@@ -949,6 +955,22 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
               <div>
                 {isSidePanelOpen && (
                   <aside className="w-[25vw] pl-[5vw] ml-[5vw] border-l border-white border-opacity-50">
+                    <div className="flex items-center space-x-4">
+                      <select
+                        name="searchGroup"
+                        value={searchGroup}
+                        onChange={handleGroupChange}
+                        className="border rounded-lg py-2 px-4 mb-4 mt-2 w-[20vw] bg-opacity-0"
+                      >
+                        <option value="any">Any</option>
+                        <option value="push">Push</option>
+                        <option value="pull">Pull</option>
+                        <option value="legs">Legs</option>
+                        <option value="core">Core</option>
+                        <option value="cardio">Cardio</option>
+                      </select>
+                    </div>
+
                     <div className="flex flex-row justify-between mb-4">
                       <button
                         onClick={() => handleGymSwitch('any')}
@@ -975,8 +997,9 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
                         <p>BRODIE</p>
                       </button>
                     </div>
+
                     <div className="search-bar-container w-[20vw]" style={searchBarStyle}>
-                      <SearchBar sendDataToA={receiveDataFromSearch} gym={searchGym} key={searchBarKey} />
+                      <SearchBar sendDataToA={receiveDataFromSearch} group={searchGroup} gym={searchGym} key={searchBarKey} />
                     </div>
                   </aside>
                 )}

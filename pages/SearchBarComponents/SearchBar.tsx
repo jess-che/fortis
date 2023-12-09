@@ -5,13 +5,39 @@ import { send } from "process";
 
 interface SearchResultsListProps {
   sendDataToA: (data: any) => void;
+  group: string;
   gym: string;
   key: number;
 }
 
-const SearchBar: React.FC<SearchResultsListProps> = ({ sendDataToA, gym, key }) => {
+interface ExerciseData {
+  description: string;
+eid: number;
+equipment: string;
+favorite: boolean;
+gym: string;
+muscle_group: string;
+name: string;
+popularity: number;
+type: string;
+}
+
+const SearchBar: React.FC<SearchResultsListProps> = ({ sendDataToA, group, gym, key }) => {
   const [input, setInput] = useState("");
   const [results, setResults] = useState([]);
+
+  type StringToArrayMappingType = {
+    [key: string]: string[];
+};
+
+  const workout_muscle_map: StringToArrayMappingType = {
+    "any": ["Chest", "Shoulder", "Triceps", "Back", "Biceps", "Quadriceps", "Hamstrings", "Calves", "Abs", "Obliques", "Cardio"], 
+    "push": ["Chest", "Shoulder", "Triceps"],
+    "pull": ["Back", "Biceps"],
+    "legs": ["Quadriceps", "Hamstrings", "Calves"],
+    "core": ["Abs", "Back", "Obliques"],
+    "cardio": ["Cardio"]
+}
 
 
   const populatelist = async (query: any) => {
@@ -22,7 +48,7 @@ const SearchBar: React.FC<SearchResultsListProps> = ({ sendDataToA, gym, key }) 
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          searchQuery: query
+          searchQuery: query, 
         }),
       });
 
@@ -31,10 +57,16 @@ const SearchBar: React.FC<SearchResultsListProps> = ({ sendDataToA, gym, key }) 
       }
 
       const data = await response.json();
-      const dataName = data.data.rows.map((row: { name: any; }) => row.name);
-      console.log(data);
+      const category = workout_muscle_map[group];
+      const filteredRows = data.data.rows.filter((row: ExerciseData) => {
+        if (category.includes(row.muscle_group)) {
+          return true; 
+        }
+        return false;
+      });
+      console.log("filtered", filteredRows);
       console.log(data.data.rows);
-      setResults(data.data.rows);
+      setResults(filteredRows);
       //setResults(dataName) -- For only Excercise name (changed to account for description etc.)
     } else {
       const response = await fetch('/api/searchExcNameFiltered', {
@@ -53,10 +85,16 @@ const SearchBar: React.FC<SearchResultsListProps> = ({ sendDataToA, gym, key }) 
       }
 
       const data = await response.json();
-      const dataName = data.data.rows.map((row: { name: any; }) => row.name);
-      console.log(data);
+      const category = workout_muscle_map[group];
+      const filteredRows = data.data.rows.filter((row: ExerciseData) => {
+        if (category.includes(row.muscle_group)) {
+          return true; 
+        }
+        return false;
+      });
+      console.log("filtered", filteredRows);
       console.log(data.data.rows);
-      setResults(data.data.rows);
+      setResults(filteredRows);
       //setResults(dataName) -- For only Excercise name (changed to account for description etc.)
     }
 
