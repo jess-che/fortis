@@ -1,3 +1,4 @@
+// get activity data based on aid and uid
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -23,11 +24,10 @@ export default async (req, res) => {
         const aid = req.body.aid;
 
         try {
-            // Insert user
             const values = [`${searchQuery}`, aid];
-            console.log('Success! HistoryActivities');
             const results = await pool.query(History, values);
 
+            console.log('Success! HistoryActivities');
             res.json({ success: true, data: results });
         } catch (err) {
             console.log('Error in HistoryActivites');

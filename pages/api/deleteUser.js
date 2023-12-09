@@ -1,3 +1,4 @@
+// delete user
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -49,7 +50,7 @@ export default async (req, res) => {
             await pool.query(deleteUser, values);
 
 
-            res.status(200).send('Data saved successfully');
+            res.status(200).send('Deleted user successfully');
         } catch (err) {
             console.log('Error in Delete User');
             console.error(err);

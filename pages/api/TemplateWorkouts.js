@@ -1,3 +1,4 @@
+// get workout information for tempalte in discover
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -14,15 +15,16 @@ const History = `
 
 export default async (req, res) => {
     if (req.method === 'POST') {
-        const aid = req.body.aid;
-
+        const searchQuery = req.body.searchQuery;
         try {
-            //console.log('Querying database');
-            const results = await pool.query(History, [aid]);
-            
+            const values = [`${searchQuery}`];
+
+            console.log('Success! TotalTime');
+            const results = await pool.query(timey, values);
+
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('Error occurred');
+            console.log('error in TotalTime');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }

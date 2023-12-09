@@ -1,3 +1,4 @@
+// delete row with receiver sender pair
 import { Pool } from 'pg';
 
 const pool = new Pool({

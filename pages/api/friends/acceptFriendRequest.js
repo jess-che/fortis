@@ -1,3 +1,4 @@
+// accept friend request for receiver sender pair
 import { Pool } from 'pg';
 
 const pool = new Pool({

@@ -1,3 +1,4 @@
+// delete highest AID from uid
 import { Pool } from 'pg';
 
 const pool = new Pool({

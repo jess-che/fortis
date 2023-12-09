@@ -1,10 +1,10 @@
+// get information required for bobby
 import { Pool } from 'pg';
 
 const pool = new Pool({
     // connectionString: process.env.POSTGRES_URL
     connectionString: "postgres://default:Azy2srgWb9aU@ep-polished-cherry-55480419-pooler.us-east-1.postgres.vercel-storage.com/verceldb?sslmode=require"
 });
-
 const Bobby = `
     SELECT 
         unnested_muscle_group AS muscle_group,
@@ -23,20 +23,18 @@ const Bobby = `
     GROUP BY 
         unnested_muscle_group;
 `;
-
-
 export default async (req, res) => {
     if (req.method === 'POST') {
         const searchQuery = req.body.searchQuery;
         try {
-            // Insert user
             const values = [`${searchQuery}`];
-            //console.log('yippers');
+
+            console.log('Success! Bobby');
             const results = await pool.query(Bobby, values);
-            
+
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('hola');
+            console.log('Error in Bobby');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
@@ -44,4 +42,3 @@ export default async (req, res) => {
         res.status(405).end();  // Method Not Allowed
     }
 };
-    

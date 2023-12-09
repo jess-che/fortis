@@ -1,3 +1,4 @@
+// input new sender receiver pair with accepted status as nah
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -14,8 +15,6 @@ export default async (req, res) => {
     if (req.method === 'POST') {
         try {
             const { sender, receiver } = req.body;
-            // Insert request 
-            // const values = [`%${searchQuery}%`];
             await pool.query(sendFriendRequest, [sender, receiver]);
             res.status(200).send('Friend request data inserted successfully');
         } catch (err) {

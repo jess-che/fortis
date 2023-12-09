@@ -1,3 +1,4 @@
+// handling save end and duration of activity
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -17,7 +18,6 @@ WHERE
              ORDER BY "Aid" DESC
              LIMIT 1)
     AND "Uid" = $1;
-
 `;
 
 export default async (req, res) => {
@@ -30,6 +30,7 @@ export default async (req, res) => {
 
             res.status(200).json({ message: 'EndTime and Duration Updated Successfully' });
         } catch (err) {
+            console.log("Error in EndTime and Duration")
             console.error(err);
             res.status(500).json({ error: 'Internal Server Error' });
         }

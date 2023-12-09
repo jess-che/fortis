@@ -1,3 +1,4 @@
+// get uid from the person's name
 import { Pool } from 'pg';
 
 const pool = new Pool({

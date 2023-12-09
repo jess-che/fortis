@@ -1,3 +1,4 @@
+// find friend request you sent out
 import { Pool } from 'pg';
 
 const pool = new Pool({

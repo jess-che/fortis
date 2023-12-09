@@ -1,3 +1,4 @@
+// get all user data from a the name
 import { Pool } from 'pg';
 
 const pool = new Pool({

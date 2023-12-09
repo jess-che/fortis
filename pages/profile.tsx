@@ -209,6 +209,7 @@ const ProfilePage: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    console.log(getCookie('uid'));
     const fetchData = async () => {
       try {
         const response = await fetch('/api/getEmailfromUID', {

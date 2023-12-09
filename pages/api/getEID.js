@@ -1,33 +1,4 @@
-
-
-//   // USELESS STUFF, JUST CHECKING
-//   const getEID = async (query: any) => {
-//     const response = await fetch('/api/getEID', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         searchQuery: query
-//       }),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error('Failed to save query');
-//     }
-
-//     const data = await response.json();
-//     console.log(data)
-//   };
-
-//     // END OF USELESS STUFF, JUST CHECKING
-
-
-
-// WHen you click a button: 
-//   "   getEID(value);    "  <-   This needs to be called.
-
-
+// get EID from exercise name
 
 import { Pool } from 'pg';
 
@@ -47,14 +18,14 @@ export default async (req, res) => {
         const searchQuery = req.body.searchQuery;
 
         try {
-            // Insert user
             const values = [`%${searchQuery}%`];
-            console.log('hi');
+
+            console.log('Success! getEid');
             const results = await pool.query(getEID, values);
 
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('hello');
+            console.log('error in getEid');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }

@@ -1,3 +1,5 @@
+// get all info from UID
+
 import { Pool } from 'pg';
 
 const pool = new Pool({

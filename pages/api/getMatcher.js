@@ -1,3 +1,5 @@
+// get matcher information
+
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -41,13 +43,13 @@ export default async (req, res) => {
         const searchQuery = req.body.searchQuery;
 
         try {
-            // Insert user
             const values = [`${searchQuery}`];
-            console.log('please work');
             const results = await pool.query(matchyboo, values);
 
+            console.log('Success! getMatcher');
             res.json({ success: true, data: results });
         } catch (err) {
+            console.log("error in getMatcher");
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
