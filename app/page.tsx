@@ -13,8 +13,8 @@ import MuscleModel from '@/pages/MuscleModel'; // Adjust the path as needed
 import '@/public/styles/home.css';                              // style sheet for animations
 
 // !! FOR DEVELOPMENT ONLY !!
-setCookie('uid', '71379e91-a26a-41fe-9901-4478133052e6');
-// setCookie('uid', 'not logged in');  // <- change to this to get it to work for development first login
+// setCookie('uid', '71379e91-a26a-41fe-9901-4478133052e6');
+setCookie('uid', 'not logged in');  // <- change to this to get it to work for development first login
 console.log(getCookie('uid'));
 setCookie('login', 'false');
 
