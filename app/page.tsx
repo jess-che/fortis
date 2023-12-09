@@ -10,7 +10,7 @@ import { setCookie, getCookie } from 'cookies-next';
 import '@/public/styles/home.css';                              // style sheet for animations
 
 // !! FOR DEVELOPMENT ONLY !!
-setCookie('uid', 'db41de11-819e-4884-804f-3791e45d2119');
+// setCookie('uid', 'db41de11-819e-4884-804f-3791e45d2119');
 // setCookie('uid', 'not logged in');  // <- change to this to get it to work for development first login
 // console.log(getCookie('uid'));
 // setCookie('login', 'false');
