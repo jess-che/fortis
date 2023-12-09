@@ -222,6 +222,7 @@ const Home: React.FC = () => {
       } catch (error) {
         console.error('Error calling Bob:', error);
       }
+
     };
     if (user)
       handleAnalStreaks();
@@ -336,6 +337,8 @@ const Home: React.FC = () => {
           date,
           duration
         }));
+
+        console.log(newParsedData);
 
         setParsedData(newParsedData); // Update state with the new parsed data
       } else {
