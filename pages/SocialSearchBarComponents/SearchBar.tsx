@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import SearchResultsList from "./SearchResultsList";
 import "./SearchBar.css";
+import { getCookie } from 'cookies-next';
 
 
 const SearchBar = () => {
@@ -14,7 +15,8 @@ const SearchBar = () => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                searchQuery: query
+                searchQuery: query, 
+                uid: getCookie('uid')
             }),
         });
     
@@ -27,7 +29,8 @@ const SearchBar = () => {
         const dataName = data.data.rows.map((row: { name: any; }) => row.name);
         const dataEmail = data.data.rows.map((row: { uid: any; }) => row.uid);
         // setResults(dataName);
-        setResults((prevResults: string[]) => [...prevResults, ...dataName]);
+        setResults([...dataName]);
+        // setResults((prevResults: string[]) => [...prevResults, ...dataName]);
         console.log(dataEmail);
     };
     

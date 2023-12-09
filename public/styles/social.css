@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+/* change all font to Nunito */
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+
+/* button effect for start activity */
+@keyframes fillBox {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+.startActivity:hover::before {
+    animation: fillBox 1.5s ease-in forwards;
+}
+
+.startActivity::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: #55bba36a;
+    z-index: -1;
+    transition: width 0.3s;
+    border-radius: 0.375rem;
+}
+
+.discover:hover::before {
+    animation: fillBox 1.5s ease-in forwards;
+}
+
+.discover::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 100%;
+    background: #2FABDD6a;
+    z-index: -1;
+    transition: width 0.3s;
+    border-radius: 0.375rem;
+}

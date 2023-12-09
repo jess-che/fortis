@@ -8,8 +8,8 @@ import DeleteConfirmation from '@/components/DeleteConfirmation';
 import { useRouter } from 'next/router';
 
 const ProfilePage: React.FC = () => {
-  const [name, setName] = useState('John Doe');
-  const [email, setEmail] = useState('johndoe@example.com');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [age, setAge] = useState(30);
   const [height, setHeight] = useState(175); // in centimeters
   const [weight, setWeight] = useState(70); // in kilograms
@@ -17,6 +17,8 @@ const ProfilePage: React.FC = () => {
   const [units, setUnits] = useState('Imperial');
   const [privacy, setPrivacy] = useState("Public");
   const [about, setAbout] = useState('');
+
+  const characterLimit = 500;
 
   // Define state variables to track edit mode
   const [isEditing, setIsEditing] = useState(false);
@@ -263,6 +265,12 @@ const ProfilePage: React.FC = () => {
     setUnits(newUnits);
   };
 
+  const handleTextareaChange = (e: any) => {
+    if (e.length <= characterLimit) {
+      setAbout(e);
+    }
+  };
+
   return (
     <DefLayout>
       <div className="flex w-screen min-h-[90vh] justify-center items-center">
@@ -271,12 +279,17 @@ const ProfilePage: React.FC = () => {
           <div className="h-[2px] w-[4vw] bg-white bg-opacity-70 mt-2 mb-5"></div>
           <div>
             {isEditing ? (
-              <textarea
-                value={about}
-                onChange={(e) => setAbout(e.target.value)}
-                className="w-full text-left opacity-75 resize-y"
-                rows={20} // Set the number of visible rows initially
-              />
+              <div>
+                <textarea
+                  value={about}
+                  onChange={(e) => handleTextareaChange(e.target.value)}
+                  className="w-full text-left opacity-75 resize-y"
+                  rows={20} // Set the number of visible rows initially
+                />
+                <p>
+                  Character Count: {about.length}/{characterLimit}
+                </p>
+              </div>
             ) : (
               <textarea
                 value={`${about !== null ? about : '-'}`}

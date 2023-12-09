@@ -7,16 +7,22 @@ const pool = new Pool({
 
 const searchUserName = `
     SELECT * FROM user_data
-    WHERE name LIKE $1
+    WHERE name LIKE $1 AND uid <> $2
+    AND uid NOT IN (
+        SELECT "Sender" FROM friend WHERE "Receiver" = $2
+        UNION
+        SELECT "Receiver" FROM friend WHERE "Sender" = $2
+    )
     `;
 
 export default async (req, res) => {
     if (req.method === 'POST') {
-        const searchQuery = req.body.searchQuery;;
+        const searchQuery = req.body.searchQuery;
+        const uid = req.body.uid;
 
         try {
             // Insert user
-            const values = [`%${searchQuery}%`];
+            const values = [`%${searchQuery}%`, uid];
             console.log('hi');
             const results = await pool.query(searchUserName, values);
             

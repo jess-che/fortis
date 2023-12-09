@@ -7,7 +7,8 @@ const pool = new Pool({
 
 const deleteFriendRequestQuery = `
 DELETE FROM public.friend 
-WHERE "Sender" = $1 AND "Receiver" = $2;
+WHERE ("Sender" = $1 AND "Receiver" = $2) OR
+("Sender" = $2 AND "Receiver" = $1);
 `;
 
 export default async (req, res) => {

@@ -7,23 +7,23 @@ import { getCookie } from 'cookies-next';
 interface SearchResultsListProps {
     results: string[]; // Assuming this is an array of user IDs
     // currentUser: string; // Add the current user's ID as a prop
-  }
-  
-  const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
-      const [friends, setFriends] = useState<{ [key: string]: boolean }>({});
-      
-  
-      useEffect(() => {
-          // Initialize the friends state based on the current status of friend requests
-          // This might involve fetching data from the server
-      }, [results]);
-  
-      const handleFriendRequest = async (userId: string, isFriend: boolean) => {
-          const currentUser = getCookie('uid');
-          // let receiverUid = "4188925c-e00e-43f2-b930-074f83783925";
-          let receiverUid;
+}
 
-          try {
+const SearchResultsList: React.FC<SearchResultsListProps> = ({ results }) => {
+    const [friends, setFriends] = useState<{ [key: string]: boolean }>({});
+
+
+    useEffect(() => {
+        // Initialize the friends state based on the current status of friend requests
+        // This might involve fetching data from the server
+    }, [results]);
+
+    const handleFriendRequest = async (userId: string, isFriend: boolean) => {
+        const currentUser = getCookie('uid');
+        // let receiverUid = "4188925c-e00e-43f2-b930-074f83783925";
+        let receiverUid;
+
+        try {
             // console.log(userId); this works
             const response = await fetch('/api/friends/getUIDfromName', {
                 method: 'POST',
@@ -44,9 +44,9 @@ interface SearchResultsListProps {
                 // let receiverUid = "errorUid";
                 // Handle errors (e.g., show a notification to the user)
             }
-          } catch (error) {
-            console.log('Error in getting uid from name',error);
-          }
+        } catch (error) {
+            console.log('Error in getting uid from name', error);
+        }
         //console.log("something");
 
         const endpoint = isFriend ? '/api/friends/deleteFriendRequest' : '/api/friends/sendFriendRequest';
@@ -89,6 +89,7 @@ interface SearchResultsListProps {
             console.error('Error handling friend request:', error);
             // Handle errors (e.g., show a notification to the user)
         }
+        window.location.reload();
     };
 
     return (
@@ -98,11 +99,20 @@ interface SearchResultsListProps {
                     {results.map((userId, index) => (
                         <li key={index} className="result-item">
                             <span className="result-item-name">{userId}</span>
-                            <button 
-                                className={`friend-button ${friends[userId] ? 'remove-friend' : 'add-friend'}`}
+                            <button
+                                className={`friend-button relative ${friends[userId] ? 'remove-friend' : 'add-friend'}`}
                                 onClick={() => handleFriendRequest(userId, friends[userId])}
                             >
-                                {friends[userId] ? 'Remove Friend' : 'Add Friend'}
+                                {friends[userId] ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                                    </svg>
+                                ) : (
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                                    </svg>
+
+                                )}
                             </button>
                         </li>
                     ))}

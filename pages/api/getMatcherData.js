@@ -5,26 +5,24 @@ const pool = new Pool({
     connectionString: "postgres://default:Azy2srgWb9aU@ep-polished-cherry-55480419-pooler.us-east-1.postgres.vercel-storage.com/verceldb?sslmode=require"
 });
 
-const Streaks = `
-    SELECT "Date", "Duration"
-    FROM activity
-    WHERE activity."Uid" = $1
-    ORDER BY "Date" DESC;
-    `; 
-
+const matchyboo = `
+    SELECT *
+    FROM public.matcher 
+    WHERE "Uid" = $1
+    `;
 
 export default async (req, res) => {
     if (req.method === 'POST') {
-        const searchQuery = req.body.searchQuery;
+        const uid = req.body.uid;
+
         try {
             // Insert user
-            const values = [`${searchQuery}`];
-            //console.log('yippers');
-            const results = await pool.query(Streaks, values);
-            
+            const values = [uid];
+            console.log('please work');
+            const results = await pool.query(matchyboo, values);
+
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('hola');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
@@ -32,4 +30,3 @@ export default async (req, res) => {
         res.status(405).end();  // Method Not Allowed
     }
 };
-    
