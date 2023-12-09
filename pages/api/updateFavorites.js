@@ -6,9 +6,13 @@ const pool = new Pool({
 });
 
 const query = `
-UPDATE public.activity
-  SET "Favorite" = "Favorite" + 1
-  WHERE "Aid" = $1;
+    UPDATE public.activity
+    SET "Favorite" = CASE
+                        WHEN "Favorite" > 0 THEN "Favorite" + 1
+                        WHEN "Favorite" < 0 THEN "Favorite" - 1
+                        ELSE "Favorite"
+                    END
+    WHERE "Aid" = $1;
 `;
 
 export default async (req, res) => {

@@ -249,7 +249,11 @@ const DiscoverPage2: React.FC = () => {
         return parseInt(data.data.rows[0].Aid);
     };
 
-    const handleTemplateClick = async (workoutData: any[]) => {
+    const handleTemplateClick = async (workoutData: any[], aid: any) => {
+
+        console.log('Favorite clicked for Aid:', aid);
+        updateFavorites(aid);
+
         if (getCookie('log') === 'false') {
             await addActivity();
         }
@@ -287,13 +291,13 @@ const DiscoverPage2: React.FC = () => {
         router.push('/log'); // Assuming '/log' is the path to Log2Page
     };
 
-    const handleFavoriteClick = (aid: any) => {
-        // Logic to handle the favorite button click
-        // For example, updating the favorite count in the state or making an API call
-        console.log('Favorite clicked for Aid:', aid);
-        updateFavorites(aid);
-        // Add your implementation here
-    };
+    // const handleFavoriteClick = (aid: any) => {
+    //     // Logic to handle the favorite button click
+    //     // For example, updating the favorite count in the state or making an API call
+    //     console.log('Favorite clicked for Aid:', aid);
+    //     updateFavorites(aid);
+    //     // Add your implementation here
+    // };
 
     const updateFavorites = async (aid: any) => {
         const response = await fetch('/api/updateFavorites', {
@@ -388,17 +392,17 @@ const DiscoverPage2: React.FC = () => {
                                             </span>
 
                                             <div className='col-span-1 flex flex-row items-center'>
-                                                <button onClick={() => handleFavoriteClick(activity.Aid)} className="flex flex-row items-center justify-center">
+                                                {/* <button onClick={() => handleFavoriteClick(activity.Aid)} className="flex flex-row items-center justify-center">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 h-4 opacity-80">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                     </svg>
 
                                                     <p className="pl-2 pr-3 border-r text-white text-opacity-75 text-sm hover:gradient-text-gb duration-300 text-center">FAVORITE</p>
-                                                </button>
+                                                </button> */}
 
                                                 <button onClick={() => {
                                                     if (activity && activity.workouts) {
-                                                        handleTemplateClick(activity.workouts);
+                                                        handleTemplateClick(activity.workouts, activity.Aid);
                                                     } else {
                                                         console.log("No workout data to save");
                                                         // Optionally, you could display a notification or alert to the user here.
