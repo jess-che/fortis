@@ -88,14 +88,14 @@ const DiscoverPage2: React.FC = () => {
     };
     // Filter and sort activities based on the selected category and set count
     const filteredAndSortedActivityData = activityData
-    .filter(activity => {
-        // Apply any existing filters here
-        return selectedCategory ? activity.categorySetCounts[selectedCategory] > 5 : true;
-    })
-    .sort((a, b) => {
-        // Sort based on the absolute value of the favorite count
-        return Math.abs(b.Favorite) - Math.abs(a.Favorite);
-    });
+        .filter(activity => {
+            // Apply any existing filters here
+            return selectedCategory ? activity.categorySetCounts[selectedCategory] > 5 : true;
+        })
+        .sort((a, b) => {
+            // Sort based on the absolute value of the favorite count
+            return Math.abs(b.Favorite) - Math.abs(a.Favorite);
+        });
 
 
 
@@ -110,7 +110,7 @@ const DiscoverPage2: React.FC = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ page: pageNumber, size: pageSize, uid: getCookie('uid')}),
+                body: JSON.stringify({ page: pageNumber, size: pageSize, uid: getCookie('uid') }),
             });
 
 
@@ -362,15 +362,28 @@ const DiscoverPage2: React.FC = () => {
                             {filteredAndSortedActivityData.map((activity: any, i: number) => (
                                 <li key={i} className="border-b border-white p-5 border-opacity-50">
                                     <div className="">
-                                        <div className="grid grid-cols-5 gap-2">
+                                        <div className="grid grid-cols-6 gap-2">
 
-                                            <div className='flex flex-row items-center'>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#C32E67" className="w-6 h-6 mr-1">
+                                            <div className='flex flex-row items-center  col-span-2'>
+
+                                                {activity.Favorite <= -2 ? (
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#C32E67" className="w-6 h-6 mr-1">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                                    </svg>
+                                                    )
+                                                    : activity.Favorite >= 1 ? (
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#55BBA4" className="w-6 h-6 mr-1">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                                    </svg>
+                                                    )
+                                                    :
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2FABDD" className="w-6 h-6 mr-1">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                                                </svg>
+                                                </svg> 
+                                                }
 
-                                                <div className="mr-3">{activity.Favorite}</div>
-                                                <h2 className="text-2xl font-bold displayheader gradient-text-pg overflow-x-auto flex flex-row items-center col-span-1">
+                                                <div className="mr-3">{Math.abs(activity.Favorite)}</div>
+                                                <h2 className="text-2xl font-bold displayheader gradient-text-pg overflow-x-auto flex flex-row items-center">
                                                     {activity.Activity_name}
                                                     {activity.friend_name && <span className="ml-2 text-sm">(by {activity.friend_name})</span>}
                                                 </h2>
@@ -415,36 +428,48 @@ const DiscoverPage2: React.FC = () => {
                                     </div>
 
                                     <ul className="workout-list">
+                                        <div className="grid grid-cols-5 gap-1 px-5 mt-2 mb-2 pt-3 border-t border-white border-opacity-30">
+                                            <div className="col-span-2"></div>
+                                            <div className="flex flex-row text-md text-left items-center opacity-70">
+                                                <Image
+                                                    src="/animated/set.svg"
+                                                    alt=""
+                                                    width={40}
+                                                    height={40}
+                                                />
+                                                <div className="ml-2">Sets:</div>
+                                            </div>
+                                            <div className="flex flex-row text-md text-left items-center opacity-70">
+                                                <Image
+                                                    src="/animated/rep.svg"
+                                                    alt=""
+                                                    width={40}
+                                                    height={40}
+                                                />
+                                                <div className="ml-2">Reps: </div>
+                                            </div>
+                                            <div className="flex flex-row text-md text-left items-center opacity-70">
+                                                <Image
+                                                    src="/animated/weight.svg"
+                                                    alt=""
+                                                    width={40}
+                                                    height={40}
+                                                />
+                                                <div className="ml-2">Weight:</div>
+                                            </div>
+                                        </div>
                                         {activity.workouts.map((workout: any, j: number) => (
                                             <li key={j} className="workout-item">
-                                                <div className="text-lg text-left px-2 opacity-80">{workout.exerciseData.name}</div>
-                                                <div className="grid grid-cols-3 gap-1 px-5 mb-2">
+                                                <div className="grid grid-cols-5 gap-1 px-5 mb-2">
+                                                    <div className="text-lg text-left px-2 opacity-80 col-span-2">{workout.exerciseData.name}</div>
                                                     <div className="flex flex-row text-md text-left items-center opacity-70">
-                                                        <Image
-                                                            src="/animated/set.svg"
-                                                            alt=""
-                                                            width={40}
-                                                            height={40}
-                                                        />
-                                                        <div className="ml-2">Sets: {workout.Set}</div>
+                                                        <div className="ml-2">{workout.Set}</div>
                                                     </div>
                                                     <div className="flex flex-row text-md text-left items-center opacity-70">
-                                                        <Image
-                                                            src="/animated/rep.svg"
-                                                            alt=""
-                                                            width={40}
-                                                            height={40}
-                                                        />
-                                                        <div className="ml-2">Reps: {workout.Rep}</div>
+                                                        <div className="ml-2">{workout.Rep}</div>
                                                     </div>
                                                     <div className="flex flex-row text-md text-left items-center opacity-70">
-                                                        <Image
-                                                            src="/animated/weight.svg"
-                                                            alt=""
-                                                            width={40}
-                                                            height={40}
-                                                        />
-                                                        <div className="ml-2">Weight: {getCookie('units') === 'Metric' ? poundsToKilograms(workout.Weight) : workout.Weight}</div>
+                                                        <div className="ml-2">{getCookie('units') === 'Metric' ? poundsToKilograms(workout.Weight) : workout.Weight}</div>
                                                     </div>
                                                 </div>
                                             </li>
