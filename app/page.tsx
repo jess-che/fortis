@@ -110,8 +110,6 @@ const Home: React.FC = () => {
       }
 
       const data = await response.json();
-      console.log(getCookie('name'))
-      setCookie('name', data.data.rows[0].name);
       return data.data.rows[0].name;
     }
     catch (err) {

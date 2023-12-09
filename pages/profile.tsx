@@ -67,7 +67,7 @@ const ProfilePage: React.FC = () => {
       weightToSend = Math.round(weight / 0.453592);
     }
 
-    setCookie('name', name);
+    // setCookie('name', name);
     setCookie('units', units);
     console.log(getCookie('units'));
 
@@ -146,7 +146,7 @@ const ProfilePage: React.FC = () => {
         console.log(data);
 
         const userdata = data.data.rows[0];
-        setCookie('name', data.data.rows[0].name);
+        // setCookie('name', data.data.rows[0].name);
 
         setName(userdata.name);
         setAge(userdata.age);
