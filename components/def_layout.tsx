@@ -38,7 +38,7 @@ export default function RootLayout({
                     </div>
                 </div>
                 {/* if mode set to dark */}
-                <div className={`fixed top-0 left-0 w-full h-full  ${darkMode ? '' : ''} ${getCookie('mode') === 'dark' ? 'bg-[#121212] bg-opacity-50' : ''}`}></div>
+                <div className={`fixed top-0 left-0 w-full h-full  ${darkMode ? '' : ''} ${getCookie('mode') === 'dark' ? 'bg-[#121212] bg-opacity-70' : ''}`}></div>
 
                 {/* navbar cushion */}
                 <div className="h-[10vh] flex w-full"></div>
