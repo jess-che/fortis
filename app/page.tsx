@@ -14,11 +14,11 @@ import '@/public/styles/home.css';                              // style sheet f
 
 // !! FOR DEVELOPMENT ONLY !!
 // setCookie('uid', '71379e91-a26a-41fe-9901-4478133052e6');
-setCookie('uid', 'not logged in');  // <- change to this to get it to work for development first login
-console.log(getCookie('uid'));
-setCookie('login', 'false');
+// setCookie('uid', 'not logged in');  // <- change to this to get it to work for development first login
+// console.log(getCookie('uid'));
+// setCookie('login', 'false');
 
-setCookie('name', 'temp name');
+// setCookie('name', 'temp name');
 // remove this (for development only)
 // setCookie('units', 'Imperial');
 
