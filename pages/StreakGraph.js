@@ -50,7 +50,7 @@ const StreakGraph = ({ parsedData }) => {
           const color = `rgb(${red}, ${green}, ${blue})`;
 
           return (
-            <div key={dateKey} className="day-box min-w-[6vw] min-h-[6vh] rounded-md relative flex flex-row items-center justify-center border border-white border-opacity-50" style={{ backgroundColor: color }}>
+            <div key={dateKey} className="day-box min-w-[3vw] min-h-[5vh] rounded-md relative flex flex-row items-center justify-center border border-white border-opacity-50" style={{ backgroundColor: color }}>
               <div className="relative inline-block">
                 <div className="tooltiptext">Date: {dateKey}, <br />  Duration: {duration} minutes</div>
                 <div className="text-xl">{getDayFromDateKey(dateKey)}</div>

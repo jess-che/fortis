@@ -7,9 +7,6 @@ import LoginLayout from '@/components/login_layout';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useState, useEffect } from 'react';
 import { setCookie, getCookie } from 'cookies-next';
-import '@/pages/StreakGraphs.css';
-import StreakGraph from '@/pages/StreakGraph'; // Adjust the path as needed
-import MuscleModel from '@/pages/MuscleModel'; // Adjust the path as needed
 import '@/public/styles/home.css';                              // style sheet for animations
 
 // !! FOR DEVELOPMENT ONLY !!
@@ -30,14 +27,6 @@ interface DataPoint {
 const Home: React.FC = () => {
   const { user, error, isLoading } = useUser();                 // auth0 login status
   let firstLogin = false;                                       // check if first time logged in
-
-  // Declare the type of the state variable as an array of DataPoint objects
-  const [parsedData, setParsedData] = useState<DataPoint[]>([]);
-  const [loading, setIsLoading] = useState(false); // new state for loading indicator
-  const [workoutTimeText, setWorkoutTimeText] = useState('');
-  const [workoutChangeText, setWorkoutChangeText] = useState('');
-  const [isPositiveChange, setIsPositiveChange] = useState(false);
-  const [muscleGroups, setMuscleGroups] = useState([]);
 
   // ---- start of scroll effect ----
   // states to do scrolling information effect
@@ -195,161 +184,8 @@ const Home: React.FC = () => {
   };
   // ---- end of API calls ----
 
-  // ---- start of analytics API calls ----
-  // this calls analytics on mount and once user uid gets updated
-  useEffect(() => {
-    const handleAnalStreaks = async () => {
-      try {
-        await AnalStreaks();
-        console.log('AnalStreaks called successfully');
-      } catch (error) {
-        console.error('Error calling AnalStreaks:', error);
-      }
-      // } else {
-      //   console.error('User email is not available.');
-      // }
 
-      try {
-        await time();
-        console.log('time Done');
-      } catch (error) {
-        console.error('Error calling time:', error);
-      }
-
-      try {
-        await Bob();
-        console.log('Bobby Done');
-      } catch (error) {
-        console.error('Error calling Bob:', error);
-      }
-
-    };
-    if (user)
-      handleAnalStreaks();
-  }, [user]);
-
-  // work time this week
-  const time = async () => {
-    try {
-      const res = await fetch('api/TotalTime', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          searchQuery: getCookie('uid'),
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to fetch data');
-      }
-
-      const data = await res.json();
-      const totalMinutes = Math.round(parseFloat(data.data.rows[0].total_workout_minutes));
-      const previousWeekMinutes = Math.round(parseFloat(data.data.rows[0].previous_week_minutes));
-
-      // Calculate percentage change
-      let percentageChange = 0;
-      if (previousWeekMinutes > 0) {
-        percentageChange = ((totalMinutes - previousWeekMinutes) / previousWeekMinutes) * 100;
-      }
-
-      const hours = Math.floor(totalMinutes / 60);
-      const minutes = totalMinutes % 60;
-
-      const formattedTime = `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
-      setWorkoutTimeText(`${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`);
-      setWorkoutChangeText(`${percentageChange.toFixed(1)}%`);
-      setIsPositiveChange(percentageChange > 0);
-
-      console.log(formattedTime);
-
-      return formattedTime; // This line returns the formatted time, which can be used elsewhere
-    } catch (error) {
-      console.error('Error in time:', error);
-      return ''; // Return an empty string or some default value in case of an error
-    }
-  };
-
-  // Bob, just bob
-  const Bob = async () => {
-    try {
-      const res = await fetch('api/Bob', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          searchQuery: getCookie('uid'),
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to fetch data');
-      }
-
-      const data = await res.json();
-      const muscleGroups = data.data.rows.map((row: { muscle_group: any; total_sets: string; }) => ({
-        muscle_group: row.muscle_group,
-        sets: parseInt(row.total_sets)
-      }));
-
-      setMuscleGroups(muscleGroups); // Update the state
-      console.log(muscleGroups);
-    } catch (error) {
-      console.error('Error in Bob:', error);
-    }
-  };
-
-  // the your workout streaks
-  const AnalStreaks = async () => {
-    setIsLoading(true); // Set loading to true before fetching data
-    try {
-      const response = await fetch('api/AnalStreaks', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          searchQuery: getCookie('uid'),
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
-      }
-
-      const responseData = await response.json();
-
-      if (responseData.data && Array.isArray(responseData.data.rows)) {
-        // This will hold dates as keys and durations as values
-        const durationByDate: Record<string, number> = {};
-
-        responseData.data.rows.forEach((row: any) => {
-          const date = new Date(row.Date).toLocaleDateString("en-US");
-          const duration = (row.Duration.hours || 0) * 60 + (row.Duration.minutes || 0);
-          durationByDate[date] = (durationByDate[date] || 0) + duration;
-        });
-
-        // Convert the durationByDate object into an array of DataPoint objects
-        const newParsedData: DataPoint[] = Object.entries(durationByDate).map(([date, duration]): DataPoint => ({
-          date,
-          duration
-        }));
-
-        console.log(newParsedData);
-
-        setParsedData(newParsedData); // Update state with the new parsed data
-      } else {
-        console.error('Unexpected data structure:', responseData);
-      }
-    } catch (error) {
-      console.error('Error in AnalStreaks:', error);
-    }
-    setIsLoading(false); // Set loading to false after fetching data
-  };
-  // ---- end of analytics API calls ----
+  
 
   // home if no one is logged in
   if (!user) {
@@ -439,55 +275,76 @@ const Home: React.FC = () => {
   return (
     <DefLayout>
       <div>
-        <div className="w-[100vw] min-h-[90vh] flex flex-row items-center justify-center">
-          <div className="flex flex-col items-center justify-center">
-            <div className="text-center">
-              <span className='text-4xl font-bold'>Welcome {" "}{" "}</span>
-              <span className='text-5xl font-bold glow-text'>{getCookie('name')}</span>
-              <span className='text-4xl font-bold'>!</span>
+        <div className="w-[100vw] min-h-[90vh] flex flex-col items-center justify-center pb-[20vh]">
+          <div className="grid grid-cols-5 gap-2 h-[60vh] w-[95vw] justify-center">
+            <div className='flex flex-col items-center justify-end'>
+              <h2 className="mb-4 text-[4vw] font-bold displayheader gradient-text-bp">PROFILE</h2>
+            </div>
+            <div className='flex flex-col items-center justify-end'>
+              <h2 className="mb-4 text-[4vw] font-bold displayheader gradient-text-pg">HISTORY</h2>
+            </div>
+            <div className='flex flex-col items-center justify-end'>
+              <h2 className="mb-4 text-[4vw] font-bold displayheader text-[#55BBA4]">LOG</h2>
+            </div>
+            <div className='flex flex-col items-center justify-end'>
+              <h2 className="mb-4 text-[4vw] font-bold displayheader gradient-text-gp">SOCIAL</h2>
+            </div>
+            <div className='flex flex-col items-center justify-end'>
+              <h2 className="mb-4 text-[4vw] font-bold displayheader gradient-text-bp">DISCOVER</h2>
             </div>
 
-            <div className="w-full h-[1px] bg-white mt-5 opacity-50"></div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
 
-            {!isLoading && parsedData.length > 0 ? (
-              <StreakGraph parsedData={parsedData} />
-            ) : (
-              isLoading ? <p>Loading...</p> : <p>No data to display</p>
-            )}
 
-            <div className="w-full h-[1px] bg-white mb-5"></div>
-
-            <div className="flex flex-col items-center">
-              <div className="ml-2 text-2xl"> <span className='text-3xl font-bold'>Workout Time This Week: {" "}{" "}</span>
-                {` ${workoutTimeText}`}
-              </div>
-
-              <div className=" mr-3">
-                {workoutChangeText && (
-                  <div
-                    style={{
-                      color: isPositiveChange ? '#55BBA4' : '#C32E67', // Replace with your desired colors
-                    }}
-                    className="text-xl"
-                  >
-                    ({isPositiveChange ? '+' : ''}{workoutChangeText} change from last week)
-                  </div>
-                )}
+            <div className="flex flex-row justify-center">
+              <div className="relative">
+                <div className="relative mt-8">
+                  <Link href="/profile" className="profile rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#55BBA4]">
+                    Profile
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div>
-            {muscleGroups.length > 0 ? (
-              <MuscleModel muscleGroups={muscleGroups} />
-            ) : (
-              <Image
-                src="/images/front_bobby/Front.svg"
-                alt="Front View"
-                width={400}
-                height={700}
-              />
-            )}
+            <div className="flex flex-row justify-center">
+              <div className="relative">
+                <div className="relative mt-8">
+                  <Link href="/history" className="history rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#2FABDD]">
+                    History
+                  </Link>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-row justify-center">
+              <div className="relative">
+                <div className="relative mt-8">
+                  <Link href="/log" className="log rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#C32E67]">
+                    Log
+                  </Link>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-row justify-center">
+              <div className="relative">
+                <div className="relative mt-8">
+                  <Link href="/social" className="social rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#2FABDD]">
+                    Social
+                  </Link>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-row justify-center">
+              <div className="relative">
+                <div className="relative mt-8">
+                  <Link href="/discover" className="discover rounded-md px-2 text-xl font-bold inset-0 text-center transition hover:bg-transparent border-2 border-[#55BBA4]">
+                    Discover
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -10,6 +10,7 @@ import '@/public/styles/history.css';     // style sheet for animations
 import { useRouter } from 'next/router';
 import '@/pages/StreakGraphs.css';
 import StreakGraph from '@/pages/StreakGraph'; // Adjust the path as needed
+import MuscleModel from '@/pages/MuscleModel'; // Adjust the path as needed
 
 // define type
 type DataType = {
@@ -56,6 +57,8 @@ const HistoryPage: FC = () => {
   const [loading, setLoading] = useState(true);       // if data is being fetched for sidebar
 
   const [showGraph, setShowGraph] = useState(false);
+
+  const [muscleGroups, setMuscleGroups] = useState([]);
 
   const toggleGraph = () => {
     setShowGraph(!showGraph);
@@ -358,10 +361,46 @@ const HistoryPage: FC = () => {
       } catch (error) {
         console.error('Error calling time:', error);
       }
+
+      try {
+        await Bob();
+        console.log('Bobby Done');
+      } catch (error) {
+        console.error('Error calling Bob:', error);
+      }
     };
 
     handleAnalStreaks();
   }, [setIsGraphLoading]);
+
+  const Bob = async () => {
+    try {
+      const res = await fetch('api/Bob', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          searchQuery: getCookie('uid'),
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const data = await res.json();
+      const muscleGroups = data.data.rows.map((row: { muscle_group: any; total_sets: string; }) => ({
+        muscle_group: row.muscle_group,
+        sets: parseInt(row.total_sets)
+      }));
+
+      setMuscleGroups(muscleGroups); // Update the state
+      console.log(muscleGroups);
+    } catch (error) {
+      console.error('Error in Bob:', error);
+    }
+  };
 
   // work time this week
   const time = async () => {
@@ -549,8 +588,8 @@ const HistoryPage: FC = () => {
         {/* summary of history */}
         <div className="h-[85vh] w-[70vw] bg-blur overflow-y-auto">
           {showGraph && (
-            <div className="absolute  border border-white border-opacity-40 rounded-xl h-[85vh] w-[70vw] flex flex-row items-center justify-center flex-shrink-0 text-center bg-[#121212] backdrop-blur-md bg-opacity-10 z-50">
-              <div className="flex flex-col items-center justify-center">
+            <div className="absolute flex flex-row border border-white border-opacity-40 overflow-y-auto rounded-xl h-[85vh] w-[70vw] flex flex-row items-center justify-center flex-shrink-0 text-center bg-[#121212] backdrop-blur-md bg-opacity-10 z-50">
+              <div className="flex flex-col items-center justify-center w-[30vw]">
                 {!isLoading && parsedData.length > 0 ? (
                   <StreakGraph parsedData={parsedData} /> // Render the StreakGraph component here
                 ) : (
@@ -579,6 +618,18 @@ const HistoryPage: FC = () => {
                   </div>
                 </div>
               </div>
+              <div>
+                  {muscleGroups.length > 0 ? (
+                    <MuscleModel muscleGroups={muscleGroups} />
+                  ) : (
+                    <Image
+                      src="/images/front_bobby/Front.svg"
+                      alt="Front View"
+                      width={400}
+                      height={700}
+                    />
+                  )}
+                </div>
             </div>
           )}
 

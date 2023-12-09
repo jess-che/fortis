@@ -115,15 +115,6 @@ div {
 
 
 /* sidebar effects click and hover effects */
-@keyframes fillBox {
-  from {
-    width: 0%;
-  }
-
-  to {
-    width: 100%;
-  }
-}
 
 .activity-item.clicked::before {
   animation: fillBox .5s ease-in forwards;
