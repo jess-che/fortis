@@ -9,6 +9,7 @@ export default async (req, res) => {
       try {
         const page = parseInt(req.body.page);
         const size = parseInt(req.body.size);
+        const UID = req.body.uid;
         
         if (isNaN(page) || page < 0) {
           return res.status(400).json({ success: false, message: 'Invalid page number' });
@@ -19,11 +20,20 @@ export default async (req, res) => {
 
 
       // SQL query with pagination
-      const paginatedHistory = `
+      const OLDpaginatedHistory = `
         SELECT *
         FROM activity
         ORDER BY activity."Date" DESC
         LIMIT $2 OFFSET $1;
+      `;
+
+      const paginatedHistory = `
+      SELECT a.*
+      FROM activity a
+      LEFT JOIN friend f ON (f."Sender" = a."Uid" OR f."Receiver" = a."Uid") AND (f."Sender" = $3 OR f."Receiver" = $3) AND f.accepted = 1
+      WHERE (a."Favorite" > 0) OR (a."Favorite" < 0 AND (f."Sender" IS NOT NULL OR f."Receiver" IS NOT NULL))
+      ORDER BY a."Date" DESC
+      LIMIT $2 OFFSET $1;
       `;
 
       // Calculate the offset
@@ -31,7 +41,7 @@ export default async (req, res) => {
       console.log(`Page Number: ${page}, Page Size: ${size}, Offset: ${offset}`);
 
       // Execute the query
-      const results = await pool.query(paginatedHistory, [offset, size]);
+      const results = await pool.query(paginatedHistory, [offset, size, UID]);
 
       res.json({ success: true, data: results.rows});
     } catch (err) {

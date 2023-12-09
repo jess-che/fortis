@@ -106,7 +106,7 @@ const DiscoverPage2: React.FC = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ page: pageNumber, size: pageSize }),
+                body: JSON.stringify({ page: pageNumber, size: pageSize, uid: getCookie('uid')}),
             });
 
 
