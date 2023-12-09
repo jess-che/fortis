@@ -19,7 +19,6 @@ console.log(getCookie('uid'));
 setCookie('login', 'false');
 
 setCookie('name', 'temp name');
-setCookie('mode', 'normal');
 // remove this (for development only)
 // setCookie('units', 'Imperial');
 
