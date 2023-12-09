@@ -445,7 +445,7 @@ const SocialPage: React.FC = () => {
   return (
     <DefLayout>
       <div className="flex w-screen h-[88vh] justify-center items-center">
-        <div className="grid grid-cols-3 gaps-5 w-[80vw]">
+        <div className="grid grid-cols-3 gaps-5 w-[70vw]">
           {/* My Friends List */}
           <div className="px-4">
             <h2 className="mb-4 text-4xl font-bold displayheader gradient-text-bp">My Friends</h2>
@@ -482,7 +482,7 @@ const SocialPage: React.FC = () => {
         <div className="h-[80vh] w-[2px] mx-[1vw] bg-white bg-opacity-50"></div>
 
         <div className="">
-          <div className="w-[15vw] mb-2">
+          <div className="w-[20vw] max-h-[70vh] mb-2">
             <SearchBar />
           </div>
         </div>

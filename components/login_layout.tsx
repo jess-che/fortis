@@ -77,7 +77,7 @@ export default function RootLayout({
                         <Link href="/">
                             <p className="px-3 opacity-75 text-l hover:gradient-text-gb hover:shadow-pink transition-shadow duration-300">LOG</p>
                         </Link>
-                        <Link href="/">
+                        <Link href="/social">
                             <p className="px-3 opacity-75 text-l hover:gradient-text-pg hover:shadow-blue transition-shadow duration-300">SOCIAL</p>
                         </Link>
                         <Link href="/">
