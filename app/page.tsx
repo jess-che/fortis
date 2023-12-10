@@ -226,7 +226,7 @@ const Home: React.FC = () => {
 
           {/* appears when scroll */}
           <div className={`${showTextBox ? 'opacity-100 visible' : 'opacity-0 invisible'} transition-all duration-500 mt-5 text-white text-center w-[45vw]`}>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quaerat rem quidem inventore consequatur quis doloribus perspiciatis illum nam dicta tempora facilis, corporis atque. Quos beatae, laudantium dicta cupiditate pariatur doloremque?
+            Fortís is an intuitive, simple fitness tracker that lets you log all types of workout activities. Its ease of use makes it a beloved tool for beginner, intermediate, and advanced athletes alike.
           </div>
           {/* scrolling effects */}
         </div>
@@ -291,11 +291,11 @@ const Home: React.FC = () => {
               <h2 className="mb-4 text-[4vw] font-bold displayheader gradient-text-bp">DISCOVER</h2>
             </div>
 
-            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
-            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
-            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
-            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
-            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt eligendi possimus iure maiores tempora. Nesciunt alias repellat soluta minima ad vel explicabo nemo non autem mollitia? Iste, illo? Corporis, asperiores.</div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">View or Edit User Attributes</div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">View Past Workouts and Analytics</div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Log a Workout</div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Find Friends and Workout Buddies (To use friends, status must be public)</div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Find Workout Templates By Other Users</div>
 
 
             <div className="flex flex-row justify-center">
